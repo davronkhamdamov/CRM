@@ -1,12 +1,33 @@
-import { Dropdown, Form, Popconfirm, Space, Table, message } from "antd";
+import {
+    Dropdown,
+    Form,
+    Popconfirm,
+    Space,
+    Table,
+    Tooltip,
+    message,
+} from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
-import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+    DownOutlined,
+    LoadingOutlined,
+    DeleteOutlined,
+    EditTwoTone,
+    EyeTwoTone,
+    CheckCircleOutlined,
+} from "@ant-design/icons";
 
 const actionItems = [
     {
         key: "1",
-        label: "Action 1",
+        label: (
+            <a>
+                <Space style={{ color: "green" }}>
+                    Bajarish <CheckCircleOutlined />
+                </Space>
+            </a>
+        ),
     },
     {
         key: "2",
@@ -60,13 +81,20 @@ const TableComponent = () => {
             render: () => {
                 return (
                     <Space size="middle">
+                        <Tooltip placement="top" title="Tahrirlash">
+                            <EditTwoTone />
+                        </Tooltip>
+                        <Tooltip placement="top" title="Ko'rish">
+                            <EyeTwoTone />
+                        </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
                             onConfirm={cancel}
                         >
-                            <a>O'chirish</a>
+                            <Tooltip placement="top" title="O'chirish">
+                                <DeleteOutlined style={{ color: "red" }} />
+                            </Tooltip>
                         </Popconfirm>
-                        <a>Tahrirlash</a>
                         <Dropdown
                             menu={{
                                 items: actionItems,
