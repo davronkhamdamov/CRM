@@ -1,8 +1,8 @@
 import {
     Dropdown,
-    Form,
     Popconfirm,
     Space,
+    Spin,
     Table,
     Tooltip,
     message,
@@ -36,15 +36,21 @@ const actionItems = [
 ];
 const TableComponent = () => {
     const [messageApi, contextHolder] = message.useMessage();
-
+    const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [toLoading, setToLoading] = useState(false);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
     const cancel = () => {
-        messageApi
-            .open({
-                type: "loading",
-                content: "Jarayonda...",
-                duration: 2.5,
-            })
-            .then(() => message.success("Muvaffaqqiyatli o'chirildi", 2.5));
+        setToLoading(true);
+        setTimeout(() => {
+            setToLoading(false);
+            messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
+        }, 2000);
     };
 
     const columns = [
@@ -81,17 +87,17 @@ const TableComponent = () => {
             render: () => {
                 return (
                     <Space size="middle">
-                        <Tooltip placement="top" title="Tahrirlash">
+                        <Tooltip placement="bottom" title="Tahrirlash">
                             <EditTwoTone />
                         </Tooltip>
-                        <Tooltip placement="top" title="Ko'rish">
+                        <Tooltip placement="bottom" title="Ko'rish">
                             <EyeTwoTone />
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
                             onConfirm={cancel}
                         >
-                            <Tooltip placement="top" title="O'chirish">
+                            <Tooltip placement="bottom" title="O'chirish">
                                 <DeleteOutlined style={{ color: "red" }} />
                             </Tooltip>
                         </Popconfirm>
@@ -115,14 +121,7 @@ const TableComponent = () => {
         page: params.pagination?.current,
         ...params,
     });
-    const [data, setData] = useState();
-    const [loading, setLoading] = useState(false);
-    const [tableParams, setTableParams] = useState({
-        pagination: {
-            current: 1,
-            pageSize: 10,
-        },
-    });
+
     const fetchData = () => {
         setLoading(true);
         fetch(
@@ -180,6 +179,11 @@ const TableComponent = () => {
                         : false
                 }
                 onChange={handleTableChange}
+            />
+            <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
+                spinning={toLoading}
+                fullscreen
             />
             {contextHolder}
         </>
