@@ -1,4 +1,6 @@
-const Statistic = () => {
+import React from "react";
+
+const Statistic: React.FC = () => {
     return <div>Statistic</div>;
 };
 

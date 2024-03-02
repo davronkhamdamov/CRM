@@ -12,16 +12,10 @@ import { JSX } from "react/jsx-runtime";
 
 const { Sider } = Layout;
 
-function getItem(
-    label: string,
-    key: string,
-    icon: JSX.Element,
-    children: undefined
-) {
+function getItem(label: string, key: string, icon: JSX.Element) {
     return {
         key,
         icon,
-        children,
         label,
     };
 }
@@ -29,19 +23,23 @@ function getItem(
 const RootLayout = () => {
     const getCurrentTheme = () =>
         window.matchMedia("(prefers-color-scheme: dark)").matches;
-    let [themeMode, setThemeMode] = useState("");
+
+    let [themeMode, setThemeMode] = useState<"light" | "dark">("light");
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
+
     useEffect(() => {
-        if (localStorage.getItem("theme") === "system") {
+        const storedTheme = localStorage.getItem("theme");
+        if (storedTheme === "system") {
             setThemeMode(getCurrentTheme() ? "dark" : "light");
-        } else if (!["dark", "light"].includes(localStorage.getItem("theme"))) {
+        } else if (storedTheme === "dark" || storedTheme === "light") {
+            setThemeMode(storedTheme);
+        } else {
             setThemeMode("light");
             localStorage.setItem("theme", "light");
-        } else {
-            setThemeMode(localStorage.getItem("theme"));
         }
     }, [themeMode]);
+
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
         getItem(

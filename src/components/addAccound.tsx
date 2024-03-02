@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
     Button,
@@ -12,7 +12,7 @@ import {
     Space,
 } from "antd";
 const { Option } = Select;
-const CreateAccount = () => {
+const CreateAccount: React.FC = () => {
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
         setOpen(true);
@@ -145,7 +145,7 @@ const CreateAccount = () => {
                                         width: "100%",
                                     }}
                                     getPopupContainer={(trigger) =>
-                                        trigger.parentElement
+                                        trigger.parentElement!
                                     }
                                 />
                             </Form.Item>

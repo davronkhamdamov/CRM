@@ -1,39 +1,15 @@
-import { useEffect, useState } from "react";
-
-import { Typography, Flex, Select, Space, Layout, theme } from "antd";
+import { Typography, Flex, Space, Layout, theme } from "antd";
 import CreateAccount from "../components/addAccound";
 import TableComponent from "../components/table";
+import React from "react";
 const { Title } = Typography;
 const { Content } = Layout;
 
-const Bemorlar = () => {
-    const getCurrentTheme = () =>
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-    let [themeMode, setThemeMode] = useState("");
-
-    useEffect(() => {
-        if (localStorage.getItem("theme") === "system") {
-            setThemeMode(getCurrentTheme() ? "dark" : "light");
-        } else if (!["dark", "light"].includes(localStorage.getItem("theme"))) {
-            setThemeMode("light");
-            localStorage.setItem("theme", "light");
-        } else {
-            setThemeMode(localStorage.getItem("theme"));
-        }
-    }, [themeMode]);
-
+const Bemorlar: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-    const handleChange = (value) => {
-        if (value === "system") {
-            setThemeMode(getCurrentTheme() ? "dark" : "light");
-            localStorage.setItem("theme", "system");
-        } else {
-            setThemeMode(value);
-            localStorage.setItem("theme", value);
-        }
-    };
+
     return (
         <Content
             style={{

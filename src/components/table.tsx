@@ -17,6 +17,9 @@ import {
     EyeTwoTone,
     CheckCircleOutlined,
 } from "@ant-design/icons";
+import type { TableProps } from "antd";
+import { DataType, TableParams } from "../types/type";
+import { ColumnsType } from "antd/es/table";
 
 const actionItems = [
     {
@@ -34,12 +37,17 @@ const actionItems = [
         label: "Action 2",
     },
 ];
+const getRandomuserParams = (params: TableParams) => ({
+    results: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    ...params,
+});
 const TableComponent = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [data, setData] = useState();
+    const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
     const [toLoading, setToLoading] = useState(false);
-    const [tableParams, setTableParams] = useState({
+    const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
             pageSize: 10,
@@ -53,7 +61,7 @@ const TableComponent = () => {
         }, 2000);
     };
 
-    const columns = [
+    const columns: ColumnsType<DataType> = [
         {
             title: "Name",
             dataIndex: "name",
@@ -116,12 +124,25 @@ const TableComponent = () => {
         },
     ];
 
-    const getRandomuserParams = (params) => ({
-        results: params.pagination?.pageSize,
-        page: params.pagination?.current,
-        ...params,
-    });
+    useEffect(() => {
+        fetchData();
+    }, [JSON.stringify(tableParams)]);
 
+    const handleTableChange: TableProps["onChange"] = (
+        pagination,
+        filters,
+        sorter
+    ) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+
+        if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+            setData([]);
+        }
+    };
     const fetchData = () => {
         setLoading(true);
         fetch(
@@ -141,20 +162,6 @@ const TableComponent = () => {
                     },
                 });
             });
-    };
-    useEffect(() => {
-        fetchData();
-    }, [JSON.stringify(tableParams)]);
-    const handleTableChange = (pagination, filters, sorter) => {
-        setTableParams({
-            pagination,
-            filters,
-            ...sorter,
-        });
-
-        if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-            setData([]);
-        }
     };
 
     return (
