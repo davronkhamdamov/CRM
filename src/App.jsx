@@ -86,7 +86,7 @@ const App = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["4"]}
+          defaultSelectedKeys={["1"]}
           items={items}
         />
       </Sider>
@@ -108,6 +108,7 @@ const App = () => {
               minHeight: 110,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
+              marginBottom: 50,
             }}
           >
             <Title style={{ margin: 0 }}>Title</Title>
