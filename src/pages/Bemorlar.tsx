@@ -31,7 +31,7 @@ const Bemorlar: React.FC = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    <Title style={{ margin: 0 }}>Title</Title>
+                    <Title style={{ margin: 0 }}>Bemorlar</Title>
                     <CreateAccount />
                 </Flex>
                 <TableComponent />

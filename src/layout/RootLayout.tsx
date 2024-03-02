@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
     LogoutOutlined,
     PieChartOutlined,
@@ -55,7 +55,7 @@ const RootLayout = () => {
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
                 style={{
-                    height: "100vh",
+                    minHeight: "100vh",
                 }}
             >
                 <Flex

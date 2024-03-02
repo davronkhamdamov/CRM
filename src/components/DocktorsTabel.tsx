@@ -18,6 +18,7 @@ import {
     EyeTwoTone,
     CheckCircleOutlined,
 } from "@ant-design/icons";
+
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
@@ -43,7 +44,7 @@ const getRandomuserParams = (params: TableParams) => ({
     page: params.pagination?.current,
     ...params,
 });
-const TableComponent = () => {
+const DoctorsTable = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
@@ -64,14 +65,14 @@ const TableComponent = () => {
 
     const columns: ColumnsType<DataType> = [
         {
-            title: "Ismi",
+            title: "Name",
             dataIndex: "name",
             sorter: true,
             render: (name) => `${name.first} ${name.last}`,
             width: "20%",
         },
         {
-            title: "Jinsi",
+            title: "Gender",
             dataIndex: "gender",
             filters: [
                 {
@@ -164,6 +165,7 @@ const TableComponent = () => {
                 });
             });
     };
+
     const [value, setValue] = useState("");
     const [options, setOptions] = useState<{ value: string }[]>([]);
     const onChange = (data: string) => {
@@ -186,7 +188,6 @@ const TableComponent = () => {
     const onSelect = (data: string) => {
         console.log("onSelect", data);
     };
-
     return (
         <>
             <AutoComplete
@@ -229,4 +230,4 @@ const TableComponent = () => {
     );
 };
 
-export default TableComponent;
+export default DoctorsTable;

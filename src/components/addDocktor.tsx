@@ -12,7 +12,8 @@ import {
     Space,
 } from "antd";
 const { Option } = Select;
-const CreateAccount: React.FC = ({}) => {
+
+const AddDocktor: React.FC = () => {
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
         setOpen(true);
@@ -23,10 +24,10 @@ const CreateAccount: React.FC = ({}) => {
     return (
         <>
             <Button type="default" onClick={showDrawer} icon={<PlusOutlined />}>
-                Yangi bemor
+                Yangi shifokor
             </Button>
             <Drawer
-                title="Create a new account"
+                title="Yangi shifokor yaratish"
                 width={720}
                 onClose={onClose}
                 open={open}
@@ -175,4 +176,4 @@ const CreateAccount: React.FC = ({}) => {
         </>
     );
 };
-export default CreateAccount;
+export default AddDocktor;
