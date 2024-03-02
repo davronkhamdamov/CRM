@@ -1,41 +1,93 @@
-import { Table } from "antd";
+import { Dropdown, Form, Popconfirm, Space, Table, message } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
+import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 
-const columns = [
+const actionItems = [
   {
-    title: "Name",
-    dataIndex: "name",
-    sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
-    width: "20%",
+    key: "1",
+    label: "Action 1",
   },
   {
-    title: "Gender",
-    dataIndex: "gender",
-    filters: [
-      {
-        text: "Male",
-        value: "male",
-      },
-      {
-        text: "Female",
-        value: "female",
-      },
-    ],
-    width: "20%",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
+    key: "2",
+    label: "Action 2",
   },
 ];
-const getRandomuserParams = (params) => ({
-  results: params.pagination?.pageSize,
-  page: params.pagination?.current,
-  ...params,
-});
 const TableComponent = () => {
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const cancel = () => {
+    messageApi
+      .open({
+        type: "loading",
+        content: "Jarayonda...",
+        duration: 2.5,
+      })
+      .then(() => message.success("Muvaffaqqiyatli o'chirildi", 2.5));
+  };
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: true,
+      render: (name) => `${name.first} ${name.last}`,
+      width: "20%",
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      filters: [
+        {
+          text: "Male",
+          value: "male",
+        },
+        {
+          text: "Female",
+          value: "female",
+        },
+      ],
+      width: "20%",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Action",
+      dataIndex: "operation",
+      key: "operation",
+      render: () => {
+        return (
+          <Space size="middle">
+            <Popconfirm
+              title="O'chirishga ishonchingiz komilmi?"
+              onConfirm={cancel}
+            >
+              <a>O'chirish</a>
+            </Popconfirm>
+            <a>Stop</a>
+            <Dropdown
+              menu={{
+                items: actionItems,
+              }}
+            >
+              <a>
+                More <DownOutlined />
+              </a>
+            </Dropdown>
+          </Space>
+        );
+      },
+    },
+  ];
+
+  const getRandomuserParams = (params) => ({
+    results: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    ...params,
+  });
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
@@ -78,15 +130,32 @@ const TableComponent = () => {
       setData([]);
     }
   };
+
   return (
-    <Table
-      columns={columns}
-      rowKey={(record) => record.login.uuid}
-      dataSource={data}
-      pagination={tableParams.pagination}
-      loading={loading}
-      onChange={handleTableChange}
-    />
+    <Form form={form} component={false}>
+      <Table
+        columns={columns}
+        rowKey={(record) => record.login.uuid}
+        dataSource={data}
+        pagination={tableParams.pagination}
+        loading={
+          loading
+            ? {
+                indicator: (
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 34,
+                    }}
+                    spin
+                  />
+                ),
+              }
+            : false
+        }
+        onChange={handleTableChange}
+      />
+      {contextHolder}
+    </Form>
   );
 };
 
