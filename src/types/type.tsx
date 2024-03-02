@@ -23,3 +23,4 @@ export interface DataType {
         uuid: string;
     };
 }
+export type themeMode = "light" | "dark" | "system";

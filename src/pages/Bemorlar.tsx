@@ -21,37 +21,6 @@ const Bemorlar: React.FC = () => {
                 size="large"
                 style={{ display: "flex" }}
             >
-                {/* <Flex>
-                    <Select
-                        defaultValue={() => {
-                            if (themeMode == "light") {
-                                return "Yorug' mavzu";
-                            } else if (themeMode === "light") {
-                                return "Tungi mavzu";
-                            } else {
-                                return "Sistema mavzusi";
-                            }
-                        }}
-                        style={{
-                            width: 200,
-                        }}
-                        onChange={handleChange}
-                        options={[
-                            {
-                                value: "light",
-                                label: "Yorug' mavzu",
-                            },
-                            {
-                                value: "dark",
-                                label: "Tungi mavzu",
-                            },
-                            {
-                                value: "system",
-                                label: "Sistema mavzusi",
-                            },
-                        ]}
-                    />
-                </Flex> */}
                 <Flex
                     justify="space-between"
                     align="center"
