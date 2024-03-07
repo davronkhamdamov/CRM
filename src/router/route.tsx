@@ -11,6 +11,7 @@ import Statistic from "../pages/Statistic";
 import Reception from "../pages/Reception";
 import Doctors from "../pages/Doctors";
 import Login from "../pages/Login";
+import Book from "./../pages/Book";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
@@ -36,6 +37,7 @@ const route = createBrowserRouter(
             <Route path="/auth">
                 <Route index element={<Login />} />
             </Route>
+            <Route path="/book" element={<Book />} />
         </>
     )
 );

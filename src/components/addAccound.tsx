@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
     Button,
@@ -11,8 +11,10 @@ import {
     Select,
     Space,
 } from "antd";
+import dayjs from "dayjs";
+
 const { Option } = Select;
-const CreateAccount: React.FC = ({}) => {
+const CreateAccount = () => {
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
         setOpen(true);
@@ -26,7 +28,7 @@ const CreateAccount: React.FC = ({}) => {
                 Yangi bemor
             </Button>
             <Drawer
-                title="Create a new account"
+                title="Yangi bemor qo'shish"
                 width={720}
                 onClose={onClose}
                 open={open}
@@ -78,94 +80,88 @@ const CreateAccount: React.FC = ({}) => {
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
-                                name="owner"
-                                label="Owner"
+                                name="adress"
+                                label="Yashash joyi"
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please select an owner",
+                                        message: "Yashash joyi",
                                     },
                                 ]}
                             >
-                                <Select placeholder="Please select an owner">
-                                    <Option value="xiao">Xiaoxiao Fu</Option>
-                                    <Option value="mao">Maomao Zhou</Option>
-                                </Select>
+                                <Input placeholder="Iltimos yashash joyini kiriting" />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
-                                name="type"
-                                label="Type"
+                                name="phone"
+                                label="Telefon"
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please choose the type",
+                                        message: "Telefon nomer",
                                     },
                                 ]}
                             >
-                                <Select placeholder="Please choose the type">
-                                    <Option value="private">Private</Option>
-                                    <Option value="public">Public</Option>
-                                </Select>
+                                <Input placeholder="Iltimos telefon nomer kiriting" />
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
-                                name="approver"
-                                label="Approver"
+                                name="gender"
+                                label="Jinsi"
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please choose the approver",
+                                        message: "Iltimos jinsingizni tanlang",
                                     },
                                 ]}
                             >
-                                <Select placeholder="Please choose the approver">
-                                    <Option value="jack">Jack Ma</Option>
-                                    <Option value="tom">Tom Liu</Option>
+                                <Select placeholder="Iltimos jinsingizni tanlang">
+                                    <Option value="male">Erkak</Option>
+                                    <Option value="female">Ayol</Option>
                                 </Select>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item
-                                name="dateTime"
-                                label="DateTime"
+                                name="job"
+                                label="Kasb"
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please choose the dateTime",
+                                        message: "Iltimos kasbingizni kiriting",
                                     },
                                 ]}
                             >
-                                <DatePicker.RangePicker
+                                <Input placeholder="Iltimos kasbingizni kiriting" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="birth_date"
+                                label="Tug'ilgan sana"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Tug'ilgan sana",
+                                    },
+                                ]}
+                            >
+                                <DatePicker
                                     style={{
                                         width: "100%",
                                     }}
+                                    placeholder="Tug'ilgan sana"
+                                    defaultPickerValue={dayjs("2010-04-13")}
+                                    maxDate={dayjs(new Date())}
                                     getPopupContainer={(trigger) =>
                                         trigger.parentElement!
                                     }
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="description"
-                                label="Description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "please enter url description",
-                                    },
-                                ]}
-                            >
-                                <Input.TextArea
-                                    rows={4}
-                                    placeholder="please enter url description"
                                 />
                             </Form.Item>
                         </Col>

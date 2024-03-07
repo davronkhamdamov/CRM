@@ -30,7 +30,7 @@ const App = () => {
     }, [theme]);
     return (
         <ThemeProvider.Provider value={{ theme, setTheme }}>
-            <RouterProvider router={route} />;
+            <RouterProvider router={route} />
         </ThemeProvider.Provider>
     );
 };

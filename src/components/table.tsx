@@ -75,22 +75,22 @@ const TableComponent = () => {
             dataIndex: "gender",
             filters: [
                 {
-                    text: "Male",
+                    text: "Erkak",
                     value: "male",
                 },
                 {
-                    text: "Female",
+                    text: "Ayol",
                     value: "female",
                 },
             ],
             width: "20%",
         },
         {
-            title: "Email",
-            dataIndex: "email",
+            title: "Ismi",
+            dataIndex: "name",
         },
         {
-            title: "Action",
+            title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
             render: () => {

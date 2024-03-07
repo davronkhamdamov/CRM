@@ -18,7 +18,11 @@ const ProfileAvatar: React.FC = () => {
             key: "1",
             theme: "light" === theme || "dark" === theme ? theme : "dark",
             onClick: (e) => {
-                if (e.key === "light" || e.key === "dark") {
+                if (
+                    e.key === "light" ||
+                    e.key === "dark" ||
+                    e.key === "system"
+                ) {
                     localStorage.setItem("theme", e.key);
                     setTheme(e.key);
                 }
@@ -45,10 +49,20 @@ const ProfileAvatar: React.FC = () => {
             ],
         },
     ];
-
+    const localTheme = localStorage.getItem("theme");
     return (
         <Dropdown
-            menu={{ items, selectable: true, defaultSelectedKeys: [theme] }}
+            menu={{
+                items,
+                selectable: true,
+                defaultSelectedKeys: [
+                    localTheme === "dark" ||
+                    localTheme === "light" ||
+                    localTheme === "system"
+                        ? localTheme
+                        : theme,
+                ],
+            }}
             trigger={["click"]}
             placement="bottomRight"
         >
