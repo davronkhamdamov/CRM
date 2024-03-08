@@ -69,7 +69,7 @@ const Book: React.FC = () => {
                             getPopupContainer={(trigger) =>
                                 trigger.parentElement!
                             }
-                        />{" "}
+                        />
                     </Form.Item>
                     <Form.Item>
                         <Button
@@ -77,7 +77,7 @@ const Book: React.FC = () => {
                             htmlType="submit"
                             className="login-form-button"
                         >
-                            Ro'yhattan o'tish
+                            Ro'yxattan o'tish
                         </Button>
                     </Form.Item>
                 </Space>

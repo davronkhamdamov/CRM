@@ -21,6 +21,7 @@ import {
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
+import { Link } from "react-router-dom";
 
 const actionItems = [
     {
@@ -86,21 +87,25 @@ const TableComponent = () => {
             width: "20%",
         },
         {
-            title: "Ismi",
-            dataIndex: "name",
+            title: "Manzil",
+            dataIndex: "location",
+            render: (location) => `${location.street.name}`,
+            width: "20%",
         },
         {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
-            render: () => {
+            render: (_, record) => {
                 return (
                     <Space size="middle">
                         <Tooltip placement="bottom" title="Tahrirlash">
                             <EditTwoTone />
                         </Tooltip>
                         <Tooltip placement="bottom" title="Ko'rish">
-                            <EyeTwoTone />
+                            <Link to={record.login.uuid}>
+                                <EyeTwoTone />
+                            </Link>
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
@@ -196,7 +201,7 @@ const TableComponent = () => {
                 onSelect={onSelect}
                 onSearch={async (text) => setOptions(await getPanelValue(text))}
                 onChange={onChange}
-                placeholder="Shifkorni qidirish"
+                placeholder="Bemorni qidirish"
             />
             <Table
                 columns={columns}

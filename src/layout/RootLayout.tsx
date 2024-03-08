@@ -10,7 +10,6 @@ import { Flex, Layout, Menu } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import ProfileAvatar from "../components/ProfileAvatar";
-import { RiAdminFill } from "react-icons/ri";
 import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
 
@@ -31,11 +30,6 @@ const RootLayout = () => {
 
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
-        getItem(
-            "Admin",
-            "admin",
-            <RiAdminFill color={theme === "dark" ? "#f2f2f2" : "#000"} />
-        ),
         getItem(
             "To'lov",
             "payment",
@@ -73,7 +67,7 @@ const RootLayout = () => {
                     defaultSelectedKeys={["patient"]}
                     items={items}
                     onClick={(e) => {
-                        navigate("/" + e.key);
+                        navigate(e.key);
                     }}
                 />
             </Sider>

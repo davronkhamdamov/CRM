@@ -197,7 +197,7 @@ const DoctorsTable = () => {
                 onSelect={onSelect}
                 onSearch={async (text) => setOptions(await getPanelValue(text))}
                 onChange={onChange}
-                placeholder="Shifkorni qidirish"
+                placeholder="Shifokorni qidirish"
             />
             <Table
                 columns={columns}
