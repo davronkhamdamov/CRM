@@ -1,4 +1,4 @@
-import { Flex, Layout, Typography, theme } from "antd";
+import { Layout, Space, Typography, theme } from "antd";
 import React from "react";
 import PaymentsTable from "../components/PaymentsTable";
 const { Title } = Typography;
@@ -10,20 +10,26 @@ const Payment: React.FC = () => {
     } = theme.useToken();
 
     return (
-        <Content style={{ margin: "24px 16px 0" }}>
-            <div
-                style={{
-                    padding: 24,
-                    minHeight: "100px",
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
-                }}
+        <Content style={{ margin: "30px 16px 0" }}>
+            <Space
+                direction="vertical"
+                size="large"
+                style={{ display: "flex" }}
             >
-                <Flex align="center" gap={30}>
+                <div
+                    style={{
+                        padding: 24,
+                        minHeight: 110,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG,
+                        alignItems: "center",
+                        display: "flex",
+                    }}
+                >
                     <Title style={{ margin: 0 }}>To'lovlar</Title>
-                </Flex>
-            </div>
-            <PaymentsTable />
+                </div>
+                <PaymentsTable />
+            </Space>
         </Content>
     );
 };

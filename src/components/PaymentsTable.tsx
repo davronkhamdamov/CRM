@@ -21,6 +21,8 @@ import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
+import { HiOutlineCash } from "react-icons/hi";
+import { IoCardOutline } from "react-icons/io5";
 
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
@@ -68,6 +70,33 @@ const PaymentsTable = () => {
             align: "center",
             render: (record) =>
                 `${dayjs(record.date).format("DD-MM-YYYY HH:MM")}`,
+            width: "20%",
+        },
+        {
+            title: "To'lov turi",
+            dataIndex: "",
+            align: "center",
+            render: () => {
+                const data = ["Naqt", "Karta"];
+                let random = data[Math.floor(Math.random() * data.length)];
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: "10px",
+                            alignItems: "center",
+                        }}
+                    >
+                        {random === "Naqt" ? (
+                            <HiOutlineCash />
+                        ) : (
+                            <IoCardOutline />
+                        )}
+                        {random}
+                    </div>
+                );
+            },
             width: "20%",
         },
         {

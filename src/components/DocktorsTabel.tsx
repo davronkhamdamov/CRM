@@ -1,6 +1,5 @@
 import {
     AutoComplete,
-    Dropdown,
     Popconfirm,
     Space,
     Spin,
@@ -11,12 +10,10 @@ import {
 import qs from "qs";
 import { useEffect, useState } from "react";
 import {
-    DownOutlined,
     LoadingOutlined,
     DeleteOutlined,
     EditTwoTone,
     EyeTwoTone,
-    CheckCircleOutlined,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
@@ -24,22 +21,6 @@ import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 
-const actionItems = [
-    {
-        key: "1",
-        label: (
-            <a>
-                <Space style={{ color: "green" }}>
-                    Bajarish <CheckCircleOutlined />
-                </Space>
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: "Action 2",
-    },
-];
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
@@ -63,13 +44,20 @@ const DoctorsTable = () => {
             messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
-
+    const role_data = ["Doktor", "Admin"];
     const columns: ColumnsType<DataType> = [
         {
             title: "Ism Familyasi",
-            dataIndex: "name",
+            dataIndex: "",
             sorter: true,
-            render: (name) => `${name.first} ${name.last}`,
+            render: (name) => {
+                return (
+                    <Link to={name.login?.uuid}>
+                        {name.name.first} {name.name.last}
+                    </Link>
+                );
+            },
+
             width: "20%",
         },
         {
@@ -88,25 +76,20 @@ const DoctorsTable = () => {
             width: "20%",
         },
         {
-            title: "Manzil",
+            title: "Role",
             dataIndex: "location",
-            render: (location) => `${location.street.name}`,
+            render: () => role_data[Math.floor(Math.random() * 2)],
             width: "20%",
         },
         {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
-            render: (_, record) => {
+            render: () => {
                 return (
                     <Space size="middle">
                         <Tooltip placement="bottom" title="Tahrirlash">
-                            <EditTwoTone />
-                        </Tooltip>
-                        <Tooltip placement="bottom" title="Ko'rish">
-                            <Link to={record.login.uuid}>
-                                <EyeTwoTone />
-                            </Link>
+                            <EditTwoTone style={{ cursor: "pointer" }} />
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
@@ -116,15 +99,6 @@ const DoctorsTable = () => {
                                 <DeleteOutlined style={{ color: "red" }} />
                             </Tooltip>
                         </Popconfirm>
-                        <Dropdown
-                            menu={{
-                                items: actionItems,
-                            }}
-                        >
-                            <a>
-                                More <DownOutlined />
-                            </a>
-                        </Dropdown>
                     </Space>
                 );
             },
