@@ -1,10 +1,9 @@
 import { Flex, Layout, Typography, theme } from "antd";
 import React from "react";
-import PaymentsTable from "../components/PaymentsTable";
 const { Title } = Typography;
 const { Content } = Layout;
 
-const Payment: React.FC = () => {
+const Services: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -20,12 +19,11 @@ const Payment: React.FC = () => {
                 }}
             >
                 <Flex align="center" gap={30}>
-                    <Title style={{ margin: 0 }}>To'lovlar</Title>
+                    <Title style={{ margin: 0 }}>Xizmatlar</Title>
                 </Flex>
             </div>
-            <PaymentsTable />
         </Content>
     );
 };
 
-export default Payment;
+export default Services;

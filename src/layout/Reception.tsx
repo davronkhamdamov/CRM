@@ -6,11 +6,12 @@ import {
 } from "@ant-design/icons";
 import { Flex, Layout, Menu } from "antd";
 
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import ProfileAvatar from "../components/ProfileAvatar";
 import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
+import { FaSuitcaseMedical } from "react-icons/fa6";
 
 const { Sider } = Layout;
 
@@ -25,16 +26,18 @@ function getItem(label: string, key: string, icon: JSX.Element) {
 const RootLayout = () => {
     const { theme } = useContext(ThemeProvider);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const [collapsed, setCollapsed] = useState(false);
 
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
         getItem(
-            "To'lov",
+            "To'lovlar",
             "payment",
             <MdPayments color={theme === "dark" ? "#f2f2f2" : "#000"} />
         ),
-        getItem("Foydalanuvchilar", "patient", <UserOutlined />),
+        getItem("Bemorlar", "patient", <UserOutlined />),
+        getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
         getItem("Log out", "auth", <LogoutOutlined />),
     ];
 
@@ -62,7 +65,7 @@ const RootLayout = () => {
                         "light" === theme || "dark" === theme ? theme : "dark"
                     }
                     mode="inline"
-                    defaultSelectedKeys={["patient"]}
+                    defaultSelectedKeys={[pathname.split("/")[2]]}
                     items={items}
                     onClick={(e) => {
                         navigate(e.key);

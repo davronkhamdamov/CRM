@@ -37,30 +37,6 @@ const App: React.FC = () => {
                         placeholder="Usernameni kiriting"
                     />
                 </Form.Item>
-                <Form.Item
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Iltimos parolni kiriting!",
-                        },
-                    ]}
-                >
-                    <Input.Password
-                        prefix={
-                            <LockOutlined className="site-form-item-icon" />
-                        }
-                        placeholder="Parolni kiriting"
-                        iconRender={(visible) =>
-                            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                        }
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Link className="login-form-forgot" to="forget-password">
-                        Parolni unutdingizimi?
-                    </Link>
-                </Form.Item>
 
                 <Form.Item>
                     <Button
@@ -68,7 +44,7 @@ const App: React.FC = () => {
                         htmlType="submit"
                         className="login-form-button"
                     >
-                        Tizimga kirish
+                        Parolni tiklash
                     </Button>
                 </Form.Item>
             </Form>

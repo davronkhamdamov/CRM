@@ -1,6 +1,5 @@
 import {
     AutoComplete,
-    Dropdown,
     Popconfirm,
     Space,
     Spin,
@@ -10,35 +9,15 @@ import {
 } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
-import {
-    DownOutlined,
-    LoadingOutlined,
-    DeleteOutlined,
-    EditTwoTone,
-    EyeTwoTone,
-    CheckCircleOutlined,
-} from "@ant-design/icons";
+import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
+import { FaUserDoctor } from "react-icons/fa6";
+import { MdEdit } from "react-icons/md";
+import EditAccound from "./EditAccound";
+import dayjs from "dayjs";
 
-const actionItems = [
-    {
-        key: "1",
-        label: (
-            <a>
-                <Space style={{ color: "green" }}>
-                    Bajarish <CheckCircleOutlined />
-                </Space>
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: "Action 2",
-    },
-];
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
@@ -48,6 +27,10 @@ const TableComponent = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState<EditModal>({
+        id: "",
+        isOpen: false,
+    });
     const [toLoading, setToLoading] = useState(false);
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
@@ -66,9 +49,14 @@ const TableComponent = () => {
     const columns: ColumnsType<DataType> = [
         {
             title: "Ismi",
-            dataIndex: "name",
             sorter: true,
-            render: (name) => `${name.first} ${name.last}`,
+            render: (record) => {
+                return (
+                    <a href={`patient/${record.login.uuid}`}>
+                        {record.name.first} {record.name.last}
+                    </a>
+                );
+            },
             width: "20%",
         },
         {
@@ -84,13 +72,26 @@ const TableComponent = () => {
                     value: "female",
                 },
             ],
-            width: "20%",
+            width: "10%",
+        },
+        {
+            title: "Ro'yxatdan o'tgan sanasi",
+            dataIndex: "registered",
+            render: (registered) =>
+                `${dayjs(registered?.date).format("DD-MM-YYYY")}`,
+            width: "15%",
         },
         {
             title: "Manzil",
             dataIndex: "location",
             render: (location) => `${location.street.name}`,
             width: "20%",
+        },
+        {
+            title: "Balans",
+            dataIndex: "location",
+            render: (location) => `${location.street.number} so'm`,
+            width: "15%",
         },
         {
             title: "Bajariladigan ishlar",
@@ -100,30 +101,37 @@ const TableComponent = () => {
                 return (
                     <Space size="middle">
                         <Tooltip placement="bottom" title="Tahrirlash">
-                            <EditTwoTone />
+                            <MdEdit
+                                style={{ cursor: "pointer" }}
+                                color="dodgerblue"
+                                onClick={() => {
+                                    if (
+                                        openEditModal.id !== record.login.uuid
+                                    ) {
+                                        setOpenEditModal({
+                                            id: record.login.uuid,
+                                            isOpen: true,
+                                        });
+                                    }
+                                }}
+                            />
                         </Tooltip>
-                        <Tooltip placement="bottom" title="Ko'rish">
-                            <Link to={record.login.uuid}>
-                                <EyeTwoTone />
-                            </Link>
+                        <Tooltip placement="bottom" title="Davolash">
+                            <FaUserDoctor
+                                color="#3b82f6"
+                                style={{ cursor: "pointer" }}
+                            />
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
                             onConfirm={cancel}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
-                                <DeleteOutlined style={{ color: "red" }} />
+                                <DeleteOutlined
+                                    style={{ color: "red", cursor: "pointer" }}
+                                />
                             </Tooltip>
                         </Popconfirm>
-                        <Dropdown
-                            menu={{
-                                items: actionItems,
-                            }}
-                        >
-                            <a>
-                                More <DownOutlined />
-                            </a>
-                        </Dropdown>
                     </Space>
                 );
             },
@@ -229,6 +237,7 @@ const TableComponent = () => {
                 spinning={toLoading}
                 fullscreen
             />
+            <EditAccound setOpen={setOpenEditModal} data={openEditModal} />
             {contextHolder}
         </>
     );

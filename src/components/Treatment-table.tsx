@@ -1,54 +1,48 @@
 import {
     AutoComplete,
-    Dropdown,
     Popconfirm,
     Space,
     Spin,
     Table,
+    Tag,
     Tooltip,
     message,
 } from "antd";
 import qs from "qs";
+
 import { useEffect, useState } from "react";
 import {
     DownOutlined,
     LoadingOutlined,
     DeleteOutlined,
-    EditTwoTone,
-    EyeTwoTone,
     CheckCircleOutlined,
+    ClockCircleOutlined,
+    CloseCircleOutlined,
+    ExclamationCircleOutlined,
+    MinusCircleOutlined,
+    SyncOutlined,
 } from "@ant-design/icons";
-
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
+import { FaUserDoctor } from "react-icons/fa6";
+import { MdEdit, MdOutlinePayment } from "react-icons/md";
+import dayjs from "dayjs";
+import { IoIosMore } from "react-icons/io";
 
-const actionItems = [
-    {
-        key: "1",
-        label: (
-            <a>
-                <Space style={{ color: "green" }}>
-                    Bajarish <CheckCircleOutlined />
-                </Space>
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: "Action 2",
-    },
-];
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
     ...params,
 });
-const DoctorsTable = () => {
+const Treatment = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState<EditModal>({
+        id: "",
+        isOpen: false,
+    });
     const [toLoading, setToLoading] = useState(false);
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
@@ -66,65 +60,118 @@ const DoctorsTable = () => {
 
     const columns: ColumnsType<DataType> = [
         {
-            title: "Ism Familyasi",
-            dataIndex: "name",
+            title: "Ismi",
             sorter: true,
-            render: (name) => `${name.first} ${name.last}`,
+            render: (record) => {
+                return (
+                    <a href={`patient/${record.login.uuid}`}>
+                        {record.name.first} {record.name.last}
+                    </a>
+                );
+            },
             width: "20%",
         },
         {
-            title: "Jinsi",
-            dataIndex: "gender",
+            title: "Shifokor",
+            dataIndex: "name",
             filters: [
                 {
-                    text: "Erkak",
-                    value: "male",
+                    text: "Birinchi doktor",
+                    value: "first",
                 },
                 {
-                    text: "Ayol",
-                    value: "female",
+                    text: "Ikkinchi doktor",
+                    value: "second",
+                },
+                {
+                    text: "Uchinchi doktor",
+                    value: "third",
                 },
             ],
+            render: (name) => `${name?.first}`,
             width: "20%",
         },
         {
-            title: "Manzil",
-            dataIndex: "location",
-            render: (location) => `${location.street.name}`,
+            title: "Sana",
+            dataIndex: "registered",
+            render: (dob) =>
+                `${dayjs(dob?.date).format("DD-MM-YYYY HH:MM")} - ${dayjs(
+                    dob?.date
+                ).format("HH:MM")}`,
             width: "20%",
+        },
+        {
+            title: "Holati",
+            dataIndex: "",
+            width: "5%",
+            render: () => {
+                return (
+                    <>
+                        <Tag icon={<CheckCircleOutlined />} color="success">
+                            Yakunlandi
+                        </Tag>
+                        {/* <Tag icon={<SyncOutlined spin />} color="processing">
+                            Jarayonda
+                        </Tag>
+                        <Tag icon={<CloseCircleOutlined />} color="error">
+                            Xatolik
+                        </Tag>
+                        <Tag icon={<ClockCircleOutlined />} color="default">
+                            Kutillmoqda
+                        </Tag>
+                        <Tag icon={<MinusCircleOutlined />} color="default">
+                            To'xtatilgan
+                        </Tag> */}
+                    </>
+                );
+            },
         },
         {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
+            align: "center",
             render: (_, record) => {
                 return (
                     <Space size="middle">
-                        <Tooltip placement="bottom" title="Tahrirlash">
-                            <EditTwoTone />
+                        <Tooltip placement="bottom" title="To'lash">
+                            <MdOutlinePayment
+                                style={{ cursor: "pointer" }}
+                                color="dodgerblue"
+                                onClick={() => {
+                                    if (
+                                        openEditModal.id !== record.login.uuid
+                                    ) {
+                                        setOpenEditModal({
+                                            id: record.login.uuid,
+                                            isOpen: true,
+                                        });
+                                    }
+                                }}
+                            />
                         </Tooltip>
-                        <Tooltip placement="bottom" title="Ko'rish">
-                            <Link to={record.login.uuid}>
-                                <EyeTwoTone />
-                            </Link>
+                        <Tooltip placement="bottom" title="Tahrirlash">
+                            <MdEdit
+                                color="#3b82f6"
+                                style={{ cursor: "pointer" }}
+                            />
+                        </Tooltip>
+                        <Tooltip placement="bottom" title="Ko'proq ma'lumot">
+                            <IoIosMore
+                                color="#3b82f6"
+                                style={{ cursor: "pointer" }}
+                            />
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
                             onConfirm={cancel}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
-                                <DeleteOutlined style={{ color: "red" }} />
+                                <DeleteOutlined
+                                    style={{ color: "red", cursor: "pointer" }}
+                                />
                             </Tooltip>
                         </Popconfirm>
-                        <Dropdown
-                            menu={{
-                                items: actionItems,
-                            }}
-                        >
-                            <a>
-                                More <DownOutlined />
-                            </a>
-                        </Dropdown>
                     </Space>
                 );
             },
@@ -170,7 +217,6 @@ const DoctorsTable = () => {
                 });
             });
     };
-
     const [value, setValue] = useState("");
     const [options, setOptions] = useState<{ value: string }[]>([]);
     const onChange = (data: string) => {
@@ -193,6 +239,7 @@ const DoctorsTable = () => {
     const onSelect = (data: string) => {
         console.log("onSelect", data);
     };
+
     return (
         <>
             <AutoComplete
@@ -202,7 +249,7 @@ const DoctorsTable = () => {
                 onSelect={onSelect}
                 onSearch={async (text) => setOptions(await getPanelValue(text))}
                 onChange={onChange}
-                placeholder="Shifokorni qidirish"
+                placeholder="Bemorni qidirish"
             />
             <Table
                 columns={columns}
@@ -235,4 +282,4 @@ const DoctorsTable = () => {
     );
 };
 
-export default DoctorsTable;
+export default Treatment;

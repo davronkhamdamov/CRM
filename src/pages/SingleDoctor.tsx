@@ -1,13 +1,12 @@
 import { Flex, Layout, Typography, theme } from "antd";
 import React from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const { Title } = Typography;
 const { Content } = Layout;
 import { IoArrowBackSharp } from "react-icons/io5";
 
-const SingleBemor: React.FC = () => {
+const SingleDocktor: React.FC = () => {
     const params = useParams();
-    const location = useLocation();
     console.log(params.id);
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -23,7 +22,7 @@ const SingleBemor: React.FC = () => {
                     borderRadius: borderRadiusLG,
                 }}
             >
-                <Link to={location.pathname.split("/").splice(0, 3).join("/")}>
+                <Link to="/admin/patient">
                     <Flex align="center" gap={5}>
                         <IoArrowBackSharp />
                         <p>Bemorlar ro'yhatiga qaytish</p>
@@ -38,4 +37,4 @@ const SingleBemor: React.FC = () => {
     );
 };
 
-export default SingleBemor;
+export default SingleDocktor;

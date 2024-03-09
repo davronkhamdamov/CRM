@@ -1,20 +1,12 @@
 import { useContext, useState } from "react";
-import {
-    PieChartOutlined,
-    UserOutlined,
-    SettingOutlined,
-} from "@ant-design/icons";
+import { LogoutOutlined, PieChartOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu } from "antd";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import ProfileAvatar from "../components/ProfileAvatar";
-import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
-import { FaDollarSign, FaSuitcaseMedical, FaUserDoctor } from "react-icons/fa6";
-import { GrServices } from "react-icons/gr";
-import { CiBoxList } from "react-icons/ci";
-import { SlLogout } from "react-icons/sl";
+import { FaSuitcaseMedical } from "react-icons/fa6";
 
 const { Sider } = Layout;
 
@@ -26,27 +18,16 @@ function getItem(label: string, key: string, icon: JSX.Element) {
     };
 }
 
-const RootLayout = () => {
+const DockerLayout = () => {
     const { theme } = useContext(ThemeProvider);
     const navigate = useNavigate();
-    const [collapsed, setCollapsed] = useState(false);
     const { pathname } = useLocation();
+    const [collapsed, setCollapsed] = useState(false);
 
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
-        getItem(
-            "To'lov",
-            "payment",
-            <FaDollarSign color={theme === "dark" ? "#f2f2f2" : "#000"} />
-        ),
-        getItem("Bemorlar", "patient", <UserOutlined />),
-        getItem("Shifokorlar", "doctors", <FaUserDoctor />),
-        getItem("To'lov turlari", "payment-type", <MdPayments />),
-        getItem("Xizmatlar", "services", <GrServices />),
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-        getItem("Sozlamalar", "settings", <SettingOutlined />),
-        getItem("Xisobot", "hisobot", <CiBoxList />),
-        getItem("Log out", "auth", <SlLogout />),
+        getItem("Log out", "auth", <LogoutOutlined />),
     ];
 
     return (
@@ -86,4 +67,4 @@ const RootLayout = () => {
         </Layout>
     );
 };
-export default RootLayout;
+export default DockerLayout;

@@ -1,6 +1,5 @@
 import {
     AutoComplete,
-    Dropdown,
     Popconfirm,
     Space,
     Spin,
@@ -11,41 +10,24 @@ import {
 import qs from "qs";
 import { useEffect, useState } from "react";
 import {
-    DownOutlined,
     LoadingOutlined,
     DeleteOutlined,
     EditTwoTone,
     EyeTwoTone,
-    CheckCircleOutlined,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
-const actionItems = [
-    {
-        key: "1",
-        label: (
-            <a>
-                <Space style={{ color: "green" }}>
-                    Bajarish <CheckCircleOutlined />
-                </Space>
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: "Action 2",
-    },
-];
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
     ...params,
 });
-const DoctorsTable = () => {
+const PaymentsTable = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
@@ -71,32 +53,28 @@ const DoctorsTable = () => {
             sorter: true,
             render: (name) => `${name.first} ${name.last}`,
             width: "20%",
+            align: "center",
         },
         {
-            title: "Jinsi",
-            dataIndex: "gender",
-            filters: [
-                {
-                    text: "Erkak",
-                    value: "male",
-                },
-                {
-                    text: "Ayol",
-                    value: "female",
-                },
-            ],
-            width: "20%",
-        },
-        {
-            title: "Manzil",
+            title: "To'lov miqdori",
             dataIndex: "location",
-            render: (location) => `${location.street.name}`,
+            align: "center",
+            width: "20%",
+            render: (location) => `${location.street.number} so'm`,
+        },
+        {
+            title: "Sana",
+            dataIndex: "registered",
+            align: "center",
+            render: (record) =>
+                `${dayjs(record.date).format("DD-MM-YYYY HH:MM")}`,
             width: "20%",
         },
         {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
+            align: "center",
             render: (_, record) => {
                 return (
                     <Space size="middle">
@@ -116,15 +94,6 @@ const DoctorsTable = () => {
                                 <DeleteOutlined style={{ color: "red" }} />
                             </Tooltip>
                         </Popconfirm>
-                        <Dropdown
-                            menu={{
-                                items: actionItems,
-                            }}
-                        >
-                            <a>
-                                More <DownOutlined />
-                            </a>
-                        </Dropdown>
                     </Space>
                 );
             },
@@ -235,4 +204,4 @@ const DoctorsTable = () => {
     );
 };
 
-export default DoctorsTable;
+export default PaymentsTable;

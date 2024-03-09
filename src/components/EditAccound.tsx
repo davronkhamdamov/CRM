@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Col,
@@ -12,40 +11,29 @@ import {
     Space,
 } from "antd";
 import dayjs from "dayjs";
-import Title from "antd/es/typography/Title";
+import { EditModalProps, UserData } from "../types/type";
 
 const { Option } = Select;
-const CreateAccount = () => {
-    const [open, setOpen] = useState(false);
-    const showDrawer = () => {
-        setOpen(true);
-    };
+const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const onClose = () => {
-        setOpen(false);
+        setOpen({ id: "", isOpen: false });
     };
-    const onChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
-
-    const onSearch = (value: string) => {
-        console.log("search:", value);
-    };
-
-    const filterOption = (
-        input: string,
-        option?: { label: string; value: string }
-    ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    const [user_data, setData] = useState<UserData>();
+    useEffect(() => {
+        fetch("https://randomuser.me/api")
+            .then((res) => res.json())
+            .then((data) => {
+                setData(data.results[0]);
+            });
+    }, [data]);
 
     return (
         <>
-            <Button type="default" onClick={showDrawer} icon={<PlusOutlined />}>
-                Yangi bemor
-            </Button>
             <Drawer
-                title="Yangi bemor qo'shish"
+                title="Bemorni ma'lumotlarini yangilash"
                 width={720}
                 onClose={onClose}
-                open={open}
+                open={data.isOpen}
                 styles={{
                     body: {
                         paddingBottom: 80,
@@ -55,12 +43,23 @@ const CreateAccount = () => {
                     <Space>
                         <Button onClick={onClose}>Bekor qilish</Button>
                         <Button onClick={onClose} type="primary">
-                            Yaratish
+                            Yangilash
                         </Button>
                     </Space>
                 }
             >
-                <Form layout="vertical">
+                <Form
+                    layout="vertical"
+                    initialValues={{
+                        first_name: user_data?.name?.first,
+                        last_name: user_data?.name?.last,
+                        adress: user_data?.location?.state,
+                        phone: "+" + user_data?.phone,
+                        gender: user_data?.gender,
+                        job: "Ishsiz",
+                        birth_date: dayjs(user_data?.dob.date),
+                    }}
+                >
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
@@ -180,51 +179,9 @@ const CreateAccount = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Title level={3}>
-                                Bemorni Shifokorga yozdirish
-                            </Title>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="staff"
-                                label="Shifokorlar"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Iltimos shifokorni kiriting",
-                                    },
-                                ]}
-                            >
-                                <Select
-                                    showSearch
-                                    placeholder="Shiforkor tanlang"
-                                    optionFilterProp="children"
-                                    onChange={onChange}
-                                    onSearch={onSearch}
-                                    filterOption={filterOption}
-                                    options={[
-                                        {
-                                            value: "azim",
-                                            label: "Azim",
-                                        },
-                                        {
-                                            value: "aziz",
-                                            label: "Aziz",
-                                        },
-                                        {
-                                            value: "usmon",
-                                            label: "Usmon",
-                                        },
-                                    ]}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
                 </Form>
             </Drawer>
         </>
     );
 };
-export default CreateAccount;
+export default EditAccound;
