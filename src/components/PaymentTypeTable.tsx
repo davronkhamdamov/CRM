@@ -24,13 +24,13 @@ import { CiCalendarDate } from "react-icons/ci";
 
 const PaymentTypeTable = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [data, setData] = useState<PaymentDataType[]>([
+    const [data] = useState<PaymentDataType[]>([
         { name: "Naqt", created_at: new Date() },
         { name: "Karta", created_at: new Date() },
     ]);
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const [toLoading, setToLoading] = useState(false);
-    const [tableParams, setTableParams] = useState<TableParams>({
+    const [tableParams] = useState<TableParams>({
         pagination: {
             current: 1,
             pageSize: 10,
@@ -40,7 +40,7 @@ const PaymentTypeTable = () => {
         setToLoading(true);
         setTimeout(() => {
             setToLoading(false);
-            messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
+            messageApi.success("To'lov turi muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
 

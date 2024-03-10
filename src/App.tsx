@@ -2,6 +2,8 @@ import { RouterProvider } from "react-router-dom";
 import route from "./router/route";
 import { createContext, useEffect, useState } from "react";
 import { themeMode } from "./types/type";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export const ThemeProvider = createContext<{
     theme: themeMode;
@@ -13,10 +15,21 @@ export const ThemeProvider = createContext<{
     },
 });
 
+export const LoadingProvider = createContext<{
+    isLoadingCnx: boolean;
+    setLoadingCnx: (i: boolean) => void;
+}>({
+    isLoadingCnx: false,
+    setLoadingCnx(i) {
+        i;
+    },
+});
+
 const App = () => {
     const getCurrentTheme = () =>
         window.matchMedia("(prefers-color-scheme: dark)").matches;
     const [theme, setTheme] = useState<themeMode>("light");
+    const [isLoadingCnx, setLoadingCnx] = useState<boolean>(false);
     useEffect(() => {
         const storedTheme = localStorage.getItem("theme");
         if (storedTheme === "system") {
@@ -30,7 +43,17 @@ const App = () => {
     }, [theme]);
     return (
         <ThemeProvider.Provider value={{ theme, setTheme }}>
-            <RouterProvider router={route} />
+            <LoadingProvider.Provider value={{ isLoadingCnx, setLoadingCnx }}>
+                <RouterProvider router={route} />
+                <Spin
+                    indicator={
+                        <LoadingOutlined style={{ fontSize: 30 }} spin />
+                    }
+                    style={{ zIndex: 1000000 }}
+                    spinning={isLoadingCnx}
+                    fullscreen
+                />
+            </LoadingProvider.Provider>
         </ThemeProvider.Provider>
     );
 };

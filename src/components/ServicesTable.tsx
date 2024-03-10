@@ -2,38 +2,36 @@ import {
     AutoComplete,
     Popconfirm,
     Space,
-    Spin,
     Table,
+    Tag,
     Tooltip,
     message,
 } from "antd";
 import qs from "qs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     LoadingOutlined,
     DeleteOutlined,
     EditTwoTone,
-    EyeTwoTone,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
 import dayjs from "dayjs";
-import { HiOutlineCash } from "react-icons/hi";
-import { IoCardOutline } from "react-icons/io5";
+import { IoIosMore } from "react-icons/io";
+import { LoadingProvider } from "../App";
 
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
     ...params,
 });
-const PaymentsTable = () => {
+const ServicesTable = () => {
+    const { setLoadingCnx } = useContext(LoadingProvider);
     const [messageApi, contextHolder] = message.useMessage();
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
-    const [toLoading, setToLoading] = useState(false);
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
@@ -41,79 +39,90 @@ const PaymentsTable = () => {
         },
     });
     const cancel = () => {
-        setToLoading(true);
+        setLoadingCnx(true);
         setTimeout(() => {
-            setToLoading(false);
-            messageApi.success("To'lov muvaffaqqiyatli o'chirildi", 2);
+            setLoadingCnx(false);
+            messageApi.success("Xizmat muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
 
     const columns: ColumnsType<DataType> = [
         {
-            title: "Ism Familyasi",
+            title: "Xizmat nomi",
             dataIndex: "name",
             sorter: true,
-            render: (name) => `${name.first} ${name.last}`,
+            render: (name) => `${name.last}`,
             width: "20%",
             align: "center",
         },
         {
-            title: "To'lov miqdori",
+            title: "Xizmat narxi",
             dataIndex: "location",
             align: "center",
-            width: "20%",
+            width: "16%",
             render: (location) => `${location.street.number} so'm`,
         },
         {
-            title: "Sana",
-            dataIndex: "registered",
+            title: "Xom ashyo narxi",
+            dataIndex: "location",
             align: "center",
-            render: (record) =>
-                `${dayjs(record.date).format("DD-MM-YYYY HH:MM")}`,
-            width: "20%",
+            render: (location) => `${location.street.number} so'm`,
+            width: "16%",
         },
         {
-            title: "To'lov turi",
-            dataIndex: "",
+            title: "Yaratilgan vaqti",
+            dataIndex: "registered",
             align: "center",
-            render: () => {
-                const data = ["Naqt", "Karta"];
-                let random = data[Math.floor(Math.random() * data.length)];
-                return (
-                    <div
+            render: (record) => `${dayjs(record.date).format("DD-MM-YYYY")}`,
+            width: "16%",
+        },
+        {
+            title: "Xizmat holati",
+            dataIndex: "gender",
+            align: "center",
+            render: (record) => {
+                return record === "male" ? (
+                    <Tag
                         style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "10px",
-                            alignItems: "center",
+                            maxWidth: "90px",
+                            minWidth: "80px",
+                            textAlign: "center",
                         }}
+                        color="success"
                     >
-                        {random === "Naqt" ? (
-                            <HiOutlineCash />
-                        ) : (
-                            <IoCardOutline />
-                        )}
-                        {random}
-                    </div>
+                        Foal
+                    </Tag>
+                ) : (
+                    <Tag
+                        style={{
+                            maxWidth: "90px",
+                            minWidth: "80px",
+                            textAlign: "center",
+                        }}
+                        color="default"
+                    >
+                        Foal emas
+                    </Tag>
                 );
             },
-            width: "20%",
+            width: "10%",
         },
         {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
             align: "center",
-            render: (_, record) => {
+            render: () => {
                 return (
                     <Space size="middle">
                         <Tooltip placement="bottom" title="Tahrirlash">
                             <EditTwoTone />
                         </Tooltip>
-                        <Tooltip placement="bottom" title="Ko'rish">
-                            <Link to={record.login.uuid}>
-                                <EyeTwoTone />
-                            </Link>
+                        <Tooltip placement="bottom" title="Ko'proq ma'lumot">
+                            <IoIosMore
+                                color="#3b82f6"
+                                style={{ cursor: "pointer" }}
+                            />
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
@@ -223,14 +232,9 @@ const PaymentsTable = () => {
                 }
                 onChange={handleTableChange}
             />
-            <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-                spinning={toLoading}
-                fullscreen
-            />
             {contextHolder}
         </>
     );
 };
 
-export default PaymentsTable;
+export default ServicesTable;

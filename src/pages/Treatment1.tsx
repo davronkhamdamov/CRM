@@ -1,5 +1,4 @@
 import { Typography, Flex, Space, Layout, theme } from "antd";
-import CreateAccount from "../components/addAccound";
 import TableComponent from "../components/Treatment-table";
 import React from "react";
 const { Title } = Typography;

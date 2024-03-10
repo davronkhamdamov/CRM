@@ -1,15 +1,37 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Drawer, Form, Input, Row, Select, Space } from "antd";
+import {
+    Button,
+    Col,
+    Drawer,
+    Form,
+    Input,
+    Row,
+    Select,
+    Space,
+    message,
+} from "antd";
+import { LoadingProvider } from "../App";
 
 const { Option } = Select;
 const CreateAccount = () => {
+    const { setLoadingCnx } = useContext(LoadingProvider);
     const [open, setOpen] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
     const showDrawer = () => {
         setOpen(true);
     };
     const onClose = () => {
         setOpen(false);
+    };
+    const onSubmit = () => {
+        setLoadingCnx(true);
+        setTimeout(() => {
+            setLoadingCnx(false);
+            setOpen(false);
+            setLoadingCnx(false);
+            messageApi.success("Shifokor muvaffaqqiyatli yaratildi", 2);
+        }, 2000);
     };
     return (
         <>
@@ -29,7 +51,7 @@ const CreateAccount = () => {
                 extra={
                     <Space>
                         <Button onClick={onClose}>Bekor qilish</Button>
-                        <Button onClick={onClose} type="primary">
+                        <Button onClick={onSubmit} type="primary">
                             Yaratish
                         </Button>
                     </Space>
@@ -130,6 +152,7 @@ const CreateAccount = () => {
                         </Col>
                     </Row>
                 </Form>
+                {contextHolder}
             </Drawer>
         </>
     );

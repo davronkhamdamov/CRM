@@ -1,20 +1,7 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-    Button,
-    Col,
-    DatePicker,
-    Drawer,
-    Form,
-    Input,
-    Row,
-    Select,
-    Space,
-} from "antd";
-import dayjs from "dayjs";
-import Title from "antd/es/typography/Title";
+import { Button, Drawer, Form, Input, Space } from "antd";
 
-const { Option } = Select;
 const CreatePaymentType = () => {
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
@@ -23,18 +10,18 @@ const CreatePaymentType = () => {
     const onClose = () => {
         setOpen(false);
     };
-    const onChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
+    // const onChange = (value: string) => {
+    //     console.log(`selected ${value}`);
+    // };
 
-    const onSearch = (value: string) => {
-        console.log("search:", value);
-    };
+    // const onSearch = (value: string) => {
+    //     console.log("search:", value);
+    // };
 
-    const filterOption = (
-        input: string,
-        option?: { label: string; value: string }
-    ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    // const filterOption = (
+    //     input: string,
+    //     option?: { label: string; value: string }
+    // ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
     return (
         <>
@@ -43,7 +30,7 @@ const CreatePaymentType = () => {
             </Button>
             <Drawer
                 title="Yangi to'lov turini qo'shish"
-                width={720}
+                width={500}
                 onClose={onClose}
                 open={open}
                 styles={{

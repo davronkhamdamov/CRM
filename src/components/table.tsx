@@ -42,7 +42,7 @@ const TableComponent = () => {
         setToLoading(true);
         setTimeout(() => {
             setToLoading(false);
-            messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
+            messageApi.success("Bemor muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
 

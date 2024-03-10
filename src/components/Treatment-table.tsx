@@ -12,20 +12,13 @@ import qs from "qs";
 
 import { useEffect, useState } from "react";
 import {
-    DownOutlined,
     LoadingOutlined,
     DeleteOutlined,
     CheckCircleOutlined,
-    ClockCircleOutlined,
-    CloseCircleOutlined,
-    ExclamationCircleOutlined,
-    MinusCircleOutlined,
-    SyncOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { FaUserDoctor } from "react-icons/fa6";
 import { MdEdit, MdOutlinePayment } from "react-icons/md";
 import dayjs from "dayjs";
 import { IoIosMore } from "react-icons/io";
@@ -54,7 +47,7 @@ const Treatment = () => {
         setToLoading(true);
         setTimeout(() => {
             setToLoading(false);
-            messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
+            messageApi.success("Davolash muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
 

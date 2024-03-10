@@ -13,7 +13,6 @@ import {
     LoadingOutlined,
     DeleteOutlined,
     EditTwoTone,
-    EyeTwoTone,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
@@ -41,7 +40,7 @@ const DoctorsTable = () => {
         setToLoading(true);
         setTimeout(() => {
             setToLoading(false);
-            messageApi.success("Muvaffaqqiyatli o'chirildi", 2);
+            messageApi.success("Shifokor muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
     const role_data = ["Doktor", "Admin"];
@@ -102,6 +101,7 @@ const DoctorsTable = () => {
                     </Space>
                 );
             },
+            width: "20%",
         },
     ];
 

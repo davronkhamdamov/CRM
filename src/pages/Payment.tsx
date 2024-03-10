@@ -1,6 +1,7 @@
 import { Layout, Space, Typography, theme } from "antd";
 import React from "react";
 import PaymentsTable from "../components/PaymentsTable";
+import AddPayment from "../components/AddPayment";
 const { Title } = Typography;
 const { Content } = Layout;
 
@@ -24,9 +25,11 @@ const Payment: React.FC = () => {
                         borderRadius: borderRadiusLG,
                         alignItems: "center",
                         display: "flex",
+                        justifyContent: "space-between",
                     }}
                 >
                     <Title style={{ margin: 0 }}>To'lovlar</Title>
+                    <AddPayment />
                 </div>
                 <PaymentsTable />
             </Space>

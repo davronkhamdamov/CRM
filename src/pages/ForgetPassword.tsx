@@ -1,12 +1,6 @@
 import React from "react";
-import {
-    EyeTwoTone,
-    EyeInvisibleOutlined,
-    UserOutlined,
-    LockOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input } from "antd";
-import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
     const onFinish = (values: any) => {

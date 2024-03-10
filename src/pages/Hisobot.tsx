@@ -1,5 +1,4 @@
 import { Flex, Layout, Typography, theme } from "antd";
-import React from "react";
 const { Title } = Typography;
 const { Content } = Layout;
 

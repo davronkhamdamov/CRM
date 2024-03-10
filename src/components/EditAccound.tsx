@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Button,
     Col,
@@ -9,14 +9,28 @@ import {
     Row,
     Select,
     Space,
+    message,
 } from "antd";
 import dayjs from "dayjs";
 import { EditModalProps, UserData } from "../types/type";
+import { LoadingProvider } from "../App";
 
 const { Option } = Select;
 const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
+    const { setLoadingCnx } = useContext(LoadingProvider);
+    const [messageApi, contextHolder] = message.useMessage();
+
     const onClose = () => {
         setOpen({ id: "", isOpen: false });
+    };
+
+    const onSubmit = () => {
+        setLoadingCnx(true);
+        setTimeout(() => {
+            setOpen({ id: "", isOpen: false });
+            setLoadingCnx(false);
+            messageApi.success("Bemor muvaffaqqiyatli yangilandi", 2);
+        }, 2000);
     };
     const [user_data, setData] = useState<UserData>();
     useEffect(() => {
@@ -29,6 +43,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
 
     return (
         <>
+            {contextHolder}
             <Drawer
                 title="Bemorni ma'lumotlarini yangilash"
                 width={720}
@@ -42,7 +57,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                 extra={
                     <Space>
                         <Button onClick={onClose}>Bekor qilish</Button>
-                        <Button onClick={onClose} type="primary">
+                        <Button onClick={onSubmit} type="primary">
                             Yangilash
                         </Button>
                     </Space>
