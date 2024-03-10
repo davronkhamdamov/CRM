@@ -193,7 +193,7 @@ const PaymentsTable = () => {
         onSelect={onSelect}
         onSearch={async (text) => setOptions(await getPanelValue(text))}
         onChange={onChange}
-        placeholder="Shifokorni qidirish"
+        placeholder="To'lovlarni qidirish"
       />
       <Table
         columns={columns}
