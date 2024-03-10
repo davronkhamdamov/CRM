@@ -49,3 +49,7 @@ export interface UserData {
         date?: string;
     };
 }
+export interface PaymentDataType {
+    name: string;
+    created_at: Date;
+}

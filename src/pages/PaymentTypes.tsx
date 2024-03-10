@@ -1,5 +1,7 @@
-import { Flex, Layout, Typography, theme } from "antd";
+import { Layout, Space, Typography, theme } from "antd";
 import React from "react";
+import PaymentTypeTable from "../components/PaymentTypeTable";
+import CreatePaymentType from "../components/CreatePaymentType";
 const { Title } = Typography;
 const { Content } = Layout;
 
@@ -9,19 +11,28 @@ const PaymentType: React.FC = () => {
     } = theme.useToken();
 
     return (
-        <Content style={{ margin: "24px 16px 0" }}>
-            <div
-                style={{
-                    padding: 24,
-                    minHeight: "100px",
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
-                }}
+        <Content style={{ margin: "30px 16px 0" }}>
+            <Space
+                direction="vertical"
+                size="large"
+                style={{ display: "flex" }}
             >
-                <Flex align="center" gap={30}>
+                <div
+                    style={{
+                        padding: 24,
+                        minHeight: 110,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
                     <Title style={{ margin: 0 }}>To'lov turlari</Title>
-                </Flex>
-            </div>
+                    <CreatePaymentType />
+                </div>
+                <PaymentTypeTable />
+            </Space>
         </Content>
     );
 };
