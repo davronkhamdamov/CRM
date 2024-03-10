@@ -64,7 +64,6 @@ const ProfileAvatar: React.FC = () => {
                 ],
             }}
             trigger={["click"]}
-            placement="bottomRight"
         >
             <a onClick={(e) => e.preventDefault()}>
                 <Space>

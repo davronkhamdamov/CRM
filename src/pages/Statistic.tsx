@@ -101,7 +101,7 @@ const Statistica: React.FC = () => {
                     >
                         <MdOutlineMedicalServices size={30} />
                         <Statistic
-                            value={14}
+                            value={23}
                             valueStyle={{ color: "white" }}
                             precision={2}
                             formatter={formatter}
@@ -122,7 +122,7 @@ const Statistica: React.FC = () => {
                     >
                         <GiReceiveMoney size={30} />
                         <Statistic
-                            value={14}
+                            value={12}
                             valueStyle={{ color: "white" }}
                             precision={2}
                             formatter={formatter}
@@ -136,7 +136,7 @@ const Statistica: React.FC = () => {
                 <div
                     style={{
                         padding: 24,
-                        width: "45%",
+                        width: "70%",
                         minHeight: "500px",
                         height: "50vh",
                         background: colorBgContainer,
@@ -154,7 +154,7 @@ const Statistica: React.FC = () => {
                         justify="space-around"
                     >
                         <Statistic
-                            title="Shu oydagi isob"
+                            title="Shu oydagi hisob"
                             value={1.28}
                             precision={2}
                             valueStyle={{ color: "#3f8600" }}
@@ -175,7 +175,7 @@ const Statistica: React.FC = () => {
                 <div
                     style={{
                         padding: 24,
-                        width: "45%",
+                        width: "30%",
                         minHeight: "500px",
                         height: "50vh",
                         background: colorBgContainer,

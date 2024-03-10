@@ -62,9 +62,8 @@ const RootLayout = () => {
                 }}
             >
                 <Flex
-                    align="center"
                     justify="center"
-                    style={{ height: "60px" }}
+                    style={{ height: "50px", marginTop: 20 }}
                 >
                     <ProfileAvatar />
                 </Flex>

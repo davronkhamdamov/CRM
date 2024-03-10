@@ -25,8 +25,8 @@ const route = createBrowserRouter(
     createRoutesFromElements(
         <>
             <Route path="/admin" element={<RootLayout />}>
-                <Route path="payment" element={<Payment />} />
                 <Route index path="statistic" element={<Statistic />} />
+                <Route path="payment" element={<Payment />} />
                 <Route path="patient" element={<Bemorlar />} />
                 <Route path="patient/:id" element={<SingleBemor />} />
                 <Route path="doctors" element={<Doctors />} />
@@ -43,7 +43,7 @@ const route = createBrowserRouter(
             </Route>
             <Route path="/reception" element={<Reception />}>
                 <Route path="payment" element={<Payment />} />
-                <Route path="statistic" element={<Statistic />} />
+                <Route index path="statistic" element={<Statistic />} />
                 <Route path="patient" element={<Bemorlar />} />
                 <Route path="patient/:id" element={<SingleBemor />} />
                 <Route path="treatment" element={<Treatment />} />

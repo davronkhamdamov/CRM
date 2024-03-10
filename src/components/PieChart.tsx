@@ -1,7 +1,7 @@
 import { PieChart, Tooltip, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
-    { name: "Qo'rgontepa", value: 400 },
+    { name: "Qo'rgontepa", value: 250 },
     { name: "Andijon", value: 300 },
     { name: "Qorasuv", value: 300 },
     { name: "Xonobod", value: 200 },
