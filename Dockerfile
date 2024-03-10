@@ -1,8 +1,8 @@
-FROM node:14
+FROM node:lts as builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY ./package.json ./
+COPY package*.json ./
 
 RUN npm install
 
@@ -10,10 +10,14 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:alpine as production-build
 
-COPY --from=0 /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html/
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
