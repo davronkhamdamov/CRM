@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     LogoutOutlined,
     PieChartOutlined,
@@ -38,9 +38,19 @@ const RootLayout = () => {
         ),
         getItem("Bemorlar", "patient", <UserOutlined />),
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-        getItem("Log out", "auth", <LogoutOutlined />),
+        getItem("Chiqish", "/auth", <LogoutOutlined />),
     ];
-
+    const defaultRout = pathname?.split("/")[2] || "statistic";
+    const isAuth = localStorage.getItem("auth");
+    useEffect(() => {
+        if (
+            isAuth === "admin" ||
+            isAuth === "doctor" ||
+            isAuth === "reception"
+        ) {
+            return navigate("/" + isAuth + "/" + defaultRout);
+        }
+    }, [isAuth]);
     return (
         <Layout hasSider>
             <Sider
@@ -65,7 +75,7 @@ const RootLayout = () => {
                         "light" === theme || "dark" === theme ? theme : "dark"
                     }
                     mode="inline"
-                    defaultSelectedKeys={[pathname.split("/")[2]]}
+                    defaultSelectedKeys={[defaultRout]}
                     items={items}
                     onClick={(e) => {
                         navigate(e.key);

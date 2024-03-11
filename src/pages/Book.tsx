@@ -51,7 +51,7 @@ const Book: React.FC = () => {
                         />
                     </Form.Item>
                     <Form.Item
-                        name="surname"
+                        name="date_birth"
                         rules={[
                             {
                                 required: true,

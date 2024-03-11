@@ -47,14 +47,14 @@ const renderCustomizedLabel = ({
 const PieChartFC = () => {
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <PieChart width={400} height={400}>
+            <PieChart>
                 <Pie
                     data={data}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
                     label={renderCustomizedLabel}
-                    outerRadius={140}
+                    outerRadius={(window.screen.width / 100) * 10}
                     fill="#8884d8"
                     dataKey="value"
                 >

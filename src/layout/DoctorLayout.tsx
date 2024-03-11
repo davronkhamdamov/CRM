@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LogoutOutlined, PieChartOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu } from "antd";
 
@@ -27,8 +27,19 @@ const DockerLayout = () => {
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-        getItem("Log out", "auth", <LogoutOutlined />),
+        getItem("Chiqish", "/auth", <LogoutOutlined />),
     ];
+    const defaultRout = pathname?.split("/")[2] || "statistic";
+    const isAuth = localStorage.getItem("auth");
+    useEffect(() => {
+        if (
+            isAuth === "admin" ||
+            isAuth === "doctor" ||
+            isAuth === "reception"
+        ) {
+            return navigate("/" + isAuth + "/" + defaultRout);
+        }
+    }, [isAuth]);
 
     return (
         <Layout hasSider>
