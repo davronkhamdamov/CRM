@@ -29,17 +29,18 @@ const DockerLayout = () => {
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
         getItem("Chiqish", "auth", <LogoutOutlined />),
     ];
-    const defaultRout = pathname?.split("/")[2] || "statistic";
+    const defaultRout = pathname?.split("/")[2];
     const isAuth = localStorage.getItem("auth");
+
     useEffect(() => {
-        if (
-            isAuth === "admin" ||
-            isAuth === "doctor" ||
-            isAuth === "reception"
-        ) {
-            return navigate("/" + isAuth + "/" + defaultRout);
+        if (isAuth !== "doctor") {
+            return navigate("/auth");
         }
     }, [isAuth]);
+
+    useEffect(() => {
+        !defaultRout && navigate("/" + isAuth + "/" + "statistic");
+    }, [defaultRout]);
 
     return (
         <Layout hasSider>

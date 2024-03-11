@@ -43,14 +43,14 @@ const RootLayout = () => {
     const defaultRout = pathname?.split("/")[2] || "statistic";
     const isAuth = localStorage.getItem("auth");
     useEffect(() => {
-        if (
-            isAuth === "admin" ||
-            isAuth === "doctor" ||
-            isAuth === "reception"
-        ) {
-            return navigate("/" + isAuth + "/" + defaultRout);
+        if (isAuth !== "reception") {
+            return navigate("/auth");
         }
     }, [isAuth]);
+    useEffect(() => {
+        !defaultRout && navigate("/" + isAuth + "/" + "statistic");
+    }, [defaultRout]);
+
     return (
         <Layout hasSider>
             <Sider
