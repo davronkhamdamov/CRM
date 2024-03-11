@@ -46,7 +46,7 @@ const RootLayout = () => {
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
         getItem("Sozlamalar", "settings", <SettingOutlined />),
         getItem("Xisobot", "hisobot", <CiBoxList />),
-        getItem("Chiqish", "/auth", <SlLogout />),
+        getItem("Chiqish", "auth", <SlLogout />),
     ];
     const defaultRout = pathname?.split("/")[2] || "statistic";
     const isAuth = localStorage.getItem("auth");
@@ -86,6 +86,10 @@ const RootLayout = () => {
                     defaultSelectedKeys={[pathname.split("/")[2]]}
                     items={items}
                     onClick={(e) => {
+                        if (e.key === "auth") {
+                            navigate("/auth");
+                            localStorage.removeItem("auth");
+                        }
                         navigate(e.key);
                     }}
                 />

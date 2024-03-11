@@ -27,7 +27,7 @@ const DockerLayout = () => {
     const items = [
         getItem("Statistika", "statistic", <PieChartOutlined />),
         getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-        getItem("Chiqish", "/auth", <LogoutOutlined />),
+        getItem("Chiqish", "auth", <LogoutOutlined />),
     ];
     const defaultRout = pathname?.split("/")[2] || "statistic";
     const isAuth = localStorage.getItem("auth");
@@ -68,6 +68,10 @@ const DockerLayout = () => {
                     defaultSelectedKeys={[pathname.split("/")[2]]}
                     items={items}
                     onClick={(e) => {
+                        if (e.key === "auth") {
+                            navigate("/auth");
+                            localStorage.removeItem("auth");
+                        }
                         navigate(e.key);
                     }}
                 />
