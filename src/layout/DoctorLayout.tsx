@@ -11,76 +11,70 @@ import { FaSuitcaseMedical } from "react-icons/fa6";
 const { Sider } = Layout;
 
 function getItem(label: string, key: string, icon: JSX.Element) {
-    return {
-        key,
-        icon,
-        label,
-    };
+  return {
+    key,
+    icon,
+    label,
+  };
 }
 
 const DockerLayout = () => {
-    const { theme } = useContext(ThemeProvider);
-    const navigate = useNavigate();
-    const { pathname } = useLocation();
-    const [collapsed, setCollapsed] = useState(false);
+  const { theme } = useContext(ThemeProvider);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
 
-    const items = [
-        getItem("Statistika", "statistic", <PieChartOutlined />),
-        getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-        getItem("Chiqish", "auth", <LogoutOutlined />),
-    ];
-    const defaultRout = pathname?.split("/")[2];
-    const isAuth = localStorage.getItem("auth");
+  const items = [
+    getItem("Statistika", "statistic", <PieChartOutlined />),
+    getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
+    getItem("Chiqish", "auth", <LogoutOutlined />),
+  ];
+  const defaultRout = pathname?.split("/")[2];
+  const isAuth = localStorage.getItem("auth");
 
-    useEffect(() => {
-        if (isAuth !== "doctor") {
-            return navigate("/auth");
-        }
-    }, [isAuth]);
+  useEffect(() => {
+    if (isAuth !== "doctor") {
+      return navigate("/auth");
+    }
+  }, [isAuth]);
 
-    useEffect(() => {
-        !defaultRout && navigate("/" + isAuth + "/" + "statistic");
-    }, [defaultRout]);
+  useEffect(() => {
+    defaultRout && navigate("/" + isAuth + "/" + "statistic");
+  }, [defaultRout]);
 
-    return (
-        <Layout hasSider>
-            <Sider
-                breakpoint="lg"
-                theme={"light" === theme || "dark" === theme ? theme : "dark"}
-                collapsible
-                collapsed={collapsed}
-                onCollapse={(value) => setCollapsed(value)}
-                style={{
-                    minHeight: "100vh",
-                }}
-            >
-                <Flex
-                    align="center"
-                    justify="center"
-                    style={{ height: "60px" }}
-                >
-                    <ProfileAvatar />
-                </Flex>
-                <Menu
-                    theme={
-                        "light" === theme || "dark" === theme ? theme : "dark"
-                    }
-                    mode="inline"
-                    defaultSelectedKeys={[pathname.split("/")[2]]}
-                    items={items}
-                    onClick={(e) => {
-                        if (e.key === "auth") {
-                            navigate("/auth");
-                            localStorage.removeItem("auth");
-                        }
-                        navigate(e.key);
-                    }}
-                />
-            </Sider>
-            <Layout>
-                <Outlet />
-            </Layout>
-        </Layout>
-    );
+  return (
+    <Layout hasSider>
+      <Sider
+        breakpoint="lg"
+        theme={"light" === theme || "dark" === theme ? theme : "dark"}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        style={{
+          minHeight: "100vh",
+        }}
+      >
+        <Flex align="center" justify="center" style={{ height: "60px" }}>
+          <ProfileAvatar />
+        </Flex>
+        <Menu
+          theme={"light" === theme || "dark" === theme ? theme : "dark"}
+          mode="inline"
+          defaultSelectedKeys={[pathname.split("/")[2]]}
+          items={items}
+          onClick={(e) => {
+            if (e.key === "auth") {
+              navigate("/auth");
+              localStorage.removeItem("auth");
+            }
+            navigate(e.key);
+          }}
+        />
+      </Sider>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </Layout>
+  );
 };
 export default DockerLayout;

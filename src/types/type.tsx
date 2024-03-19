@@ -13,15 +13,18 @@ export interface TableParams {
     filters?: Parameters<GetProp<TableProps, "onChange">>[1];
 }
 export interface DataType {
-    name: {
-        first: string;
-        last: string;
-    };
-    gender: string;
-    email: string;
-    login: {
-        uuid: string;
-    };
+    id: string
+    name: string
+    surname: string
+    date_birth: string
+    address: string
+    phone_number: string
+    gender: string
+    job: string
+    balance: number
+    created_at: string
+    updated_at: string;
+
 }
 export type themeMode = "light" | "dark" | "system";
 

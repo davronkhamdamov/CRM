@@ -20,6 +20,7 @@ import { LoadingProvider } from "../App";
 const { Option } = Select;
 const CreateAccount = () => {
     const [open, setOpen] = useState(false);
+    const [payload, setPayload] = useState({});
     const { setLoadingCnx } = useContext(LoadingProvider);
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -30,12 +31,27 @@ const CreateAccount = () => {
         setOpen(false);
     };
     const onSubmit = () => {
+
         setLoadingCnx(true);
-        setTimeout(() => {
-            setOpen(false);
-            setLoadingCnx(false);
-            messageApi.success("Bemor muvaffaqqiyatli yaratildi", 2);
-        }, 2000);
+        fetch(import.meta.env.VITE_APP_URL + "/user",
+            {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setOpen(false);
+                setLoadingCnx(false);
+                messageApi.success("Bemor muvaffaqqiyatli yaratildi", 2);
+            }).catch((err) => {
+                console.log(err);
+                setLoadingCnx(false);
+                messageApi.error("Nimadir xato ketdi", 2);
+            })
     };
     const onChange = (value: string) => {
         console.log(`selected ${value}`);
@@ -87,7 +103,9 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos ism kiriting" />
+                                <Input placeholder="Iltimos ism kiriting" onChange={e => setPayload(prev => {
+                                    return { ...prev, name: e.target.value }
+                                })} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -101,7 +119,10 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Familya kiriting" />
+                                <Input placeholder="Familya kiriting"
+                                    onChange={e => setPayload(prev => {
+                                        return { ...prev, surname: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -117,7 +138,10 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos yashash joyini kiriting" />
+                                <Input placeholder="Iltimos yashash joyini kiriting"
+                                    onChange={e => setPayload(prev => {
+                                        return { ...prev, address: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -131,7 +155,10 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos telefon nomer kiriting" />
+                                <Input placeholder="Iltimos telefon nomer kiriting"
+                                    onChange={e => setPayload(prev => {
+                                        return { ...prev, phone_number: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -147,7 +174,10 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Select placeholder="Iltimos jinsingizni tanlang">
+                                <Select placeholder="Iltimos jinsingizni tanlang"
+                                    onChange={e => setPayload(prev => {
+                                        return { ...prev, gender: e }
+                                    })}>
                                     <Option value="male">Erkak</Option>
                                     <Option value="female">Ayol</Option>
                                 </Select>
@@ -164,7 +194,10 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos kasbingizni kiriting" />
+                                <Input placeholder="Iltimos kasbingizni kiriting"
+                                    onChange={e => setPayload(prev => {
+                                        return { ...prev, job: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -183,6 +216,11 @@ const CreateAccount = () => {
                                 <DatePicker
                                     style={{
                                         width: "100%",
+                                    }}
+                                    onChange={e => {
+                                        setPayload(prev => {
+                                            return { ...prev, date_birth: e }
+                                        })
                                     }}
                                     placeholder="Tug'ilgan sana"
                                     defaultPickerValue={dayjs("2010-04-13")}

@@ -17,8 +17,9 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 import EditAccound from "./EditAccound";
 import dayjs from "dayjs";
+import { log } from "console";
 
-const getRandomuserParams = (params: TableParams) => ({
+const getuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
     ...params,
@@ -38,12 +39,16 @@ const TableComponent = () => {
             pageSize: 10,
         },
     });
-    const cancel = () => {
+    const cancel = (id: string) => {
         setToLoading(true);
-        setTimeout(() => {
-            setToLoading(false);
-            messageApi.success("Bemor muvaffaqqiyatli o'chirildi", 2);
-        }, 2000);
+        fetch(import.meta.env.VITE_APP_URL + "/user/" + id, { method: "DELETE" }).then(res => res.json())
+            .then(() => {
+                setToLoading(false);
+                messageApi.success("Bemor muvaffaqqiyatli o'chirildi", 2);
+            }).catch(() => {
+                setToLoading(false);
+                messageApi.error("Nimadir xato ketdi", 2);
+            })
     };
 
     const columns: ColumnsType<DataType> = [
@@ -52,8 +57,8 @@ const TableComponent = () => {
             sorter: true,
             render: (record) => {
                 return (
-                    <a href={`patient/${record.login.uuid}`}>
-                        {record.name.first} {record.name.last}
+                    <a href={`patient/${record.id}`}>
+                        {record.name} {record.surname}
                     </a>
                 );
             },
@@ -76,21 +81,21 @@ const TableComponent = () => {
         },
         {
             title: "Ro'yxatdan o'tgan sanasi",
-            dataIndex: "registered",
+            dataIndex: "created_at",
             render: (registered) =>
                 `${dayjs(registered?.date).format("DD-MM-YYYY")}`,
             width: "15%",
         },
         {
             title: "Manzil",
-            dataIndex: "location",
-            render: (location) => `${location.street.name}`,
+            dataIndex: "address",
+            render: (location) => `${location}`,
             width: "20%",
         },
         {
             title: "Balans",
-            dataIndex: "location",
-            render: (location) => `${location.street.number} so'm`,
+            dataIndex: "balance",
+            render: (balance) => `${balance} so'm`,
             width: "15%",
         },
         {
@@ -106,10 +111,10 @@ const TableComponent = () => {
                                 color="dodgerblue"
                                 onClick={() => {
                                     if (
-                                        openEditModal.id !== record.login.uuid
+                                        openEditModal.id !== record.id
                                     ) {
                                         setOpenEditModal({
-                                            id: record.login.uuid,
+                                            id: record.id,
                                             isOpen: true,
                                         });
                                     }
@@ -124,7 +129,7 @@ const TableComponent = () => {
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
-                            onConfirm={cancel}
+                            onConfirm={() => cancel(record.id)}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
                                 <DeleteOutlined
@@ -160,19 +165,20 @@ const TableComponent = () => {
     const fetchData = () => {
         setLoading(true);
         fetch(
-            `https://randomuser.me/api?${qs.stringify(
-                getRandomuserParams(tableParams)
+            `${import.meta.env.VITE_APP_URL}/user/?${qs.stringify(
+                getuserParams(tableParams)
             )}`
         )
             .then((res) => res.json())
-            .then(({ results }) => {
-                setData(results);
+            .then((results) => {
+                console.log(results);
+                setData(results.result);
                 setLoading(false);
                 setTableParams({
                     ...tableParams,
                     pagination: {
                         ...tableParams.pagination,
-                        total: 200,
+                        total: results.count_of_users,
                     },
                 });
             });
@@ -213,21 +219,21 @@ const TableComponent = () => {
             />
             <Table
                 columns={columns}
-                rowKey={(record) => record.login.uuid}
+                rowKey={(record) => record.id}
                 dataSource={data}
                 pagination={tableParams.pagination}
                 loading={
                     loading
                         ? {
-                              indicator: (
-                                  <LoadingOutlined
-                                      style={{
-                                          fontSize: 34,
-                                      }}
-                                      spin
-                                  />
-                              ),
-                          }
+                            indicator: (
+                                <LoadingOutlined
+                                    style={{
+                                        fontSize: 34,
+                                    }}
+                                    spin
+                                />
+                            ),
+                        }
                         : false
                 }
                 onChange={handleTableChange}

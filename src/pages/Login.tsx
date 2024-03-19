@@ -10,7 +10,8 @@ import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    localStorage.setItem("auth", values.username)
+    location = values.username
   };
 
   return (
