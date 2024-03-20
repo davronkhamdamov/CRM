@@ -12,12 +12,24 @@ import {
     message,
 } from "antd";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { EditModalProps, UserData } from "../types/type";
 import { LoadingProvider } from "../App";
 
 const { Option } = Select;
+
 const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const { setLoadingCnx } = useContext(LoadingProvider);
+    const [user_data, setData] = useState<UserData>({ address: "", gender: "", job: '', name: '', phone_number: '', surname: '' });
+
+    useEffect(() => {
+        fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id).then(res => res.json())
+            .then(res => {
+                setData(res.result)
+            })
+    }, [data.isOpen]);
+
+
     const [messageApi, contextHolder] = message.useMessage();
 
     const onClose = () => {
@@ -26,20 +38,27 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
 
     const onSubmit = () => {
         setLoadingCnx(true);
-        setTimeout(() => {
-            setOpen({ id: "", isOpen: false });
-            setLoadingCnx(false);
-            messageApi.success("Bemor muvaffaqqiyatli yangilandi", 2);
-        }, 2000);
-    };
-    const [user_data, setData] = useState<UserData>();
-    useEffect(() => {
-        fetch("https://randomuser.me/api")
+        user_data.updated_at = new Date()
+        fetch(import.meta.env.VITE_APP_URL + "/user", {
+            method: "PUT",
+            body: JSON.stringify(user_data),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
             .then((res) => res.json())
             .then((data) => {
-                setData(data.results[0]);
-            });
-    }, [data]);
+                console.log(data);
+                setOpen({ id: "", isOpen: false });
+                setLoadingCnx(false);
+                messageApi.success("Bemor muvaffaqqiyatli yangilandi", 2);
+            }).catch(err => {
+                console.log(err);
+                setLoadingCnx(false);
+                messageApi.error("Nimadir xato ketdi", 2);
+            })
+    };
+
 
     return (
         <>
@@ -63,16 +82,16 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                     </Space>
                 }
             >
-                <Form
+                {user_data?.name && <Form
                     layout="vertical"
                     initialValues={{
-                        first_name: user_data?.name?.first,
-                        last_name: user_data?.name?.last,
-                        adress: user_data?.location?.state,
-                        phone: "+" + user_data?.phone,
+                        first_name: user_data?.name,
+                        last_name: user_data?.surname,
+                        adress: user_data?.address,
+                        phone: user_data?.phone_number,
                         gender: user_data?.gender,
-                        job: "Ishsiz",
-                        birth_date: dayjs(user_data?.dob.date),
+                        job: user_data?.job,
+                        birth_date: dayjs(user_data?.date_birth),
                     }}
                 >
                     <Row gutter={16}>
@@ -87,7 +106,9 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos ism kiriting" />
+                                <Input placeholder="Iltimos ism kiriting" onChange={e => setData(prev => {
+                                    return { ...prev, name: e.target.value }
+                                })} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -101,7 +122,10 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Familya kiriting" />
+                                <Input placeholder="Familya kiriting"
+                                    onChange={e => setData(prev => {
+                                        return { ...prev, surname: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -117,7 +141,10 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos yashash joyini kiriting" />
+                                <Input placeholder="Iltimos yashash joyini kiriting"
+                                    onChange={e => setData(prev => {
+                                        return { ...prev, address: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -131,7 +158,10 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos telefon nomer kiriting" />
+                                <Input placeholder="Iltimos telefon nomer kiriting"
+                                    onChange={e => setData(prev => {
+                                        return { ...prev, phone_number: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -147,7 +177,10 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Select placeholder="Iltimos jinsingizni tanlang">
+                                <Select placeholder="Iltimos jinsingizni tanlang"
+                                    onChange={e => setData(prev => {
+                                        return { ...prev, gender: e }
+                                    })} >
                                     <Option value="male">Erkak</Option>
                                     <Option value="female">Ayol</Option>
                                 </Select>
@@ -164,12 +197,15 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos kasbingizni kiriting" />
+                                <Input placeholder="Iltimos kasbingizni kiriting"
+                                    onChange={e => setData(prev => {
+                                        return { ...prev, job: e.target.value }
+                                    })} />
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
+                    <Row>
+                        <Col>
                             <Form.Item
                                 name="birth_date"
                                 label="Tug'ilgan sana"
@@ -177,15 +213,19 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                                     {
                                         required: true,
                                         message: "Tug'ilgan sana",
-                                    },
+                                    }
                                 ]}
                             >
                                 <DatePicker
                                     style={{
                                         width: "100%",
                                     }}
+                                    onChange={(e) => {
+                                        setData((prev) => {
+                                            return { ...prev, date_birth: dayjs(e).add(1, 'day') }
+                                        })
+                                    }}
                                     placeholder="Tug'ilgan sana"
-                                    defaultPickerValue={dayjs("2010-04-13")}
                                     maxDate={dayjs(new Date())}
                                     getPopupContainer={(trigger) =>
                                         trigger.parentElement!
@@ -194,7 +234,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                             </Form.Item>
                         </Col>
                     </Row>
-                </Form>
+                </Form>}
             </Drawer>
         </>
     );

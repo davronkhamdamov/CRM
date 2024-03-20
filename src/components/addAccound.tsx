@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
     Button,
@@ -18,7 +18,7 @@ import Title from "antd/es/typography/Title";
 import { LoadingProvider } from "../App";
 
 const { Option } = Select;
-const CreateAccount = () => {
+const CreateAccount: FC = () => {
     const [open, setOpen] = useState(false);
     const [payload, setPayload] = useState({});
     const { setLoadingCnx } = useContext(LoadingProvider);
@@ -31,7 +31,6 @@ const CreateAccount = () => {
         setOpen(false);
     };
     const onSubmit = () => {
-
         setLoadingCnx(true);
         fetch(import.meta.env.VITE_APP_URL + "/user",
             {
@@ -219,7 +218,7 @@ const CreateAccount = () => {
                                     }}
                                     onChange={e => {
                                         setPayload(prev => {
-                                            return { ...prev, date_birth: e }
+                                            return { ...prev, date_birth: dayjs(e).add(1, 'day') }
                                         })
                                     }}
                                     placeholder="Tug'ilgan sana"

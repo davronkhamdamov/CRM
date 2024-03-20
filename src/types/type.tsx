@@ -1,4 +1,5 @@
 import { GetProp, TableProps } from "antd";
+import { Dayjs } from "dayjs";
 
 export type ColumnsType<T> = TableProps<T>["columns"];
 export type TablePaginationConfig = Exclude<
@@ -23,7 +24,7 @@ export interface DataType {
     job: string
     balance: number
     created_at: string
-    updated_at: string;
+    updated_at: string
 
 }
 export type themeMode = "light" | "dark" | "system";
@@ -39,20 +40,24 @@ export interface EditModalProps {
     setOpen: (arg: EditModal) => void;
 }
 export interface UserData {
-    name: {
-        first?: string;
-        last?: string;
-    };
-    location: {
-        state?: string;
-    };
-    phone?: string;
-    gender?: string;
-    dob: {
-        date?: string;
-    };
+    id?: string
+    name: string
+    surname: string
+    date_birth?: Dayjs
+    address: string
+    phone_number: string
+    gender: string
+    job: string
+    balance?: number
+    updated_at?: Date
+    created_at?: Date
 }
 export interface PaymentDataType {
     name: string;
     created_at: Date;
+}
+
+export interface TableProp {
+    data?: any;
+    setData: (a: any) => void;
 }

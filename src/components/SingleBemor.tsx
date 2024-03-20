@@ -5,14 +5,13 @@ const { Title } = Typography;
 const { Content } = Layout;
 import { IoArrowBackSharp, IoHomeOutline } from "react-icons/io5";
 import { UserData } from "../types/type";
-import { FaFemale, FaMale, FaRegUserCircle } from "react-icons/fa";
+import { FaFemale, FaMale } from "react-icons/fa";
 import dayjs from "dayjs";
 import { BsCalendar2Date } from "react-icons/bs";
 import { GrPhone, GrServices } from "react-icons/gr";
 import { MdOutlinePayments, MdWork } from "react-icons/md";
 import { LuCircleDollarSign } from "react-icons/lu";
 import PaymentHistory from "../components/PaymentHistory";
-import ServiceHistory from "../components/ServiceHistory ";
 
 const SingleBemor: React.FC = () => {
     const params = useParams();
@@ -25,7 +24,6 @@ const SingleBemor: React.FC = () => {
         fetch(import.meta.env.VITE_APP_URL + "/user/" + params.id)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 setUserData(data.result)
             })
     })
@@ -38,7 +36,7 @@ const SingleBemor: React.FC = () => {
         {
             icon: GrServices,
             title: "Foydalanilgan xizmatlar tarixi",
-            children: <ServiceHistory />
+            children: <PaymentHistory />
         }
     ]
 
@@ -65,11 +63,10 @@ const SingleBemor: React.FC = () => {
                         borderRadius: borderRadiusLG,
                         minHeight: "400px"
                     }}>
-
-
                     <Flex vertical style={{ width: "20%" }}>
                         <Flex align="center" vertical gap={20}>
-                            <FaRegUserCircle size={150} />
+                            <img src="../assets/image/Sample_User_Icon.png" alt="" />
+
                             <Title level={4} style={{ margin: 0 }}>{userData?.name} {userData?.surname}</Title>
                         </Flex>
                     </Flex>
@@ -117,8 +114,8 @@ const SingleBemor: React.FC = () => {
                     }}
                 >
                     <Tabs
-                        style={{ width: "100%" }}
-                        defaultActiveKey="1"
+                        defaultActiveKey="2"
+                        animated
                         items={tabItems.map((el, i) => {
                             const id = String(i + 1);
                             return {

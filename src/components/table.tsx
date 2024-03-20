@@ -8,26 +8,25 @@ import {
     message,
 } from "antd";
 import qs from "qs";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
-import type { TableProps } from "antd";
 import { DataType, EditModal, TableParams } from "../types/type";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TableProps } from "antd/es/table";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 import EditAccound from "./EditAccound";
 import dayjs from "dayjs";
-import { log } from "console";
 
 const getuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
     ...params,
 });
-const TableComponent = () => {
+const TableComponent: FC = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<DataType[]>();
+
     const [openEditModal, setOpenEditModal] = useState<EditModal>({
         id: "",
         isOpen: false,
@@ -39,11 +38,12 @@ const TableComponent = () => {
             pageSize: 10,
         },
     });
-    const cancel = (id: string) => {
+    const deleteUser = (id: string) => {
         setToLoading(true);
         fetch(import.meta.env.VITE_APP_URL + "/user/" + id, { method: "DELETE" }).then(res => res.json())
             .then(() => {
                 setToLoading(false);
+                fetchData()
                 messageApi.success("Bemor muvaffaqqiyatli o'chirildi", 2);
             }).catch(() => {
                 setToLoading(false);
@@ -129,7 +129,7 @@ const TableComponent = () => {
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
-                            onConfirm={() => cancel(record.id)}
+                            onConfirm={() => deleteUser(record.id)}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
                                 <DeleteOutlined
@@ -157,7 +157,6 @@ const TableComponent = () => {
             filters,
             ...sorter,
         });
-
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
             setData([]);
         }
@@ -171,7 +170,6 @@ const TableComponent = () => {
         )
             .then((res) => res.json())
             .then((results) => {
-                console.log(results);
                 setData(results.result);
                 setLoading(false);
                 setTableParams({
