@@ -13,7 +13,7 @@ import { MdOutlinePayments, MdWork } from "react-icons/md";
 import { LuCircleDollarSign } from "react-icons/lu";
 import PaymentHistory from "../components/PaymentHistory";
 
-const SingleBemor: React.FC = () => {
+const SingleBemor2: React.FC = () => {
     const params = useParams();
     const location = useLocation();
     const [userData, setUserData] = useState<UserData>()
@@ -26,7 +26,7 @@ const SingleBemor: React.FC = () => {
             .then(data => {
                 setUserData(data.result)
             })
-    })
+    }, [userData])
     const tabItems = [
         {
             icon: MdOutlinePayments,
@@ -65,8 +65,6 @@ const SingleBemor: React.FC = () => {
                     }}>
                     <Flex vertical style={{ width: "20%" }}>
                         <Flex align="center" vertical gap={20}>
-                            <img src="../assets/image/Sample_User_Icon.png" alt="" />
-
                             <Title level={4} style={{ margin: 0 }}>{userData?.name} {userData?.surname}</Title>
                         </Flex>
                     </Flex>
@@ -133,4 +131,4 @@ const SingleBemor: React.FC = () => {
     );
 };
 
-export default SingleBemor;
+export default SingleBemor2

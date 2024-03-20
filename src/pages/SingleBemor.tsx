@@ -5,7 +5,7 @@ const { Title } = Typography;
 const { Content } = Layout;
 import { IoArrowBackSharp, IoHomeOutline } from "react-icons/io5";
 import { UserData } from "../types/type";
-import { FaFemale, FaMale, FaRegUserCircle } from "react-icons/fa";
+import { FaFemale, FaMale } from "react-icons/fa";
 import dayjs from "dayjs";
 import { BsCalendar2Date } from "react-icons/bs";
 import { GrPhone, GrServices } from "react-icons/gr";
@@ -13,6 +13,8 @@ import { MdOutlinePayments, MdWork } from "react-icons/md";
 import { LuCircleDollarSign } from "react-icons/lu";
 import PaymentHistory from "../components/PaymentHistory";
 import ServiceHistory from "../components/ServiceHistory ";
+import userImage from '../assets/image/Sample_User_Icon.png'
+import { TbCameraPlus } from "react-icons/tb";
 
 const SingleBemor: React.FC = () => {
     const params = useParams();
@@ -28,7 +30,7 @@ const SingleBemor: React.FC = () => {
                 console.log(data);
                 setUserData(data.result)
             })
-    })
+    }, [location])
     const tabItems = [
         {
             icon: MdOutlinePayments,
@@ -69,7 +71,13 @@ const SingleBemor: React.FC = () => {
 
                     <Flex vertical style={{ width: "20%" }}>
                         <Flex align="center" vertical gap={20}>
-                            <FaRegUserCircle size={150} />
+                            <label htmlFor="profile" className="profile_image">
+                                <img src={userImage} alt="" style={{ width: "200px" }} />
+                                <div className="profile_hidden">
+                                    <TbCameraPlus size={30} color="white" />
+                                </div>
+                            </label>
+                            <input type="file" style={{ display: "none" }} id="profile" />
                             <Title level={4} style={{ margin: 0 }}>{userData?.name} {userData?.surname}</Title>
                         </Flex>
                     </Flex>
