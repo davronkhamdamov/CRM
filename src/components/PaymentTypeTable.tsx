@@ -7,7 +7,7 @@ import {
     Tooltip,
     message,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     LoadingOutlined,
     DeleteOutlined,
@@ -15,39 +15,49 @@ import {
 } from "@ant-design/icons";
 
 import { PaymentDataType, TableParams } from "../types/type";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TableProps } from "antd/es/table";
 
 import { HiOutlineCash } from "react-icons/hi";
 import { IoCardOutline } from "react-icons/io5";
 import dayjs from "dayjs";
 import { CiCalendarDate } from "react-icons/ci";
+import qs from "qs";
 
+const getPaymentTypeParams = (params: TableParams) => ({
+    results: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    ...params,
+});
 const PaymentTypeTable = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [data] = useState<PaymentDataType[]>([
-        { name: "Naqt", created_at: new Date() },
-        { name: "Karta", created_at: new Date() },
-    ]);
-    const [loading] = useState(false);
+    const [data, setData] = useState<PaymentDataType[]>();
+    const [loading, setLoading] = useState(false);
     const [toLoading, setToLoading] = useState(false);
-    const [tableParams] = useState<TableParams>({
+    const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
             pageSize: 10,
         },
     });
-    const cancel = () => {
+
+    const deletePaymentType = (id: string) => {
         setToLoading(true);
-        setTimeout(() => {
-            setToLoading(false);
-            messageApi.success("To'lov turi muvaffaqqiyatli o'chirildi", 2);
-        }, 2000);
+        fetch(import.meta.env.VITE_APP_URL + "/payment-type/" + id, { method: "DELETE" }).then(res => res.json())
+            .then(() => {
+                setToLoading(false);
+                fetchData()
+                messageApi.success("To'lov turi muvaffaqqiyatli o'chirildi", 2);
+            }).catch(() => {
+                setToLoading(false);
+                messageApi.error("Nimadir xato ketdi", 2);
+            })
     };
+
 
     const columns: ColumnsType<PaymentDataType> = [
         {
             title: "To'lov turi",
-            dataIndex: "name",
+            dataIndex: "method",
             render: (record) => {
                 return (
                     <div
@@ -91,7 +101,7 @@ const PaymentTypeTable = () => {
             title: "Bajariladigan ishlar",
             dataIndex: "operation",
             key: "operation",
-            render: () => {
+            render: (_, record) => {
                 return (
                     <Space size="middle">
                         <Tooltip placement="bottom" title="Tahrirlash">
@@ -99,7 +109,7 @@ const PaymentTypeTable = () => {
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
-                            onConfirm={cancel}
+                            onConfirm={() => deletePaymentType(record.id)}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
                                 <DeleteOutlined style={{ color: "red" }} />
@@ -112,68 +122,87 @@ const PaymentTypeTable = () => {
         },
     ];
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, [JSON.stringify(tableParams)]);
+    useEffect(() => {
+        fetchData();
+    }, [JSON.stringify(tableParams)]);
 
-    // const handleTableChange: TableProps["onChange"] = (
-    //     pagination,
-    //     filters,
-    //     sorter
-    // ) => {
-    //     setTableParams({
-    //         pagination,
-    //         filters,
-    //         ...sorter,
-    //     });
+    const handleTableChange: TableProps["onChange"] = (
+        pagination,
+        filters,
+        sorter
+    ) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
 
-    //     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-    //         setData([]);
-    //     }
-    // };
-    // const fetchData = () => {
-    //     setLoading(true);
-    //     setData([]);
-    //     setLoading(false);
-    // };
+        if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+            setData([]);
+        }
+    };
+    const fetchData = () => {
+        setLoading(true);
+        fetch(
+            `${import.meta.env.VITE_APP_URL}/payment-type/?${qs.stringify(
+                getPaymentTypeParams(tableParams)
+            )}`
+        )
+            .then((res) => res.json())
+            .then((results) => {
+                setData(results.result);
+                setLoading(false);
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        ...tableParams.pagination,
+                        total: results.count_of_users,
+                    },
+                });
+            });
+    };
 
-    // const [value, setValue] = useState("");
-    // const [options, setOptions] = useState<{ value: string }[]>([]);
-    // const onChange = (data: string) => {
-    //     setValue(data);
-    // };
+    const [value, setValue] = useState("");
+    const [options, setOptions] = useState<{ value: string }[]>([]);
+    const onChange = (data: string) => {
+        setValue(data);
+    };
+
+    function getPanelValue(text: string): import("react").SetStateAction<{ value: string; }[]> | PromiseLike<import("react").SetStateAction<{ value: string; }[]>> {
+        throw new Error("Function not implemented." + text);
+    }
 
     return (
         <>
             <AutoComplete
-                // value={value}
-                // options={options}
+                value={value}
+                options={options}
                 style={{ width: 300, marginBottom: 20 }}
                 // onSelect={onSelect}
-                // onSearch={async (text) => setOptions(await getPanelValue(text))}
-                // onChange={onChange}
+                onSearch={async (text) => setOptions(await getPanelValue(text))}
+                onChange={onChange}
                 placeholder="To'lov turlarni qidirish"
             />
             <Table
                 columns={columns}
-                rowKey={(record) => record.name}
+                rowKey={(record) => record.method}
                 dataSource={data}
                 pagination={tableParams.pagination}
                 loading={
                     loading
                         ? {
-                              indicator: (
-                                  <LoadingOutlined
-                                      style={{
-                                          fontSize: 34,
-                                      }}
-                                      spin
-                                  />
-                              ),
-                          }
+                            indicator: (
+                                <LoadingOutlined
+                                    style={{
+                                        fontSize: 34,
+                                    }}
+                                    spin
+                                />
+                            ),
+                        }
                         : false
                 }
-                // onChange={handleTableChange}
+                onChange={handleTableChange}
             />
             <Spin
                 indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}

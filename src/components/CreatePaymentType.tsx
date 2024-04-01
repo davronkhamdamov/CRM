@@ -8,6 +8,7 @@ const CreatePaymentType = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [open, setOpen] = useState(false);
+  const [paymentType, setPaymentType] = useState("");
   const showDrawer = () => {
     setOpen(true);
   };
@@ -16,24 +17,25 @@ const CreatePaymentType = () => {
   };
   const onSubmit = () => {
     setLoadingCnx(true);
-    setTimeout(() => {
-      setOpen(false);
-      setLoadingCnx(false);
-      messageApi.success("To'lov turi muvaffaqqiyatli yaratildi", 2);
-    }, 2000);
+    fetch(import.meta.env.VITE_APP_URL + "/payment-type", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        method: paymentType
+      })
+    }).then(res => res.json())
+      .then(() => {
+        setOpen(false);
+        setLoadingCnx(false);
+        messageApi.success("To'lov turi muvaffaqqiyatli yaratildi", 2);
+      }).catch(err => {
+        console.log(err);
+        setLoadingCnx(false);
+        messageApi.error("Nimadir xato ketdi", 2);
+      })
   };
-  // const onChange = (value: string) => {
-  //     console.log(`selected ${value}`);
-  // };
-
-  // const onSearch = (value: string) => {
-  //     console.log("search:", value);
-  // };
-
-  // const filterOption = (
-  //     input: string,
-  //     option?: { label: string; value: string }
-  // ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <>
@@ -71,7 +73,9 @@ const CreatePaymentType = () => {
               },
             ]}
           >
-            <Input placeholder="Iltimos to'lov turi nomini kiriting" />
+            <Input placeholder="Iltimos to'lov turi nomini kiriting" onChange={(e) => {
+              setPaymentType(e.target.value)
+            }} />
           </Form.Item>
         </Form>
       </Drawer>

@@ -6,6 +6,7 @@ import {
     Table,
     Tooltip,
     message,
+    Tag
 } from "antd";
 import qs from "qs";
 import { FC, useEffect, useState } from "react";
@@ -13,9 +14,10 @@ import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { FaUserDoctor } from "react-icons/fa6";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdOutlinePayment } from "react-icons/md";
 import EditAccound from "./EditAccound";
 import dayjs from "dayjs";
+import AddPayment from "./AddPayment";
 
 const getuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
@@ -26,7 +28,10 @@ const TableComponent: FC = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<DataType[]>();
-
+    const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
+        id: "",
+        isOpen: false,
+    });
     const [openEditModal, setOpenEditModal] = useState<EditModal>({
         id: "",
         isOpen: false,
@@ -95,7 +100,12 @@ const TableComponent: FC = () => {
         {
             title: "Balans",
             dataIndex: "balance",
-            render: (balance) => `${balance} so'm`,
+            render: (balance) => {
+                if (balance < 0) {
+                    return <Tag color="error">{balance} so'm</Tag>
+                }
+                return <Tag color="default">{balance} so'm</Tag>
+            },
             width: "15%",
         },
         {
@@ -114,6 +124,20 @@ const TableComponent: FC = () => {
                                         openEditModal.id !== record.id
                                     ) {
                                         setOpenEditModal({
+                                            id: record.id,
+                                            isOpen: true,
+                                        });
+                                    }
+                                }}
+                            />
+                        </Tooltip>
+                        <Tooltip placement="bottom" title="To'lash">
+                            <MdOutlinePayment
+                                style={{ cursor: "pointer" }}
+                                color="dodgerblue"
+                                onClick={() => {
+                                    if (openPaymentModal.id !== record.id) {
+                                        setOpenPaymentModal({
                                             id: record.id,
                                             isOpen: true,
                                         });
@@ -241,6 +265,7 @@ const TableComponent: FC = () => {
                 spinning={toLoading}
                 fullscreen
             />
+            <AddPayment data={openPaymentModal} setOpen={setOpenPaymentModal} />
             <EditAccound setOpen={setOpenEditModal} data={openEditModal} />
             {contextHolder}
         </>

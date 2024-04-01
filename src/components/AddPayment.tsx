@@ -1,39 +1,70 @@
-import { useContext, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Drawer, Form, Input, Select, Space, message } from "antd";
 import { FaDollarSign } from "react-icons/fa6";
 import { LoadingProvider } from "../App";
+import { EditModalProps, PaymentDataType } from "../types/type";
 
-const AddPayment = () => {
+const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const { setLoadingCnx } = useContext(LoadingProvider);
     const [messageApi, contextHolder] = message.useMessage();
+    const [paymentTypeData, setPaymentTypeData] = useState<PaymentDataType[]>();
+    const [loading, setLoading] = useState(true);
+    const [actionData, setActionData] = useState({ amount: 0, payment_type_id: "" })
 
-    const [open, setOpen] = useState(false);
-    const showDrawer = () => {
-        setOpen(true);
-    };
+
     const onClose = () => {
-        setOpen(false);
+        setOpen({ isOpen: false, id: "" });
     };
     const onSubmit = () => {
         setLoadingCnx(true);
-        setTimeout(() => {
-            setOpen(false);
-            setLoadingCnx(false);
-            messageApi.success("To'lov muvaffaqqiyatli yaratildi", 2);
-        }, 2000);
+        console.log({
+            ...actionData,
+            user_id: data.id
+        });
+        fetch(`${import.meta.env.VITE_APP_URL}/payment`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                ...actionData,
+                user_id: data.id
+            })
+        })
+            .then((res) => res.json())
+            .then((results) => {
+                setLoading(false)
+                setPaymentTypeData(results.result);
+                setOpen({ isOpen: false, id: "" });
+                setLoadingCnx(false);
+                messageApi.success("To'lov muvaffaqqiyatli yaratildi", 2);
+            }).catch(() => {
+                setLoadingCnx(false);
+                setLoading(false)
+                messageApi.error("Nimadir xato ketdi", 2);
+            })
     };
+    const fetchData = () => {
+        fetch(`${import.meta.env.VITE_APP_URL}/payment-type`)
+            .then((res) => res.json())
+            .then((results) => {
+                setLoading(false)
+                setPaymentTypeData(results.result);
+            }).catch(e => {
+                console.log(e);
+            })
+    };
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     return (
         <>
-            <Button type="default" onClick={showDrawer} icon={<PlusOutlined />}>
-                Yangi to'lov qo'shish
-            </Button>
             <Drawer
                 title="To'lov qilish"
                 width={520}
                 onClose={onClose}
-                open={open}
+                open={data.isOpen}
                 styles={{
                     body: {
                         paddingBottom: 80,
@@ -48,7 +79,9 @@ const AddPayment = () => {
                     </Space>
                 }
             >
-                <Form layout="vertical">
+                <Form layout="vertical" initialValues={{
+                    payment_type: "Naqt"
+                }}>
                     <Form.Item
                         name="payment_type"
                         label="To'lov turini tanlang"
@@ -60,11 +93,15 @@ const AddPayment = () => {
                         ]}
                     >
                         <Select
-                            defaultValue="naqt"
-                            options={[
-                                { value: "card", label: "Karta" },
-                                { value: "naqt", label: "Naqt" },
-                            ]}
+                            loading={loading}
+                            options={paymentTypeData?.map((e) => {
+                                return { value: e.id, label: e.method }
+                            })}
+                            onChange={(e) => {
+                                setActionData((prev) => {
+                                    return { ...prev, payment_type_id: e }
+                                })
+                            }}
                         />
                     </Form.Item>
                     <Form.Item
@@ -80,11 +117,16 @@ const AddPayment = () => {
                         <Input
                             type="number"
                             prefix={<FaDollarSign />}
+                            onChange={(e) => {
+                                setActionData((prev) => {
+                                    return { ...prev, amount: +e.target.value }
+                                })
+                            }}
                             placeholder="To'lov Miqdorini kiriting"
                         />
                     </Form.Item>
                 </Form>
-            </Drawer>
+            </Drawer >
             {contextHolder}
         </>
     );

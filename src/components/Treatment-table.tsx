@@ -15,6 +15,7 @@ import {
   LoadingOutlined,
   DeleteOutlined,
   CheckCircleOutlined,
+  CloseCircleOutlined
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { DataType, EditModal, TableParams } from "../types/type";
@@ -22,6 +23,7 @@ import { ColumnsType } from "antd/es/table";
 import { MdEdit, MdOutlinePayment } from "react-icons/md";
 import dayjs from "dayjs";
 import { IoIosMore } from "react-icons/io";
+import AddPayment from "./AddPayment";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -32,7 +34,7 @@ const Treatment = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState<EditModal>({
+  const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
     id: "",
     isOpen: false,
   });
@@ -94,6 +96,50 @@ const Treatment = () => {
       width: "20%",
     },
     {
+      title: "To'lov summasi",
+      dataIndex: "location",
+      render: (location) => location.street.number,
+      width: "20%",
+    },
+    {
+      title: "Sana",
+      dataIndex: "registered",
+      render: (dob) =>
+        `${dayjs(dob?.date).format("DD-MM-YYYY HH:MM")} - ${dayjs(
+          dob?.date
+        ).format("HH:MM")}`,
+      width: "20%",
+    },
+    {
+      title: "To'lov holati",
+      dataIndex: "",
+      width: "7%",
+      render: () => {
+        return (
+          <>
+            {/* <Tag icon={<CheckCircleOutlined />} color="success">
+                      To'landi
+                  </Tag> */}
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              To'lanmadi
+            </Tag>
+            {/* <Tag icon={<SyncOutlined spin />} color="processing">
+                        To'liq to'lanmadi
+                    </Tag>
+                    <Tag icon={<CloseCircleOutlined />} color="error">
+                        To'lanmadi
+                    </Tag>
+                    <Tag icon={<ClockCircleOutlined />} color="default">
+                        Kutilmoqda
+                    </Tag>
+                    <Tag icon={<MinusCircleOutlined />} color="default">
+                        To'lanmadi
+                    </Tag> */}
+          </>
+        );
+      },
+    },
+    {
       title: "Holati",
       dataIndex: "",
       width: "5%",
@@ -132,9 +178,9 @@ const Treatment = () => {
                 style={{ cursor: "pointer" }}
                 color="dodgerblue"
                 onClick={() => {
-                  if (openEditModal.id !== record.login.uuid) {
-                    setOpenEditModal({
-                      id: record.login.uuid,
+                  if (openPaymentModal.id !== record.id) {
+                    setOpenPaymentModal({
+                      id: record.id,
                       isOpen: true,
                     });
                   }
@@ -234,21 +280,21 @@ const Treatment = () => {
       />
       <Table
         columns={columns}
-        rowKey={(record) => record.login.uuid}
+        rowKey={(record) => record.id}
         dataSource={data}
         pagination={tableParams.pagination}
         loading={
           loading
             ? {
-                indicator: (
-                  <LoadingOutlined
-                    style={{
-                      fontSize: 34,
-                    }}
-                    spin
-                  />
-                ),
-              }
+              indicator: (
+                <LoadingOutlined
+                  style={{
+                    fontSize: 34,
+                  }}
+                  spin
+                />
+              ),
+            }
             : false
         }
         onChange={handleTableChange}
@@ -258,6 +304,7 @@ const Treatment = () => {
         spinning={toLoading}
         fullscreen
       />
+      <AddPayment data={openPaymentModal} setOpen={setOpenPaymentModal} />
       {contextHolder}
     </>
   );

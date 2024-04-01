@@ -42,14 +42,14 @@ const RootLayout = () => {
   ];
   const defaultRout = pathname?.split("/")[2];
   const isAuth = localStorage.getItem("auth");
+
   useEffect(() => {
     if (isAuth !== "reception") {
-      return navigate("/auth");
+      navigate("/auth");
+    } else {
+      !defaultRout && navigate("/" + isAuth + "/" + "statistic");
     }
-  }, [isAuth]);
-  useEffect(() => {
-    defaultRout && navigate("/" + isAuth + "/" + "statistic");
-  }, [defaultRout]);
+  }, [isAuth, defaultRout]);
 
   return (
     <Layout hasSider>
@@ -69,7 +69,7 @@ const RootLayout = () => {
         <Menu
           theme={"light" === theme || "dark" === theme ? theme : "dark"}
           mode="inline"
-          defaultSelectedKeys={[defaultRout]}
+          defaultSelectedKeys={[defaultRout || "statistic"]}
           items={items}
           onClick={(e) => {
             if (e.key === "auth") {

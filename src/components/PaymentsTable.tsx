@@ -12,14 +12,11 @@ import { useEffect, useState } from "react";
 import {
   LoadingOutlined,
   DeleteOutlined,
-  EditTwoTone,
-  EyeTwoTone,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { HiOutlineCash } from "react-icons/hi";
 import { IoCardOutline } from "react-icons/io5";
@@ -31,7 +28,7 @@ const getRandomuserParams = (params: TableParams) => ({
 });
 const PaymentsTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [data, setData] = useState<DataType[]>();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toLoading, setToLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -40,44 +37,50 @@ const PaymentsTable = () => {
       pageSize: 10,
     },
   });
-  const cancel = () => {
+  const deletePayment = (id: string) => {
     setToLoading(true);
-    setTimeout(() => {
-      setToLoading(false);
-      messageApi.success("To'lov muvaffaqqiyatli o'chirildi", 2);
-    }, 2000);
+    fetch(
+      `${import.meta.env.VITE_APP_URL}/payment/${id}`, {
+      method: "DELETE"
+    }
+    ).then(res => res.json())
+      .then(() => {
+        setToLoading(false);
+        messageApi.success("To'lov muvaffaqqiyatli o'chirildi", 2);
+      }).catch(() => {
+        setToLoading(false);
+        messageApi.success("Nimadir xato ketdi", 2);
+      })
   };
 
   const columns: ColumnsType<DataType> = [
     {
       title: "Ism Familyasi",
-      dataIndex: "name",
+      dataIndex: "",
       sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
+      render: (user) => `${user.username} ${user.surname}`,
       width: "20%",
       align: "center",
     },
     {
       title: "To'lov miqdori",
-      dataIndex: "location",
+      dataIndex: "amount",
       align: "center",
       width: "20%",
-      render: (location) => `${location.street.number} so'm`,
+      render: (amount) => `${amount} so'm`,
     },
     {
       title: "Sana",
-      dataIndex: "registered",
+      dataIndex: "created_at",
       align: "center",
-      render: (record) => `${dayjs(record.date).format("DD-MM-YYYY HH:MM")}`,
+      render: (record) => `${dayjs(record).format("DD-MM-YYYY HH:MM")}`,
       width: "20%",
     },
     {
       title: "To'lov turi",
-      dataIndex: "",
+      dataIndex: "method",
       align: "center",
-      render: () => {
-        const data = ["Naqt", "Karta"];
-        const random = data[Math.floor(Math.random() * data.length)];
+      render: (_, record) => {
         return (
           <div
             style={{
@@ -87,8 +90,8 @@ const PaymentsTable = () => {
               alignItems: "center",
             }}
           >
-            {random === "Naqt" ? <HiOutlineCash /> : <IoCardOutline />}
-            {random}
+            {record.method === "Naqt" ? <HiOutlineCash /> : <IoCardOutline />}
+            {record.method}
           </div>
         );
       },
@@ -96,23 +99,16 @@ const PaymentsTable = () => {
     },
     {
       title: "Bajariladigan ishlar",
-      dataIndex: "operation",
+      dataIndex: "",
       key: "operation",
       align: "center",
       render: (_, record) => {
+        console.log(record);
         return (
           <Space size="middle">
-            <Tooltip placement="bottom" title="Tahrirlash">
-              <EditTwoTone />
-            </Tooltip>
-            <Tooltip placement="bottom" title="Ko'rish">
-              <Link to={record.login.uuid}>
-                <EyeTwoTone />
-              </Link>
-            </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
-              onConfirm={cancel}
+              onConfirm={() => deletePayment(record.id)}
             >
               <Tooltip placement="bottom" title="O'chirish">
                 <DeleteOutlined style={{ color: "red" }} />
@@ -146,13 +142,14 @@ const PaymentsTable = () => {
   const fetchData = () => {
     setLoading(true);
     fetch(
-      `https://randomuser.me/api?${qs.stringify(
+      `${import.meta.env.VITE_APP_URL}/payment/?${qs.stringify(
         getRandomuserParams(tableParams)
       )}`
     )
       .then((res) => res.json())
-      .then(({ results }) => {
-        setData(results);
+      .then((result) => {
+        setData(result.result);
+
         setLoading(false);
         setTableParams({
           ...tableParams,
@@ -161,7 +158,9 @@ const PaymentsTable = () => {
             total: 200,
           },
         });
-      });
+      }).catch(() => {
+        setLoading(false);
+      })
   };
 
   const [value, setValue] = useState("");
@@ -197,21 +196,21 @@ const PaymentsTable = () => {
       />
       <Table
         columns={columns}
-        rowKey={(record) => record.login.uuid}
+        rowKey={(record) => record.id}
         dataSource={data}
         pagination={tableParams.pagination}
         loading={
           loading
             ? {
-                indicator: (
-                  <LoadingOutlined
-                    style={{
-                      fontSize: 34,
-                    }}
-                    spin
-                  />
-                ),
-              }
+              indicator: (
+                <LoadingOutlined
+                  style={{
+                    fontSize: 34,
+                  }}
+                  spin
+                />
+              ),
+            }
             : false
         }
         onChange={handleTableChange}

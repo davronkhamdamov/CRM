@@ -14,6 +14,8 @@ export interface TableParams {
     filters?: Parameters<GetProp<TableProps, "onChange">>[1];
 }
 export interface DataType {
+    method: string;
+    login: any;
     id: string
     name: string
     surname: string
@@ -53,8 +55,10 @@ export interface UserData {
     created_at?: Date
 }
 export interface PaymentDataType {
-    name: string;
+    id: string
+    method: string;
     created_at: Date;
+    payment_type_id: string
 }
 
 export interface TableProp {

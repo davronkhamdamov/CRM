@@ -13,7 +13,7 @@ import Login from "../pages/Login";
 import Book from "./../pages/Book";
 import SingleBemor from "../pages/SingleBemor";
 import SingleDocktor from "../pages/SingleDoctor";
-import Treatment from "./../pages/Treatment1";
+import Treatment from "../pages/Treatment";
 import PaymentTypes from "../pages/PaymentTypes";
 import Services from "../pages/Services";
 import Settings from "../pages/Settings";
@@ -21,6 +21,8 @@ import Hisobot from "../pages/Hisobot";
 import DockerLayout from "../layout/DoctorLayout";
 import ForgetPassword from "../pages/ForgetPassword";
 import NotFoundPage from "../pages/NotFoundPage";
+import DocktorTreatment from "../pages/DocktorTreatment";
+import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
@@ -40,7 +42,8 @@ const route = createBrowserRouter(
             </Route>
             <Route path="doctor" element={<DockerLayout />}>
                 <Route index path="statistic" element={<Statistic />} />
-                <Route path="treatment" element={<Treatment />} />
+                <Route path="treatment" element={<DocktorTreatment />} />
+                <Route path="treatment/:id" element={<SingleDocktorTreatment />} />
             </Route>
             <Route path="/reception" element={<Reception />}>
                 <Route index path="statistic" element={<Statistic />} />

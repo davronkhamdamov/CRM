@@ -12,7 +12,6 @@ import {
     message,
 } from "antd";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { EditModalProps, UserData } from "../types/type";
 import { LoadingProvider } from "../App";
 
@@ -82,7 +81,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                     </Space>
                 }
             >
-                {user_data?.name && <Form
+                {user_data.created_at && <Form
                     layout="vertical"
                     initialValues={{
                         first_name: user_data?.name,

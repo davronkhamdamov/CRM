@@ -34,13 +34,11 @@ const DockerLayout = () => {
 
   useEffect(() => {
     if (isAuth !== "doctor") {
-      return navigate("/auth");
+      navigate("/auth");
+    } else {
+      !defaultRout && navigate("/" + isAuth + "/" + "statistic");
     }
-  }, [isAuth]);
-
-  useEffect(() => {
-    defaultRout && navigate("/" + isAuth + "/" + "statistic");
-  }, [defaultRout]);
+  }, [isAuth, defaultRout]);
 
   return (
     <Layout hasSider>
@@ -60,7 +58,7 @@ const DockerLayout = () => {
         <Menu
           theme={"light" === theme || "dark" === theme ? theme : "dark"}
           mode="inline"
-          defaultSelectedKeys={[pathname.split("/")[2]]}
+          defaultSelectedKeys={[pathname.split("/")[2] || "statistic"]}
           items={items}
           onClick={(e) => {
             if (e.key === "auth") {

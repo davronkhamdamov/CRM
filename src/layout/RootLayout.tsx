@@ -76,7 +76,7 @@ const RootLayout = () => {
         <Menu
           theme={"light" === theme || "dark" === theme ? theme : "dark"}
           mode="inline"
-          defaultSelectedKeys={[pathname.split("/")[2]]}
+          defaultSelectedKeys={[pathname.split("/")[2] || "statistic"]}
           items={items}
           onClick={(e) => {
             if (e.key === "auth") {
