@@ -90,12 +90,12 @@ const SingleBemor: React.FC = () => {
                             <Divider type="vertical" style={{ height: "100px" }} />
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}><BsCalendar2Date /> Tug'ilgan sana: {dayjs(userData?.date_birth).format("DD-MM-YYYY")}</Flex>
                             <Divider type="vertical" style={{ height: "100px" }} />
-                            <Flex style={{ width: "33.3%" }} gap={10}><GrPhone /> Telefon number: {userData?.phone_number}</Flex>
+                            <Flex style={{ width: "33.3%" }} gap={10}><GrPhone /> Telefon raqam: {userData?.phone_number}</Flex>
                         </Flex>
                         <Divider />
                         <Flex style={{ width: "100%", height: "60px" }} align="center" gap={50}>
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                                <IoHomeOutline /> Address:  {userData?.address}
+                                <IoHomeOutline /> Manzil:  {userData?.address}
                             </Flex>
                             <Divider type="vertical" style={{ height: "100px" }} />
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}>
@@ -110,7 +110,7 @@ const SingleBemor: React.FC = () => {
 
                         <Flex style={{ width: "100%", height: "60px" }} gap={50} align="end">
                             <Flex style={{ width: "100%", height: "60px", fontSize: "20px" }} gap={10} align="center">
-                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance}</span>
+                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance} so'm</span>
                             </Flex>
                         </Flex>
                     </Flex>

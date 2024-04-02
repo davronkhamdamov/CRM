@@ -97,7 +97,7 @@ const SingleBemor2: React.FC = () => {
 
                         <Flex style={{ width: "100%", height: "60px" }} gap={50} align="end">
                             <Flex style={{ width: "100%", height: "60px", fontSize: "20px" }} gap={10} align="center">
-                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance}</span>
+                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance} so'm</span>
                             </Flex>
                         </Flex>
                     </Flex>
