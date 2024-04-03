@@ -36,7 +36,7 @@ const DoctorsTable = () => {
             pageSize: 10,
         },
     });
-    const cancel = () => {
+    const Delete_doctor = () => {
         setToLoading(true);
         setTimeout(() => {
             setToLoading(false);
@@ -51,8 +51,8 @@ const DoctorsTable = () => {
             sorter: true,
             render: (name) => {
                 return (
-                    <Link to={name.login?.uuid}>
-                        {name.name.first} {name.name.last}
+                    <Link to={name.id}>
+                        {name.name} {name.surname}
                     </Link>
                 );
             },
@@ -76,8 +76,7 @@ const DoctorsTable = () => {
         },
         {
             title: "Role",
-            dataIndex: "location",
-            render: () => role_data[Math.floor(Math.random() * 2)],
+            dataIndex: "role",
             width: "20%",
         },
         {
@@ -92,7 +91,7 @@ const DoctorsTable = () => {
                         </Tooltip>
                         <Popconfirm
                             title="O'chirishga ishonchingiz komilmi?"
-                            onConfirm={cancel}
+                            onConfirm={Delete_doctor}
                         >
                             <Tooltip placement="bottom" title="O'chirish">
                                 <DeleteOutlined style={{ color: "red" }} />
@@ -127,19 +126,19 @@ const DoctorsTable = () => {
     const fetchData = () => {
         setLoading(true);
         fetch(
-            `https://randomuser.me/api?${qs.stringify(
+            `${import.meta.env.VITE_APP_URL}/staffs?${qs.stringify(
                 getRandomuserParams(tableParams)
             )}`
         )
             .then((res) => res.json())
-            .then(({ results }) => {
-                setData(results);
+            .then((result) => {
+                setData(result.result);
                 setLoading(false);
                 setTableParams({
                     ...tableParams,
                     pagination: {
                         ...tableParams.pagination,
-                        total: 200,
+                        total: result.total,
                     },
                 });
             });
@@ -180,21 +179,21 @@ const DoctorsTable = () => {
             />
             <Table
                 columns={columns}
-                rowKey={(record) => record.login.uuid}
+                rowKey={(record) => record.id}
                 dataSource={data}
                 pagination={tableParams.pagination}
                 loading={
                     loading
                         ? {
-                              indicator: (
-                                  <LoadingOutlined
-                                      style={{
-                                          fontSize: 34,
-                                      }}
-                                      spin
-                                  />
-                              ),
-                          }
+                            indicator: (
+                                <LoadingOutlined
+                                    style={{
+                                        fontSize: 34,
+                                    }}
+                                    spin
+                                />
+                            ),
+                        }
                         : false
                 }
                 onChange={handleTableChange}

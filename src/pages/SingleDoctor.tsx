@@ -22,10 +22,10 @@ const SingleDocktor: React.FC = () => {
                     borderRadius: borderRadiusLG,
                 }}
             >
-                <Link to="/admin/patient">
+                <Link to="/admin/doctors">
                     <Flex align="center" gap={5}>
                         <IoArrowBackSharp />
-                        <p>Bemorlar ro'yhatiga qaytish</p>
+                        <p>Doktorlar ro'yhatiga qaytish</p>
                     </Flex>
                 </Link>
                 <br />

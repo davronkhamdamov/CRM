@@ -192,7 +192,9 @@ const TableComponent: FC = () => {
                 getuserParams(tableParams)
             )}`
         )
-            .then((res) => res.json())
+            .then((res) => {
+                return res.json()
+            })
             .then((results) => {
                 setData(results.result);
                 setLoading(false);
@@ -203,7 +205,13 @@ const TableComponent: FC = () => {
                         total: results.count_of_users,
                     },
                 });
-            });
+            }).catch((err) => {
+                if (err.message === "Failed to fetch") {
+                    messageApi.error("Internet bilan aloqani tekshiring!", 2);
+                };
+                setData([]);
+                setLoading(false);
+            })
     };
     const [value, setValue] = useState("");
     const [options, setOptions] = useState<{ value: string }[]>([]);

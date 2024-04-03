@@ -1,17 +1,13 @@
 import {
   AutoComplete,
-  Popconfirm,
-  Space,
   Spin,
   Table,
-  Tooltip,
   message,
 } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
 import {
   LoadingOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
@@ -37,32 +33,13 @@ const PaymentsTable = () => {
       pageSize: 10,
     },
   });
-  const deletePayment = (id: string) => {
-    setToLoading(true);
-    fetch(
-      `${import.meta.env.VITE_APP_URL}/payment/${id}`, {
-      method: "DELETE"
-    }
-    ).then(res => res.json())
-      .then(() => {
-        setToLoading(false);
-        messageApi.success("To'lov muvaffaqqiyatli o'chirildi", 2);
-      }).catch(() => {
-        setToLoading(false);
-        messageApi.success("Nimadir xato ketdi", 2);
-      })
-  };
 
   const columns: ColumnsType<DataType> = [
     {
       title: "Ism Familyasi",
       dataIndex: "",
       sorter: true,
-      render: (user) => {
-        return (<a href={`patient/${user.id}`}>
-          {user.username} {user.surname}
-        </a>)
-      },
+      render: (user) => <a href={`patient/${user.id}`}>{user.username} {user.surname}</a>,
       width: "20%",
       align: "center",
     },
@@ -100,28 +77,7 @@ const PaymentsTable = () => {
         );
       },
       width: "20%",
-    },
-    {
-      title: "Bajariladigan ishlar",
-      dataIndex: "",
-      key: "operation",
-      align: "center",
-      render: (_, record) => {
-        console.log(record);
-        return (
-          <Space size="middle">
-            <Popconfirm
-              title="O'chirishga ishonchingiz komilmi?"
-              onConfirm={() => deletePayment(record.id)}
-            >
-              <Tooltip placement="bottom" title="O'chirish">
-                <DeleteOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </Popconfirm>
-          </Space>
-        );
-      },
-    },
+    }
   ];
 
   useEffect(() => {
@@ -153,13 +109,12 @@ const PaymentsTable = () => {
       .then((res) => res.json())
       .then((result) => {
         setData(result.result);
-
         setLoading(false);
         setTableParams({
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 200,
+            total: result?.total,
           },
         });
       }).catch(() => {

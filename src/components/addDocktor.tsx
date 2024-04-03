@@ -18,6 +18,7 @@ const CreateAccount = () => {
     const { setLoadingCnx } = useContext(LoadingProvider);
     const [open, setOpen] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
+    const [actionData, setActionData] = useState({})
     const showDrawer = () => {
         setOpen(true);
     };
@@ -26,13 +27,24 @@ const CreateAccount = () => {
     };
     const onSubmit = () => {
         setLoadingCnx(true);
-        setTimeout(() => {
-            setLoadingCnx(false);
-            setOpen(false);
-            setLoadingCnx(false);
-            messageApi.success("Shifokor muvaffaqqiyatli yaratildi", 2);
-        }, 2000);
+        fetch(import.meta.env.VITE_APP_URL + "/staffs", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(actionData)
+        })
+            .then((res) => res.json())
+            .then(() => {
+                setLoadingCnx(false);
+                setOpen(false);
+                messageApi.success("Shifokor muvaffaqqiyatli yaratildi", 2);
+            }).catch(() => {
+                setLoadingCnx(false);
+                messageApi.error("Shifokor yaratishda xatolik yuz berdi", 2);
+            })
     };
+
     return (
         <>
             <Button type="default" onClick={showDrawer} icon={<PlusOutlined />}>
@@ -70,7 +82,11 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos ism kiriting" />
+                                <Input placeholder="Iltimos ism kiriting" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, name: e.target.value }
+                                    })
+                                }} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -84,7 +100,11 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Familya kiriting" />
+                                <Input placeholder="Familya kiriting" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, surname: e.target.value }
+                                    })
+                                }} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -100,7 +120,12 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos yashash joyini kiriting" />
+
+                                <Input placeholder="Iltimos yashash joyini kiriting" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, address: e.target.value }
+                                    })
+                                }} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -114,7 +139,12 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="Iltimos telefon nomer kiriting" />
+                                <Input placeholder="Iltimos telefon nomer kiriting"
+                                    onChange={(e) => {
+                                        setActionData(prev => {
+                                            return { ...prev, phone_number: e.target.value }
+                                        })
+                                    }} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -130,24 +160,14 @@ const CreateAccount = () => {
                                     },
                                 ]}
                             >
-                                <Select placeholder="Iltimos jinsingizni tanlang">
+                                <Select placeholder="Iltimos jinsingizni tanlang" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, gender: e }
+                                    })
+                                }}>
                                     <Option value="male">Erkak</Option>
                                     <Option value="female">Ayol</Option>
                                 </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="job"
-                                label="Kasb"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Iltimos kasbingizni kiriting",
-                                    },
-                                ]}
-                            >
-                                <Input placeholder="Iltimos kasbingizni kiriting" />
                             </Form.Item>
                         </Col>
                     </Row>

@@ -17,10 +17,6 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
     };
     const onSubmit = () => {
         setLoadingCnx(true);
-        console.log({
-            ...actionData,
-            user_id: data.id
-        });
         fetch(`${import.meta.env.VITE_APP_URL}/payment`, {
             method: "POST",
             headers: {
@@ -50,13 +46,14 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
             .then((results) => {
                 setLoading(false)
                 setPaymentTypeData(results.result);
-            }).catch(e => {
-                console.log(e);
+            }).catch(() => {
+                setLoading(false)
+                setPaymentTypeData([]);
             })
     };
     useEffect(() => {
-        fetchData()
-    }, [])
+        data.id && fetchData()
+    }, [data.isOpen])
 
     return (
         <>

@@ -22,10 +22,11 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const [user_data, setData] = useState<UserData>({ address: "", gender: "", job: '', name: '', phone_number: '', surname: '' });
 
     useEffect(() => {
-        fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id).then(res => res.json())
-            .then(res => {
-                setData(res.result)
-            })
+        if (data.id) {
+            fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id)
+                .then(res => res.json())
+                .then(res => setData(res.result))
+        }
     }, [data.isOpen]);
 
 
