@@ -159,7 +159,13 @@ const PaymentTypeTable = () => {
                         total: results.count_of_users,
                     },
                 });
-            });
+            }).catch((err) => {
+                if (err.message === "Failed to fetch") {
+                    messageApi.error("Internet bilan aloqani tekshiring!", 2);
+                };
+                setData([]);
+                setLoading(false);
+            })
     };
 
     const [value, setValue] = useState("");

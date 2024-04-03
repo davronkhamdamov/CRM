@@ -141,7 +141,13 @@ const DoctorsTable = () => {
                         total: result.total,
                     },
                 });
-            });
+            }).catch((err) => {
+                if (err.message === "Failed to fetch") {
+                    messageApi.error("Internet bilan aloqani tekshiring!", 2);
+                };
+                setData([]);
+                setLoading(false);
+            })
     };
 
     const [value, setValue] = useState("");
