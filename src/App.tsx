@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { themeMode } from "./types/type";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import frame from './components/confetti'
 
 export const ThemeProvider = createContext<{
     theme: themeMode;
@@ -41,6 +42,7 @@ const App = () => {
             localStorage.setItem("theme", "light");
         }
     }, [theme]);
+    frame()
     return (
         <ThemeProvider.Provider value={{ theme, setTheme }}>
             <LoadingProvider.Provider value={{ isLoadingCnx, setLoadingCnx }}>
