@@ -30,6 +30,8 @@ const DoctorsTable = () => {
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
     const [toLoading, setToLoading] = useState(false);
+    const token = localStorage.getItem("auth")
+
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
@@ -43,7 +45,6 @@ const DoctorsTable = () => {
             messageApi.success("Shifokor muvaffaqqiyatli o'chirildi", 2);
         }, 2000);
     };
-    const role_data = ["Doktor", "Admin"];
     const columns: ColumnsType<DataType> = [
         {
             title: "Ism Familyasi",
@@ -128,7 +129,12 @@ const DoctorsTable = () => {
         fetch(
             `${import.meta.env.VITE_APP_URL}/staffs?${qs.stringify(
                 getRandomuserParams(tableParams)
-            )}`
+            )}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
         )
             .then((res) => res.json())
             .then((result) => {

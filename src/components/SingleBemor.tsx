@@ -20,8 +20,14 @@ const SingleBemor2: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+    const token = localStorage.getItem("auth")
     useEffect(() => {
-        fetch(import.meta.env.VITE_APP_URL + "/user/" + params.id)
+        fetch(import.meta.env.VITE_APP_URL + "/user/" + params.id,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
             .then(res => res.json())
             .then(data => {
                 setUserData(data.result)

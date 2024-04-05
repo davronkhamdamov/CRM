@@ -33,6 +33,7 @@ const PaymentsTable = () => {
       pageSize: 10,
     },
   });
+  const token = localStorage.getItem("auth")
 
   const columns: ColumnsType<DataType> = [
     {
@@ -104,7 +105,12 @@ const PaymentsTable = () => {
     fetch(
       `${import.meta.env.VITE_APP_URL}/payment/?${qs.stringify(
         getRandomuserParams(tableParams)
-      )}`
+      )}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
     )
       .then((res) => res.json())
       .then((result) => {

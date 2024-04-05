@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Drawer, Form, Input, Space, Switch, message, FormProps, Flex } from "antd";
+import { Button, Drawer, Form, Input, Switch, message, FormProps, Flex } from "antd";
 import { LoadingProvider } from "../App";
 import { ServiceFieldType } from "../types/type";
 
@@ -8,6 +8,7 @@ const AddService = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const token = localStorage.getItem("auth")
 
   const showDrawer = () => {
     setOpen(true);
@@ -18,11 +19,11 @@ const AddService = () => {
   const onSubmit: FormProps<ServiceFieldType>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
     console.log(actionData);
-
     fetch(import.meta.env.VITE_APP_URL + "/service", {
       method: "POST",
       headers: {
-        "Content-type": "application/json"
+        "Content-type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(actionData)
     })

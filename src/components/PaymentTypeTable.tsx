@@ -39,10 +39,16 @@ const PaymentTypeTable = () => {
             pageSize: 10,
         },
     });
+    const token = localStorage.getItem("auth")
 
     const deletePaymentType = (id: string) => {
         setToLoading(true);
-        fetch(import.meta.env.VITE_APP_URL + "/payment-type/" + id, { method: "DELETE" }).then(res => res.json())
+        fetch(import.meta.env.VITE_APP_URL + "/payment-type/" + id, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(res => res.json())
             .then(() => {
                 setToLoading(false);
                 fetchData()
@@ -146,7 +152,12 @@ const PaymentTypeTable = () => {
         fetch(
             `${import.meta.env.VITE_APP_URL}/payment-type/?${qs.stringify(
                 getPaymentTypeParams(tableParams)
-            )}`
+            )}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
         )
             .then((res) => res.json())
             .then((results) => {

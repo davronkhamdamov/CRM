@@ -41,15 +41,24 @@ const RootLayout = () => {
     getItem("Chiqish", "auth", <LogoutOutlined />),
   ];
   const defaultRout = pathname?.split("/")[2];
-  const isAuth = localStorage.getItem("auth");
+  const token = localStorage.getItem("auth");
 
   useEffect(() => {
-    if (isAuth !== "reception") {
-      navigate("/auth");
-    } else {
-      !defaultRout && navigate("/" + isAuth + "/" + "statistic");
-    }
-  }, [isAuth, defaultRout]);
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me",
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!["reception", 'admin', 'doctor'].includes(data.result.role)) {
+          navigate("/auth");
+        } else {
+          !defaultRout && navigate("/" + data.result.role + "/" + "statistic");
+        }
+      })
+  }, [token, defaultRout]);
 
   return (
     <Layout hasSider>

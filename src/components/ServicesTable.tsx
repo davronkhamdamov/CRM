@@ -27,6 +27,7 @@ const getRandomuserParams = (params: TableParams) => ({
   page: params.pagination?.current,
   ...params,
 });
+
 const ServicesTable = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
@@ -38,6 +39,8 @@ const ServicesTable = () => {
       pageSize: 10,
     },
   });
+  const token = localStorage.getItem("auth")
+
   const cancel = () => {
     setLoadingCnx(true);
     setTimeout(() => {
@@ -155,7 +158,12 @@ const ServicesTable = () => {
   };
   const fetchData = () => {
     setLoading(true);
-    fetch(import.meta.env.VITE_APP_URL + `/service/?${qs.stringify(getRandomuserParams(tableParams))}`)
+    fetch(import.meta.env.VITE_APP_URL + `/service/?${qs.stringify(getRandomuserParams(tableParams))}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
       .then((res) => res.json())
       .then((result) => {
         setData(result.result);

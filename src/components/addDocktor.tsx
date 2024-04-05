@@ -25,12 +25,14 @@ const CreateAccount = () => {
     const onClose = () => {
         setOpen(false);
     };
+    const token = localStorage.getItem("auth")
     const onSubmit = () => {
         setLoadingCnx(true);
         fetch(import.meta.env.VITE_APP_URL + "/staffs", {
             method: "POST",
             headers: {
-                "Content-type": "application/json"
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(actionData)
         })

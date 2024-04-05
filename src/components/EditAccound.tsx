@@ -20,10 +20,15 @@ const { Option } = Select;
 const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const { setLoadingCnx } = useContext(LoadingProvider);
     const [user_data, setData] = useState<UserData>({ address: "", gender: "", job: '', name: '', phone_number: '', surname: '' });
-
+    const token = localStorage.getItem("auth")
     useEffect(() => {
         if (data.id) {
-            fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id)
+            fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
                 .then(res => res.json())
                 .then(res => setData(res.result))
         }
@@ -43,7 +48,8 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
             method: "PUT",
             body: JSON.stringify(user_data),
             headers: {
-                "Content-type": "application/json"
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`
             }
         })
             .then((res) => res.json())

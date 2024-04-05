@@ -11,6 +11,7 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
     const [loading, setLoading] = useState(true);
     const [actionData, setActionData] = useState({ amount: 0, payment_type_id: "" })
 
+    const token = localStorage.getItem("auth")
 
     const onClose = () => {
         setOpen({ isOpen: false, id: "" });
@@ -20,6 +21,7 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
         fetch(`${import.meta.env.VITE_APP_URL}/payment`, {
             method: "POST",
             headers: {
+                "Authorization": `Bearer ${token}`,
                 "Content-type": "application/json"
             },
             body: JSON.stringify({
@@ -41,7 +43,12 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
             })
     };
     const fetchData = () => {
-        fetch(`${import.meta.env.VITE_APP_URL}/payment-type`)
+        fetch(`${import.meta.env.VITE_APP_URL}/payment-type`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
             .then((res) => res.json())
             .then((results) => {
                 setLoading(false)

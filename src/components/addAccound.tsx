@@ -30,6 +30,7 @@ const CreateAccount: FC = () => {
     const onClose = () => {
         setOpen(false);
     };
+    const token = localStorage.getItem("auth")
     const onSubmit = () => {
         setLoadingCnx(true);
         fetch(import.meta.env.VITE_APP_URL + "/user",
@@ -37,7 +38,10 @@ const CreateAccount: FC = () => {
                 method: "POST",
                 body: JSON.stringify(payload),
                 headers: {
-                    "Content-type": "application/json"
+                    "Content-type": "application/json",
+
+                    "Authorization": `Bearer ${token}`
+
                 }
             })
             .then(res => res.json())

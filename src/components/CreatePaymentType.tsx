@@ -6,7 +6,7 @@ import { LoadingProvider } from "../App";
 const CreatePaymentType = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
-
+  const token = localStorage.getItem("auth")
   const [open, setOpen] = useState(false);
   const [paymentType, setPaymentType] = useState("");
   const showDrawer = () => {
@@ -20,7 +20,8 @@ const CreatePaymentType = () => {
     fetch(import.meta.env.VITE_APP_URL + "/payment-type", {
       method: "POST",
       headers: {
-        "Content-type": "application/json"
+        "Content-type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         method: paymentType
