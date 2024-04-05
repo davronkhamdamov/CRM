@@ -10,8 +10,19 @@ import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
   const onFinish = (values: any) => {
-    localStorage.setItem("auth", values.username)
-    location = values.username
+    fetch(import.meta.env.VITE_APP_URL + "/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(values)
+    }).then(res => res.json())
+      .then(data => {
+        if (data.status === "ok") {
+          localStorage.setItem("auth", data.result.access_token)
+          location = data.result.role
+        }
+      })
   };
 
   return (
@@ -23,7 +34,7 @@ const App: React.FC = () => {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="login"
           rules={[
             {
               required: true,
