@@ -65,3 +65,15 @@ export interface TableProp {
     data?: any;
     setData: (a: any) => void;
 }
+export interface SuccessProps {
+    modalStatus: "403" | "404" | "500" | 'error' | "info" | "success" | 'warning';
+    title: string;
+    link: string;
+}
+export interface ServiceFieldType {
+    isActive: boolean;
+    price: number;
+    product_price: number;
+    service_name: string;
+
+}

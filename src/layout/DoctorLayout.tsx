@@ -62,7 +62,7 @@ const DockerLayout = () => {
           items={items}
           onClick={(e) => {
             if (e.key === "auth") {
-              navigate("/auth");
+              navigate("auth");
               localStorage.removeItem("auth");
             }
             navigate(e.key);

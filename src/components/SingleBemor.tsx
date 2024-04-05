@@ -71,8 +71,21 @@ const SingleBemor2: React.FC = () => {
                     <Divider type="vertical" style={{ height: "350px" }} />
                     <Flex vertical style={{ width: "80%" }}>
                         <Flex style={{ width: "100%", height: "60px" }} gap={50} align="center">
-                            {userData?.gender &&
-                                <Flex style={{ width: "33.3%" }} align="center" gap={10}> Jinsi: {userData?.gender == "male" ? <Flex>  Erkak <FaMale /></Flex> : <Flex>Ayol <FaFemale /></Flex>} </Flex>
+                            {
+                                <Flex
+                                    style={{ width: "33.3%" }}
+                                    align="center"
+                                    gap={10}>
+                                    Jinsi: {userData?.gender == "male"
+                                        ?
+                                        <Flex>
+                                            Erkak <FaMale />
+                                        </Flex>
+                                        :
+                                        <Flex>Ayol <FaFemale />
+                                        </Flex>
+                                    }
+                                </Flex>
                             }
                             <Divider type="vertical" style={{ height: "100px" }} />
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}><BsCalendar2Date /> Tug'ilgan sana: {dayjs(userData?.date_birth).format("DD-MM-YYYY")}</Flex>

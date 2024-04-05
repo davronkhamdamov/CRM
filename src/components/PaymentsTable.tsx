@@ -39,7 +39,7 @@ const PaymentsTable = () => {
       title: "Ism Familyasi",
       dataIndex: "",
       sorter: true,
-      render: (user) => <a href={`patient/${user.id}`}>{user.username} {user.surname}</a>,
+      render: (user) => <a href={`patient/${user.user_id}`}>{user.username} {user.surname}</a>,
       width: "20%",
       align: "center",
     },
@@ -54,7 +54,7 @@ const PaymentsTable = () => {
       title: "Sana",
       dataIndex: "created_at",
       align: "center",
-      render: (record) => `${dayjs(record).format("DD-MM-YYYY HH:MM")}`,
+      render: (record) => `${dayjs(record).format("DD-MM-YYYY HH:mm")}`,
       width: "20%",
     },
     {

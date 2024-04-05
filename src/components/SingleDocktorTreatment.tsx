@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Descriptions, DescriptionsProps, Flex, Space, theme } from "antd";
+import { Badge, Button, Descriptions, DescriptionsProps, Flex, theme } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { UserData } from "../types/type";
 import dayjs from "dayjs";
+import Successfully from "./Success";
+import frame from './confetti'
 
 const SingleDocktorTreatment = () => {
     const params = useParams();
     const [cureData, setCureData] = useState<UserData>()
+    const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -18,7 +21,6 @@ const SingleDocktorTreatment = () => {
                 setCureData(data.result)
             })
     }, [params.id])
-    console.log(cureData);
 
     const items: DescriptionsProps['items'] = [
         {
@@ -67,8 +69,19 @@ const SingleDocktorTreatment = () => {
                 }}>
                 <Descriptions title="Davolash haqida umumiy ma'lumotlar" layout="vertical" items={items} column={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
                 />
+                <Button
+                    type="primary"
+                    style={{ width: "max-content" }}
+                    onClick={() => {
+                        setIsSuccess(true)
+                        frame()
+                    }}
+                >
+                    Davolashni yakunlash
+                </Button>
             </Flex>
         </div>
+        {isSuccess && <Successfully title="Davolashni muvaffaqiyatli tugatganingiz bilan tabriklayman!" modalStatus="success" link="/doctor/treatment" />}
     </Content>
 }
 export default SingleDocktorTreatment

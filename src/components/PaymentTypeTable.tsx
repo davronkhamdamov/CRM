@@ -194,6 +194,7 @@ const PaymentTypeTable = () => {
                 rowKey={(record) => record.method}
                 dataSource={data}
                 pagination={tableParams.pagination}
+                scroll={{ y: 590 }}
                 loading={
                     loading
                         ? {

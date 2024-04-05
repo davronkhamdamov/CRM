@@ -64,7 +64,7 @@ const Treatment = () => {
           </a>
         );
       },
-      width: "20%",
+      width: "15%",
     },
     {
       title: "Shifokor",
@@ -84,7 +84,7 @@ const Treatment = () => {
         },
       ],
       render: (name) => `${name?.first}`,
-      width: "20%",
+      width: "15%",
     },
     {
       title: "Sana",
@@ -93,27 +93,27 @@ const Treatment = () => {
         `${dayjs(dob?.date).format("DD-MM-YYYY HH:MM")} - ${dayjs(
           dob?.date
         ).format("HH:MM")}`,
-      width: "20%",
+      width: "13%",
     },
     {
       title: "To'lov summasi",
       dataIndex: "location",
       render: (location) => location.street.number,
-      width: "20%",
+      width: "10%",
     },
     {
       title: "Sana",
       dataIndex: "registered",
       render: (dob) =>
-        `${dayjs(dob?.date).format("DD-MM-YYYY HH:MM")} - ${dayjs(
+        `${dayjs(dob?.date).format("DD-MM-YYYY HH:mm")} - ${dayjs(
           dob?.date
-        ).format("HH:MM")}`,
-      width: "20%",
+        ).format("HH:mm")}`,
+      width: "13%",
     },
     {
       title: "To'lov holati",
       dataIndex: "",
-      width: "7%",
+      width: "6%",
       render: () => {
         return (
           <>
@@ -142,7 +142,7 @@ const Treatment = () => {
     {
       title: "Holati",
       dataIndex: "",
-      width: "5%",
+      width: "6%",
       render: () => {
         return (
           <>
@@ -170,6 +170,7 @@ const Treatment = () => {
       dataIndex: "operation",
       key: "operation",
       align: "center",
+      width: '15%',
       render: (_, record) => {
         return (
           <Space size="middle">

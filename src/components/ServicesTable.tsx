@@ -51,37 +51,36 @@ const ServicesTable = () => {
       title: "Xizmat nomi",
       dataIndex: "name",
       sorter: true,
-      render: (name) => `${name.last}`,
       width: "20%",
       align: "center",
     },
     {
       title: "Xizmat narxi",
-      dataIndex: "location",
+      dataIndex: "",
       align: "center",
       width: "16%",
-      render: (location) => `${location.street.number} so'm`,
+      render: ({ price }) => `${price} so'm`,
     },
     {
       title: "Xom ashyo narxi",
-      dataIndex: "location",
+      dataIndex: "raw_material_price",
       align: "center",
-      render: (location) => `${location.street.number} so'm`,
+      render: (raw_material_price) => `${raw_material_price} so'm`,
       width: "16%",
     },
     {
       title: "Yaratilgan vaqti",
-      dataIndex: "registered",
+      dataIndex: "create_at",
       align: "center",
-      render: (record) => `${dayjs(record.date).format("DD-MM-YYYY")}`,
+      render: (record) => `${dayjs(record).format("DD-MM-YYYY")}`,
       width: "16%",
     },
     {
       title: "Xizmat holati",
-      dataIndex: "gender",
+      dataIndex: "status",
       align: "center",
       render: (record) => {
-        return record === "male" ? (
+        return record ? (
           <Tag
             style={{
               maxWidth: "90px",
@@ -156,20 +155,16 @@ const ServicesTable = () => {
   };
   const fetchData = () => {
     setLoading(true);
-    fetch(
-      `https://randomuser.me/api?${qs.stringify(
-        getRandomuserParams(tableParams)
-      )}`
-    )
+    fetch(import.meta.env.VITE_APP_URL + `/service/?${qs.stringify(getRandomuserParams(tableParams))}`)
       .then((res) => res.json())
-      .then(({ results }) => {
-        setData(results);
+      .then((result) => {
+        setData(result.result);
         setLoading(false);
         setTableParams({
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 200,
+            total: 1,
           },
         });
       });
@@ -208,21 +203,22 @@ const ServicesTable = () => {
       />
       <Table
         columns={columns}
-        rowKey={(record) => record.login.uuid}
+        rowKey={(record) => record.id}
         dataSource={data}
         pagination={tableParams.pagination}
+        scroll={{ y: 590 }}
         loading={
           loading
             ? {
-                indicator: (
-                  <LoadingOutlined
-                    style={{
-                      fontSize: 34,
-                    }}
-                    spin
-                  />
-                ),
-              }
+              indicator: (
+                <LoadingOutlined
+                  style={{
+                    fontSize: 34,
+                  }}
+                  spin
+                />
+              ),
+            }
             : false
         }
         onChange={handleTableChange}

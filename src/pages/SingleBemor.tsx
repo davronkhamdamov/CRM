@@ -23,11 +23,11 @@ const SingleBemor: React.FC = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
     useEffect(() => {
         fetch(import.meta.env.VITE_APP_URL + "/user/" + params.id)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 setUserData(data.result)
             })
     }, [location])
@@ -67,8 +67,6 @@ const SingleBemor: React.FC = () => {
                         borderRadius: borderRadiusLG,
                         minHeight: "400px"
                     }}>
-
-
                     <Flex vertical style={{ width: "20%" }}>
                         <Flex align="center" vertical gap={20}>
                             <label htmlFor="profile" className="profile_image">
@@ -78,39 +76,39 @@ const SingleBemor: React.FC = () => {
                                 </div>
                             </label>
                             <input type="file" style={{ display: "none" }} id="profile" />
-                            <Title level={4} style={{ margin: 0 }}>{userData?.name} {userData?.surname}</Title>
+                            <Title level={4} style={{ margin: 0 }}>{userData?.name ? userData?.name : "Yuklanmoqda..."} {userData?.surname}</Title>
                         </Flex>
                     </Flex>
                     <Divider type="vertical" style={{ height: "350px" }} />
                     <Flex vertical style={{ width: "80%" }}>
                         <Flex style={{ width: "100%", height: "60px" }} gap={50} align="center">
-                            {userData?.gender &&
-                                <Flex style={{ width: "33.3%" }} align="center" gap={10}> Jinsi: {userData?.gender == "male" ? <Flex>  Erkak <FaMale /></Flex> : <Flex>Ayol <FaFemale /></Flex>} </Flex>
+                            {userData?.gender ?
+                                <Flex style={{ width: "33.3%" }} align="center" gap={10}> Jinsi: {userData?.gender == "male" ? <Flex>  Erkak <FaMale /></Flex> : <Flex>Ayol <FaFemale /></Flex>} </Flex> : <Flex style={{ width: "33.3%" }}> Jinsi: Yuklanmoqda... </Flex>
                             }
                             <Divider type="vertical" style={{ height: "100px" }} />
-                            <Flex align="center" gap={10} style={{ width: "33.3%" }}><BsCalendar2Date /> Tug'ilgan sana: {dayjs(userData?.date_birth).format("DD-MM-YYYY")}</Flex>
+                            <Flex align="center" gap={10} style={{ width: "33.3%" }}><BsCalendar2Date /> Tug'ilgan sana: {userData?.date_birth ? dayjs(userData?.date_birth).format("DD-MM-YYYY") : "Yuklanmoqda..."}</Flex>
                             <Divider type="vertical" style={{ height: "100px" }} />
-                            <Flex style={{ width: "33.3%" }} gap={10}><GrPhone /> Telefon raqam: {userData?.phone_number}</Flex>
+                            <Flex style={{ width: "33.3%" }} gap={10}><GrPhone /> Telefon raqam: {userData?.phone_number ? userData?.phone_number : "Yuklanmoqda..."}</Flex>
                         </Flex>
                         <Divider />
                         <Flex style={{ width: "100%", height: "60px" }} align="center" gap={50}>
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                                <IoHomeOutline /> Manzil:  {userData?.address}
+                                <IoHomeOutline /> Manzil:  {userData?.address ? userData?.address : "Yuklanmoqda.."}
                             </Flex>
                             <Divider type="vertical" style={{ height: "100px" }} />
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                                <MdWork /> Kasbi:  {userData?.job}
+                                <MdWork /> Kasbi:  {userData?.job ? userData?.job : "Yuklanmoqda.."}
                             </Flex>
                             <Divider type="vertical" style={{ height: "100px" }} />
                             <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                                <BsCalendar2Date /> Ro'yatdan o'tgan sanasi : {dayjs(userData?.created_at).format("DD-MM-YYYY")}
+                                <BsCalendar2Date /> Ro'yatdan o'tgan sanasi : {userData?.created_at ? dayjs(userData?.created_at).format("DD-MM-YYYY") : "Yuklanmoqda..."}
                             </Flex>
                         </Flex>
                         <Divider />
 
                         <Flex style={{ width: "100%", height: "60px" }} gap={50} align="end">
                             <Flex style={{ width: "100%", height: "60px", fontSize: "20px" }} gap={10} align="center">
-                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance} so'm</span>
+                                <LuCircleDollarSign />   Balance : <span style={{ fontSize: "30px" }}>{userData?.balance ? userData?.balance : "0"} so'm</span>
                             </Flex>
                         </Flex>
                     </Flex>
@@ -140,7 +138,7 @@ const SingleBemor: React.FC = () => {
                     />
                 </Flex>
             </div>
-        </Content>
+        </Content >
     );
 };
 

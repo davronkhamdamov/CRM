@@ -170,6 +170,68 @@ const CreateAccount = () => {
                                 </Select>
                             </Form.Item>
                         </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="role"
+                                label="Role"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "",
+                                    },
+                                ]}
+                            >
+                                <Select placeholder="Role" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, role: e }
+                                    })
+                                }}>
+                                    <Option value="reception">Qabulxona mudiri</Option>
+                                    <Option value="doctor">Doktor</Option>
+                                </Select>
+
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="logn"
+                                label="Login"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Login",
+                                    },
+                                ]}
+                            >
+
+                                <Input placeholder="Iltimos login kiriting" onChange={(e) => {
+                                    setActionData(prev => {
+                                        return { ...prev, login: e.target.value }
+                                    })
+                                }} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="password"
+                                label="Parol"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Parol",
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Iltimos parol kiriting"
+                                    onChange={(e) => {
+                                        setActionData(prev => {
+                                            return { ...prev, password: e.target.value }
+                                        })
+                                    }} />
+                            </Form.Item>
+                        </Col>
                     </Row>
                 </Form>
                 {contextHolder}

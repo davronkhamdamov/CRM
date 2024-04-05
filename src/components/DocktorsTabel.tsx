@@ -188,6 +188,7 @@ const DoctorsTable = () => {
                 rowKey={(record) => record.id}
                 dataSource={data}
                 pagination={tableParams.pagination}
+                scroll={{ y: 590 }}
                 loading={
                     loading
                         ? {
