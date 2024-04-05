@@ -52,6 +52,9 @@ const RootLayout = () => {
       })
       .then(res => res.json())
       .then(data => {
+        if (data?.detail === "Invalid token") {
+          navigate("/auth");
+        }
         if (!["reception", 'admin', 'doctor'].includes(data.result.role)) {
           navigate("/auth");
         } else {

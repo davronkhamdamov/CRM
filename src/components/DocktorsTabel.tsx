@@ -63,6 +63,7 @@ const DoctorsTable = () => {
         {
             title: "Jinsi",
             dataIndex: "gender",
+            render: (record) => record === "male" ? "Erkak" : "Ayol",
             filters: [
                 {
                     text: "Erkak",
