@@ -21,6 +21,8 @@ const SingleDocktorTreatment = () => {
                 setCureData(data.result)
             })
     }, [params.id])
+    console.log(cureData);
+
 
     const items: DescriptionsProps['items'] = [
         {

@@ -1,6 +1,5 @@
 import {
   AutoComplete,
-  Spin,
   Table,
   message,
 } from "antd";
@@ -26,7 +25,6 @@ const PaymentsTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [toLoading, setToLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -183,11 +181,6 @@ const PaymentsTable = () => {
             : false
         }
         onChange={handleTableChange}
-      />
-      <Spin
-        indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-        spinning={toLoading}
-        fullscreen
       />
       {contextHolder}
     </>
