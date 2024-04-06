@@ -28,7 +28,9 @@ const App: React.FC = () => {
           setError(data.detail)
         }
       }).catch((e) => {
-        setError(e.message)
+        if (e.message === "Failed to fetch") {
+          setError("Nimadir xato ketdi!")
+        }
       })
   };
 
