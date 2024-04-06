@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   EyeTwoTone,
   EyeInvisibleOutlined,
   UserOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import { Button, Flex, Form, Input } from "antd";
+import { Alert, Button, Flex, Form, Input, Space } from "antd";
 import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
+  const [error, setError] = useState("")
   const onFinish = (values: any) => {
+    setError('')
     fetch(import.meta.env.VITE_APP_URL + "/auth/login", {
       method: "POST",
       headers: {
@@ -22,6 +24,11 @@ const App: React.FC = () => {
           localStorage.setItem("auth", data.result.access_token)
           location = data.result.role
         }
+        if (data.detail) {
+          setError(data.detail)
+        }
+      }).catch((e) => {
+        setError(e.message)
       })
   };
 
@@ -33,6 +40,13 @@ const App: React.FC = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
+        {error &&
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Alert message={error} type="error" showIcon closable />
+          </Space>
+        }
+        <br />
+        <br />
         <Form.Item
           name="login"
           rules={[
@@ -80,7 +94,7 @@ const App: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-    </Flex>
+    </Flex >
   );
 };
 

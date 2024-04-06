@@ -2,8 +2,9 @@ import { RouterProvider } from "react-router-dom";
 import route from "./router/route";
 import { createContext, useEffect, useState } from "react";
 import { themeMode } from "./types/type";
-import { Spin } from "antd";
+import { Alert, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import Marquee from 'react-fast-marquee';
 
 export const ThemeProvider = createContext<{
     theme: themeMode;
@@ -44,6 +45,14 @@ const App = () => {
     return (
         <ThemeProvider.Provider value={{ theme, setTheme }}>
             <LoadingProvider.Provider value={{ isLoadingCnx, setLoadingCnx }}>
+                <Alert
+                    banner
+                    message={
+                        <Marquee pauseOnHover gradient={false}>
+                            Bu sayt sinov rejimida ishlamoqda agar xatoliklar bo'lsa <a style={{ margin: "0 5px" }} href="https://t.me/pro_username">menga</a> xabar bering!?
+                        </Marquee>
+                    }
+                />
                 <RouterProvider router={route} />
                 <Spin
                     indicator={

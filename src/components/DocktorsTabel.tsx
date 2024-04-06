@@ -127,10 +127,7 @@ const DoctorsTable = () => {
     };
     const fetchData = () => {
         setLoading(true);
-        fetch(
-            `${import.meta.env.VITE_APP_URL}/staffs?${qs.stringify(
-                getRandomuserParams(tableParams)
-            )}`,
+        fetch(import.meta.env.VITE_APP_URL + `/staffs?${qs.stringify(getRandomuserParams(tableParams))}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`
