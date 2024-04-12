@@ -40,7 +40,7 @@ const RootLayout = () => {
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
     getItem("Chiqish", "auth", <LogoutOutlined />),
   ];
-  const defaultRout = pathname?.split("/")[2];
+  const defaultRout = pathname?.split("/");
   const token = localStorage.getItem("auth");
 
   useEffect(() => {
@@ -57,8 +57,10 @@ const RootLayout = () => {
         }
         if (!["reception", 'admin', 'doctor'].includes(data.result.role)) {
           navigate("/auth");
+        } else if (defaultRout[1] !== data.result.role) {
+          navigate("/" + data.result.role + "/" + "statistic");
         } else {
-          !defaultRout && navigate("/" + data.result.role + "/" + "statistic");
+          !defaultRout[2] && navigate("/" + data.result.role + "/" + "statistic");
         }
       })
   }, [token, defaultRout]);
@@ -81,7 +83,7 @@ const RootLayout = () => {
         <Menu
           theme={"light" === theme || "dark" === theme ? theme : "dark"}
           mode="inline"
-          defaultSelectedKeys={[defaultRout || "statistic"]}
+          defaultSelectedKeys={[defaultRout[2] || "statistic"]}
           items={items}
           onClick={(e) => {
             if (e.key === "auth") {

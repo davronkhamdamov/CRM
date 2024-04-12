@@ -46,8 +46,8 @@ const DockerLayout = () => {
         }
         if (!["reception", 'admin', 'doctor'].includes(data.result.role)) {
           navigate("/auth");
-        } else {
-          !defaultRout && navigate("/" + data.result.role + "/" + "statistic");
+        } else if (defaultRout[1] !== data.result.role) {
+          !defaultRout[2] && navigate("/" + data.result.role + "/statistic");
         }
       })
   }, [token, defaultRout]);
