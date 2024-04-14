@@ -15,7 +15,10 @@ import {
   LoadingOutlined,
   DeleteOutlined,
   CheckCircleOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
+  SyncOutlined,
+  MinusCircleOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { DataType, EditModal, TableParams } from "../types/type";
@@ -59,16 +62,15 @@ const Treatment = () => {
       sorter: true,
       render: (record) => {
         return (
-          <a href={`patient/${record.login.uuid}`}>
-            {record.name.first} {record.name.last}
+          <a href={`patient/${record.id}`}>
+            {record.user_name} {record.user_surname}
           </a>
         );
       },
-      width: "15%",
+      width: "10%",
     },
     {
       title: "Shifokor",
-      dataIndex: "name",
       filters: [
         {
           text: "Birinchi doktor",
@@ -83,36 +85,31 @@ const Treatment = () => {
           value: "third",
         },
       ],
-      render: (name) => `${name?.first}`,
+      render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
+      width: "10%",
+    },
+    {
+      title: "Davolash vaqti",
+      render: (dob) =>
+        `${dayjs(dob?.start_time).format("HH:MM")} - ${dayjs(
+          dob?.end_time
+        ).format("HH:MM DD-MM-YYYY")}`,
       width: "15%",
     },
     {
-      title: "Sana",
-      dataIndex: "registered",
-      render: (dob) =>
-        `${dayjs(dob?.date).format("DD-MM-YYYY HH:MM")} - ${dayjs(
-          dob?.date
-        ).format("HH:MM")}`,
-      width: "13%",
-    },
-    {
       title: "To'lov summasi",
-      dataIndex: "location",
-      render: (location) => location.street.number,
+      dataIndex: "price",
+      render: (price) => (price ? price + " so'm" : "0 so'm"),
       width: "10%",
     },
     {
       title: "Sana",
-      dataIndex: "registered",
-      render: (dob) =>
-        `${dayjs(dob?.date).format("DD-MM-YYYY HH:mm")} - ${dayjs(
-          dob?.date
-        ).format("HH:mm")}`,
+      dataIndex: "created_at",
+      render: (date) => `${dayjs(date).format("DD-MM-YYYY HH:mm")}`,
       width: "13%",
     },
     {
       title: "To'lov holati",
-      dataIndex: "",
       width: "6%",
       render: () => {
         return (
@@ -141,28 +138,41 @@ const Treatment = () => {
     },
     {
       title: "Holati",
-      dataIndex: "",
+      dataIndex: "is_done",
       width: "6%",
-      render: () => {
-        return (
-          <>
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              Yakunlandi
-            </Tag>
-            {/* <Tag icon={<SyncOutlined spin />} color="processing">
-                            Jarayonda
-                        </Tag>
-                        <Tag icon={<CloseCircleOutlined />} color="error">
-                            Xatolik
-                        </Tag>
-                        <Tag icon={<ClockCircleOutlined />} color="default">
-                            Kutillmoqda
-                        </Tag>
-                        <Tag icon={<MinusCircleOutlined />} color="default">
-                            To'xtatilgan
-                        </Tag> */}
-          </>
-        );
+      render: (is_done) => {
+        switch (is_done) {
+          case "Yakunlandi":
+            return (
+              <Tag icon={<CheckCircleOutlined />} color="success">
+                Yakunlandi
+              </Tag>
+            );
+          case "Jarayonda":
+            return (
+              <Tag icon={<SyncOutlined spin />} color="processing">
+                Jarayonda
+              </Tag>
+            );
+          case "Kutilmoqda":
+            return (
+              <Tag icon={<ClockCircleOutlined />} color="default">
+                Kutilmoqda
+              </Tag>
+            );
+          case "To'xtatilgan":
+            return (
+              <Tag icon={<MinusCircleOutlined />} color="default">
+                To'xtatilgan
+              </Tag>
+            );
+          default:
+            return (
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                Xatolik
+              </Tag>
+            );
+        }
       },
     },
     {
@@ -170,7 +180,7 @@ const Treatment = () => {
       dataIndex: "operation",
       key: "operation",
       align: "center",
-      width: '15%',
+      width: "15%",
       render: (_, record) => {
         return (
           <Space size="middle">
@@ -179,9 +189,9 @@ const Treatment = () => {
                 style={{ cursor: "pointer" }}
                 color="dodgerblue"
                 onClick={() => {
-                  if (openPaymentModal.id !== record.id) {
+                  if (openPaymentModal.id !== record.user_id) {
                     setOpenPaymentModal({
-                      id: record.id,
+                      id: record.user_id,
                       isOpen: true,
                     });
                   }
@@ -227,22 +237,27 @@ const Treatment = () => {
       setData([]);
     }
   };
+  const token = localStorage.getItem("auth");
   const fetchData = () => {
     setLoading(true);
     fetch(
-      `https://randomuser.me/api?${qs.stringify(
-        getRandomuserParams(tableParams)
-      )}`
+      import.meta.env.VITE_APP_URL +
+        `/cure?${qs.stringify(getRandomuserParams(tableParams))}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((res) => res.json())
-      .then(({ results }) => {
-        setData(results);
+      .then((result) => {
+        setData(result.result);
         setLoading(false);
         setTableParams({
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 200,
+            total: 1,
           },
         });
       });
@@ -281,21 +296,21 @@ const Treatment = () => {
       />
       <Table
         columns={columns}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.cure_id}
         dataSource={data}
         pagination={tableParams.pagination}
         loading={
           loading
             ? {
-              indicator: (
-                <LoadingOutlined
-                  style={{
-                    fontSize: 34,
-                  }}
-                  spin
-                />
-              ),
-            }
+                indicator: (
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 34,
+                    }}
+                    spin
+                  />
+                ),
+              }
             : false
         }
         onChange={handleTableChange}

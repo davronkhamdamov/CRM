@@ -1,13 +1,7 @@
-import {
-  AutoComplete,
-  Table,
-  message,
-} from "antd";
+import { AutoComplete, Table, message } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
-import {
-  LoadingOutlined,
-} from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
@@ -31,14 +25,18 @@ const PaymentsTable = () => {
       pageSize: 10,
     },
   });
-  const token = localStorage.getItem("auth")
+  const token = localStorage.getItem("auth");
 
   const columns: ColumnsType<DataType> = [
     {
       title: "Ism Familyasi",
       dataIndex: "",
       sorter: true,
-      render: (user) => <a href={`patient/${user.user_id}`}>{user.username} {user.surname}</a>,
+      render: (user) => (
+        <a href={`patient/${user.user_id}`}>
+          {user.username} {user.surname}
+        </a>
+      ),
       width: "20%",
       align: "center",
     },
@@ -76,7 +74,7 @@ const PaymentsTable = () => {
         );
       },
       width: "20%",
-    }
+    },
   ];
 
   useEffect(() => {
@@ -106,8 +104,8 @@ const PaymentsTable = () => {
       )}`,
       {
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     )
       .then((res) => res.json())
@@ -121,13 +119,14 @@ const PaymentsTable = () => {
             total: result?.total,
           },
         });
-      }).catch((err) => {
+      })
+      .catch((err) => {
         if (err.message === "Failed to fetch") {
           messageApi.error("Internet bilan aloqani tekshiring!", 2);
-        };
+        }
         setData([]);
         setLoading(false);
-      })
+      });
   };
 
   const [value, setValue] = useState("");
@@ -169,15 +168,15 @@ const PaymentsTable = () => {
         loading={
           loading
             ? {
-              indicator: (
-                <LoadingOutlined
-                  style={{
-                    fontSize: 34,
-                  }}
-                  spin
-                />
-              ),
-            }
+                indicator: (
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 34,
+                    }}
+                    spin
+                  />
+                ),
+              }
             : false
         }
         onChange={handleTableChange}

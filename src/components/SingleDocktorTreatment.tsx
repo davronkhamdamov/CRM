@@ -3,13 +3,16 @@ import { useParams } from "react-router-dom";
 import {
   Badge,
   Button,
+  Checkbox,
   Descriptions,
   DescriptionsProps,
   Flex,
+  GetProp,
+  Tag,
   theme,
 } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { UserData } from "../types/type";
+import { CureDataType, ServiceType } from "../types/type";
 import dayjs from "dayjs";
 import Successfully from "./Success";
 import confetti from "canvas-confetti";
@@ -48,20 +51,35 @@ import thirtytwo from "../assets/image/teeth/32-removebg-preview.png";
 
 const SingleDocktorTreatment = () => {
   const params = useParams();
-  const [cureData, setCureData] = useState<UserData>();
+  const [cureData, setCureData] = useState<CureDataType>();
+  const [services, setServices] = useState<ServiceType[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [tooth, setTooth] = useState<number[]>([]);
+  const [payload, setPayload] = useState<number[]>([]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const token = localStorage.getItem("auth");
+
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/cure/" + params.id)
+    fetch(import.meta.env.VITE_APP_URL + "/cure/" + params.id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCureData(data.result);
       });
+    fetch(import.meta.env.VITE_APP_URL + "/service", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(data.result);
+      });
   }, [params.id]);
-  console.log(cureData);
 
   const teeth = [
     {
@@ -646,34 +664,42 @@ const SingleDocktorTreatment = () => {
     {
       key: "1",
       label: "Bemor ismi:",
-      children: "Bemor ismi bo'lishi kerak",
+      children: cureData?.user_name + " " + cureData?.user_surname,
     },
     {
       key: "2",
       label: "Mas'ul shifokor",
-      children: "Shifokor ismi",
+      children: cureData?.staff_name + " " + cureData?.staff_surname,
     },
     {
       key: "3",
       label: "Davolash boshlanish vaqti",
-      children: dayjs(new Date()).format("DD-MM-YYYY HH-mm"),
+      children: dayjs(cureData?.start_time).format("DD-MM-YYYY HH-mm"),
     },
     {
       key: "4",
       label: "Davolash tugash vaqti",
-      children: dayjs(new Date()).add(1, "hour").format("DD-MM-YYYY HH:mm"),
+      children: dayjs(cureData?.end_time).format("DD-MM-YYYY HH:mm"),
     },
     {
-      key: "6",
+      key: "5",
       label: "Holati",
-      span: 3,
       children: (
         <Flex gap={100} align="center">
-          <Badge status="processing" text="Jarayonda" />
+          <Badge status="processing" text={cureData?.is_done} />
         </Flex>
       ),
     },
   ];
+
+  const onChange: GetProp<typeof Checkbox.Group, "onChange"> = (
+    checkedValues
+  ) => {
+    console.log(checkedValues);
+    // setPayload();
+  };
+  console.log(payload);
+
   return (
     <Content>
       <div
@@ -717,15 +743,15 @@ const SingleDocktorTreatment = () => {
                 }}
               >
                 {teeth.map((e) => {
-                  const check = tooth.includes(e.id);
+                  const check = payload.includes(e.id);
                   return (
                     <button
                       key={e.id}
                       onClick={() => {
                         if (!check) {
-                          setTooth((prev) => [...prev, e.id]);
+                          setPayload((prev) => [...prev, e.id]);
                         } else {
-                          setTooth(tooth.filter((el) => el !== e.id));
+                          setPayload(payload.filter((el) => el !== e.id));
                         }
                       }}
                       style={{
@@ -756,10 +782,33 @@ const SingleDocktorTreatment = () => {
                 })}
               </div>
             </Flex>
-            <Flex style={{ width: "50%" }}>
+            <Flex vertical style={{ width: "50%" }} align="center">
               <h3 style={{ width: "100%", textAlign: "center" }}>
                 Nima qilmoqchi ekanligingizni tanlang:
               </h3>
+              <br />
+              <br />
+              <br />
+              <br />
+              <Checkbox.Group onChange={onChange}>
+                <Flex gap={20} vertical>
+                  {services
+                    ?.filter((e) => e.status)
+                    ?.map((e) => {
+                      return (
+                        <Checkbox value={e.id} key={e.id}>
+                          {e.name}
+                          <Tag style={{ marginLeft: "10px" }}>
+                            Xizmat narxi: {e.service_price_price} so'm
+                          </Tag>
+                          <Tag>
+                            Xom ashyo narxi: {e.raw_material_price} so'm
+                          </Tag>
+                        </Checkbox>
+                      );
+                    })}
+                </Flex>
+              </Checkbox.Group>
             </Flex>
           </Flex>
           <br />
@@ -770,9 +819,7 @@ const SingleDocktorTreatment = () => {
               setIsSuccess(true);
               let colors = ["#FFF000", "#00FF00", "#FF0000"];
               let duration = 2 * 1000;
-
               let end = Date.now() + duration;
-
               (function frame() {
                 confetti({
                   particleCount: 3,

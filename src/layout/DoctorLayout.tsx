@@ -33,23 +33,22 @@ const DockerLayout = () => {
 
   const token = localStorage.getItem("auth");
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me",
-      {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
         if (data?.detail === "Invalid token") {
           navigate("/auth");
         }
-        if (!["reception", 'admin', 'doctor'].includes(data.result.role)) {
+        if (!["reception", "admin", "doctor"].includes(data.result.role)) {
           navigate("/auth");
         } else if (defaultRout[1] !== data.result.role) {
           !defaultRout[2] && navigate("/" + data.result.role + "/statistic");
         }
-      })
+      });
   }, [token, defaultRout]);
   return (
     <Layout hasSider>
