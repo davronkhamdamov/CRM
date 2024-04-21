@@ -216,13 +216,15 @@ const TableComponent: FC = () => {
         return res.json();
       })
       .then((results) => {
+        console.log(results);
+
         setData(results.result);
         setLoading(false);
         setTableParams({
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: results.count_of_users,
+            total: results.total,
           },
         });
       })

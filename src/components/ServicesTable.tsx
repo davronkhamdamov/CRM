@@ -39,14 +39,25 @@ const ServicesTable = () => {
       pageSize: 10,
     },
   });
-  const token = localStorage.getItem("auth")
+  const token = localStorage.getItem("auth");
 
-  const cancel = () => {
+  const deleteService = (id: string) => {
     setLoadingCnx(true);
-    setTimeout(() => {
-      setLoadingCnx(false);
-      messageApi.success("Xizmat muvaffaqqiyatli o'chirildi", 2);
-    }, 2000);
+    fetch(import.meta.env.VITE_APP_URL + "/service/" + id, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => {
+        setLoadingCnx(false);
+        messageApi.success("Xizmat muvaffaqqiyatli o'chirildi", 2);
+        fetchData();
+      })
+      .catch(() => {
+        setLoadingCnx(false);
+        messageApi.success("Xizmat o'chirishda muommo paydo bo'ldi", 2);
+      });
   };
 
   const columns: ColumnsType<DataType> = [
@@ -114,7 +125,7 @@ const ServicesTable = () => {
       dataIndex: "operation",
       key: "operation",
       align: "center",
-      render: () => {
+      render: (_, record) => {
         return (
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
@@ -125,7 +136,7 @@ const ServicesTable = () => {
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
-              onConfirm={cancel}
+              onConfirm={() => deleteService(record.id)}
             >
               <Tooltip placement="bottom" title="O'chirish">
                 <DeleteOutlined style={{ color: "red" }} />
@@ -158,12 +169,15 @@ const ServicesTable = () => {
   };
   const fetchData = () => {
     setLoading(true);
-    fetch(import.meta.env.VITE_APP_URL + `/service/?${qs.stringify(getRandomuserParams(tableParams))}`,
+    fetch(
+      import.meta.env.VITE_APP_URL +
+        `/service/?${qs.stringify(getRandomuserParams(tableParams))}`,
       {
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((result) => {
         setData(result.result);
@@ -218,15 +232,15 @@ const ServicesTable = () => {
         loading={
           loading
             ? {
-              indicator: (
-                <LoadingOutlined
-                  style={{
-                    fontSize: 34,
-                  }}
-                  spin
-                />
-              ),
-            }
+                indicator: (
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 34,
+                    }}
+                    spin
+                  />
+                ),
+              }
             : false
         }
         onChange={handleTableChange}

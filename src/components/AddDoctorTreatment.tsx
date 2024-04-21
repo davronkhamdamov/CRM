@@ -62,7 +62,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
   };
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/staffs", {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs?results=1000000000000", {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -130,12 +130,14 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
               ]}
             >
               <Select
-                options={staffs.map((e) => {
-                  return {
-                    value: e.id,
-                    label: e.name,
-                  };
-                })}
+                options={staffs
+                  .filter((e) => e.role === "doctor")
+                  .map((e) => {
+                    return {
+                      value: e.id,
+                      label: e.name,
+                    };
+                  })}
               />
             </Form.Item>
           </Col>

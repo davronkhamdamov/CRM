@@ -55,9 +55,11 @@ const SingleDocktorTreatment = () => {
   const [services, setServices] = useState<ServiceType[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [payload, setPayload] = useState<number[]>([]);
+  const [payloadServices, setPayloadServices] = useState<string[]>([]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   const token = localStorage.getItem("auth");
 
   useEffect(() => {
@@ -663,7 +665,7 @@ const SingleDocktorTreatment = () => {
   const items: DescriptionsProps["items"] = [
     {
       key: "1",
-      label: "Bemor ismi:",
+      label: "Bemor ismi",
       children: cureData?.user_name + " " + cureData?.user_surname,
     },
     {
@@ -693,20 +695,64 @@ const SingleDocktorTreatment = () => {
   ];
 
   const onChange: GetProp<typeof Checkbox.Group, "onChange"> = (
-    checkedValues
+    checkedValues: any
   ) => {
-    console.log(checkedValues);
-    // setPayload();
+    setPayloadServices(checkedValues);
   };
-  console.log(payload);
-
+  const finish = () => {
+    fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        payloadServices,
+        payload,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setIsSuccess(true);
+        let colors = ["#FFF000", "#00FF00", "#FF0000"];
+        let duration = 2 * 1000;
+        let end = Date.now() + duration;
+        (function frame() {
+          confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors,
+          });
+          confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors,
+          });
+          confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 2 },
+            colors: colors,
+          });
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        })();
+      });
+  };
   return (
-    <Content>
-      <div
-        style={{
-          minHeight: "96vh",
-        }}
-      >
+    <Content
+      style={{
+        height: "80vh",
+        overflowY: "scroll",
+      }}
+    >
+      <div>
         <Flex
           vertical
           style={{
@@ -784,7 +830,7 @@ const SingleDocktorTreatment = () => {
             </Flex>
             <Flex vertical style={{ width: "50%" }} align="center">
               <h3 style={{ width: "100%", textAlign: "center" }}>
-                Nima qilmoqchi ekanligingizni tanlang:
+                Mavjud xizmatlar:
               </h3>
               <br />
               <br />
@@ -815,39 +861,7 @@ const SingleDocktorTreatment = () => {
           <Button
             type="primary"
             style={{ width: "max-content" }}
-            onClick={() => {
-              setIsSuccess(true);
-              let colors = ["#FFF000", "#00FF00", "#FF0000"];
-              let duration = 2 * 1000;
-              let end = Date.now() + duration;
-              (function frame() {
-                confetti({
-                  particleCount: 3,
-                  angle: 60,
-                  spread: 55,
-                  origin: { x: 0 },
-                  colors: colors,
-                });
-                confetti({
-                  particleCount: 3,
-                  angle: 120,
-                  spread: 55,
-                  origin: { x: 1 },
-                  colors: colors,
-                });
-                confetti({
-                  particleCount: 3,
-                  angle: 120,
-                  spread: 55,
-                  origin: { x: 2 },
-                  colors: colors,
-                });
-
-                if (Date.now() < end) {
-                  requestAnimationFrame(frame);
-                }
-              })();
-            }}
+            onClick={finish}
           >
             Davolashni yakunlash
           </Button>

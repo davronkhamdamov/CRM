@@ -43,7 +43,7 @@ const DockerLayout = () => {
         if (data?.detail === "Invalid token") {
           navigate("/auth");
         }
-        if (!["reception", "admin", "doctor"].includes(data.result.role)) {
+        if (!["reception", "admin", "doctor"].includes(data?.result?.role)) {
           navigate("/auth");
         } else if (defaultRout[1] !== data.result.role) {
           !defaultRout[2] && navigate("/" + data.result.role + "/statistic");

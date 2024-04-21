@@ -16,7 +16,6 @@ export interface TableParams {
 export interface DataType {
   user_id: string;
   method: string;
-  login: any;
   id: string;
   name: string;
   surname: string;
@@ -54,6 +53,7 @@ export interface UserData {
   balance?: number;
   updated_at?: Date;
   created_at?: Date;
+  img_url: string;
 }
 export interface PaymentDataType {
   id: string;
@@ -78,6 +78,7 @@ export interface ServiceFieldType {
   service_name: string;
 }
 export interface Staffs {
+  role: string;
   id: string;
   name: string;
 }

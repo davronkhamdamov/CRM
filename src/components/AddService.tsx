@@ -1,6 +1,15 @@
 import { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Drawer, Form, Input, Switch, message, FormProps, Flex } from "antd";
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  Switch,
+  message,
+  FormProps,
+  Flex,
+} from "antd";
 import { LoadingProvider } from "../App";
 import { ServiceFieldType } from "../types/type";
 
@@ -8,7 +17,7 @@ const AddService = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const token = localStorage.getItem("auth")
+  const token = localStorage.getItem("auth");
 
   const showDrawer = () => {
     setOpen(true);
@@ -18,24 +27,24 @@ const AddService = () => {
   };
   const onSubmit: FormProps<ServiceFieldType>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-    console.log(actionData);
     fetch(import.meta.env.VITE_APP_URL + "/service", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(actionData)
+      body: JSON.stringify(actionData),
     })
       .then((res) => res.json())
       .then(() => {
         setLoadingCnx(false);
         setOpen(false);
         messageApi.success("Xizmat muvaffaqqiyatli yaratildi", 2);
-      }).catch(() => {
+      })
+      .catch(() => {
         setLoadingCnx(false);
         messageApi.error("Xizmat yaratishda xatolik yuz berdi", 2);
-      })
+      });
   };
   return (
     <>
@@ -52,11 +61,14 @@ const AddService = () => {
             paddingBottom: 80,
           },
         }}
-
       >
-        <Form layout="vertical" onFinish={onSubmit} initialValues={{
-          isActive: true
-        }}>
+        <Form
+          layout="vertical"
+          onFinish={onSubmit}
+          initialValues={{
+            isActive: true,
+          }}
+        >
           <Form.Item
             name="name"
             label="Xizmat nomi"
@@ -98,7 +110,7 @@ const AddService = () => {
           >
             <Input
               type="number"
-              min={1}
+              min={0}
               placeholder="Xom ashyo narxini kiriting!"
             />
           </Form.Item>
@@ -112,11 +124,7 @@ const AddService = () => {
               },
             ]}
           >
-            <Input
-              type="number"
-              min={1}
-              placeholder="Narx kiriting!"
-            />
+            <Input type="number" min={1} placeholder="Narx kiriting!" />
           </Form.Item>
           <Form.Item name="status" label="Xizmat xolati">
             <Switch defaultChecked />
@@ -124,9 +132,12 @@ const AddService = () => {
           <Form.Item>
             <Flex gap={20}>
               <Button size="large" type="primary" htmlType="submit">
-                Submit
+                Yaratish
               </Button>
-              <Button size="large" onClick={onClose}>Bekor qilish</Button></Flex>
+              <Button size="large" onClick={onClose}>
+                Bekor qilish
+              </Button>
+            </Flex>
           </Form.Item>
         </Form>
       </Drawer>
