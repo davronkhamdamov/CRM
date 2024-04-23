@@ -9,29 +9,31 @@ import { Alert, Button, Flex, Form, Input, Space } from "antd";
 import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   const onFinish = (values: any) => {
-    setError('')
+    setError("");
     fetch(import.meta.env.VITE_APP_URL + "/auth/login", {
       method: "POST",
       headers: {
-        "Content-type": "application/json"
+        "Content-type": "application/json",
       },
-      body: JSON.stringify(values)
-    }).then(res => res.json())
-      .then(data => {
+      body: JSON.stringify(values),
+    })
+      .then((res) => res.json())
+      .then((data) => {
         if (data.status === "ok") {
-          localStorage.setItem("auth", data.result.access_token)
-          location = data.result.role
+          localStorage.setItem("auth", data.result.access_token);
+          location = data.result.role;
         }
         if (data.detail) {
-          setError(data.detail)
-        }
-      }).catch((e) => {
-        if (e.message === "Failed to fetch") {
-          setError("Nimadir xato ketdi!")
+          setError(data.detail);
         }
       })
+      .catch((e) => {
+        if (e.message === "Failed to fetch") {
+          setError("Nimadir xato ketdi!");
+        }
+      });
   };
 
   return (
@@ -42,11 +44,11 @@ const App: React.FC = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
-        {error &&
-          <Space direction="vertical" style={{ width: '100%' }}>
+        {error && (
+          <Space direction="vertical" style={{ width: "100%" }}>
             <Alert message={error} type="error" showIcon closable />
           </Space>
-        }
+        )}
         <br />
         <br />
         <Form.Item
@@ -96,7 +98,7 @@ const App: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-    </Flex >
+    </Flex>
   );
 };
 

@@ -32,6 +32,7 @@ const CreateAccount: FC = () => {
   const token = localStorage.getItem("auth");
   const onSubmit = () => {
     setLoadingCnx(true);
+    messageApi.loading("Bemor yaratilmoqda");
     fetch(import.meta.env.VITE_APP_URL + "/user", {
       method: "POST",
       body: JSON.stringify(payload),
@@ -42,10 +43,11 @@ const CreateAccount: FC = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         setOpen(false);
         setLoadingCnx(false);
+        messageApi.loading("Bemor yaratilmoqda");
+        messageApi.destroy();
         messageApi.success("Bemor muvaffaqqiyatli yaratildi", 2);
       })
       .catch((err) => {

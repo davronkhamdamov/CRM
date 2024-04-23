@@ -63,7 +63,7 @@ export interface PaymentDataType {
 }
 
 export interface TableProp {
-  data?: any;
+  data: any;
   setData: (a: any) => void;
 }
 export interface SuccessProps {

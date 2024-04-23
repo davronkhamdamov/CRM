@@ -6,38 +6,34 @@ const { Title } = Typography;
 const { Content } = Layout;
 
 const Doctors: React.FC = () => {
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
-    return (
-        <Content
-            style={{
-                margin: "30px 16px 0",
-            }}
+  return (
+    <Content
+      style={{
+        margin: "30px 16px 0",
+      }}
+    >
+      <Space direction="vertical" size="large" style={{ display: "flex" }}>
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{
+            padding: 24,
+            minHeight: 110,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
         >
-            <Space
-                direction="vertical"
-                size="large"
-                style={{ display: "flex" }}
-            >
-                <Flex
-                    justify="space-between"
-                    align="center"
-                    style={{
-                        padding: 24,
-                        minHeight: 110,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                    }}
-                >
-                    <Title style={{ margin: 0 }}>Shifokorlar</Title>
-                    <AddDocktor />
-                </Flex>
-                <DoctorsTable />
-            </Space>
-        </Content>
-    );
+          <Title style={{ margin: 0 }}>Shifokorlar</Title>
+          <AddDocktor />
+        </Flex>
+        <DoctorsTable />
+      </Space>
+    </Content>
+  );
 };
 
 export default Doctors;

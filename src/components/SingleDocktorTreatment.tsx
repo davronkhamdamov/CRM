@@ -9,6 +9,7 @@ import {
   Flex,
   GetProp,
   Tag,
+  message,
   theme,
 } from "antd";
 import { Content } from "antd/es/layout/layout";
@@ -51,6 +52,7 @@ import thirtytwo from "../assets/image/teeth/32-removebg-preview.png";
 
 const SingleDocktorTreatment = () => {
   const params = useParams();
+  const [messageApi, contextHolder] = message.useMessage();
   const [cureData, setCureData] = useState<CureDataType>();
   const [services, setServices] = useState<ServiceType[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -700,50 +702,54 @@ const SingleDocktorTreatment = () => {
     setPayloadServices(checkedValues);
   };
   const finish = () => {
-    fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        payloadServices,
-        payload,
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setIsSuccess(true);
-        let colors = ["#FFF000", "#00FF00", "#FF0000"];
-        let duration = 2 * 1000;
-        let end = Date.now() + duration;
-        (function frame() {
-          confetti({
-            particleCount: 3,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: colors,
-          });
-          confetti({
-            particleCount: 3,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: colors,
-          });
-          confetti({
-            particleCount: 3,
-            angle: 120,
-            spread: 55,
-            origin: { x: 2 },
-            colors: colors,
-          });
-          if (Date.now() < end) {
-            requestAnimationFrame(frame);
-          }
-        })();
-      });
+    if (payloadServices.length !== 0 && payload.length != 0) {
+      fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          payload_services: payloadServices,
+          payload,
+        }),
+      })
+        .then((res) => res.json())
+        .then(() => {
+          setIsSuccess(true);
+          const colors = ["#FFF000", "#00FF00", "#FF0000"];
+          const duration = 2 * 1000;
+          const end = Date.now() + duration;
+          (function frame() {
+            confetti({
+              particleCount: 3,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 },
+              colors: colors,
+            });
+            confetti({
+              particleCount: 3,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 },
+              colors: colors,
+            });
+            confetti({
+              particleCount: 3,
+              angle: 120,
+              spread: 55,
+              origin: { x: 2 },
+              colors: colors,
+            });
+            if (Date.now() < end) {
+              requestAnimationFrame(frame);
+            }
+          })();
+        });
+    } else {
+      messageApi.warning("Tish yoki xizmat tanladingiz!");
+    }
   };
   return (
     <Content
@@ -874,6 +880,7 @@ const SingleDocktorTreatment = () => {
           link="/doctor/treatment"
         />
       )}
+      {contextHolder}
     </Content>
   );
 };

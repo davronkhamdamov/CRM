@@ -16,6 +16,8 @@ import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { FaTooth } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { AiOutlineFileSearch } from "react-icons/ai";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -151,11 +153,30 @@ const DocktorTreatment = () => {
       render: (_, record) => {
         return (
           <Space size="middle">
-            <Tooltip placement="bottom" title="Davolash">
-              <Link to={record.cure_id}>
-                <FaTooth color="#3b82f6" style={{ cursor: "pointer" }} />
-              </Link>
-            </Tooltip>
+            {record.is_done !== "Yakunlandi" ? (
+              <Tooltip placement="bottom" title="Davolash">
+                <Link to={record.cure_id}>
+                  <FaTooth color="#3b82f6" style={{ cursor: "pointer" }} />
+                </Link>
+              </Tooltip>
+            ) : (
+              <Space size="large">
+                <Tooltip placement="bottom" title="Ko'rish">
+                  <AiOutlineFileSearch
+                    color="#3b82f6"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+                <Tooltip placement="bottom" title="Batafsil ko'rish">
+                  <Link to={"info/" + record.cure_id}>
+                    <BsThreeDotsVertical
+                      color="#3b82f6"
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Link>
+                </Tooltip>
+              </Space>
+            )}
           </Space>
         );
       },

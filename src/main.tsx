@@ -4,13 +4,13 @@ import "./index.css";
 import { ConfigProvider } from "antd";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <ConfigProvider
-    // theme={{
-    //     token: {
-    //         algorithm: theme.darkAlgorithm,
-    //     },
-    // }}
-    >
-        <App />
-    </ConfigProvider>
+  <ConfigProvider
+  // theme={{
+  //     token: {
+  //         algorithm: theme.darkAlgorithm,
+  //     },
+  // }}
+  >
+    <App />
+  </ConfigProvider>
 );

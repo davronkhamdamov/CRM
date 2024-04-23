@@ -35,7 +35,7 @@ const SingleBemor: React.FC = () => {
       .then((data) => {
         setUserData(data.result);
       });
-  }, [location]);
+  }, [location, params.id, token]);
   const tabItems = [
     {
       icon: MdOutlinePayments,

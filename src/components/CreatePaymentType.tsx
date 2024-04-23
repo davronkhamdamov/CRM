@@ -6,7 +6,7 @@ import { LoadingProvider } from "../App";
 const CreatePaymentType = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
-  const token = localStorage.getItem("auth")
+  const token = localStorage.getItem("auth");
   const [open, setOpen] = useState(false);
   const [paymentType, setPaymentType] = useState("");
   const showDrawer = () => {
@@ -21,21 +21,23 @@ const CreatePaymentType = () => {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        method: paymentType
-      })
-    }).then(res => res.json())
+        method: paymentType,
+      }),
+    })
+      .then((res) => res.json())
       .then(() => {
         setOpen(false);
         setLoadingCnx(false);
         messageApi.success("To'lov turi muvaffaqqiyatli yaratildi", 2);
-      }).catch(err => {
+      })
+      .catch((err) => {
         console.log(err);
         setLoadingCnx(false);
         messageApi.error("Nimadir xato ketdi", 2);
-      })
+      });
   };
 
   return (
@@ -74,9 +76,12 @@ const CreatePaymentType = () => {
               },
             ]}
           >
-            <Input placeholder="Iltimos to'lov turi nomini kiriting" onChange={(e) => {
-              setPaymentType(e.target.value)
-            }} />
+            <Input
+              placeholder="Iltimos to'lov turi nomini kiriting"
+              onChange={(e) => {
+                setPaymentType(e.target.value);
+              }}
+            />
           </Form.Item>
         </Form>
       </Drawer>
