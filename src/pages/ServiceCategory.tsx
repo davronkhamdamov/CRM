@@ -1,6 +1,5 @@
 import { Typography, Flex, Space, Layout, theme } from "antd";
 import React from "react";
-import AddDocktor from "../components/addDocktor";
 import ServiceCategoryTable from "../components/ServiceCategoryTable";
 import AddServiceCategory from "../components/AddServiceCategory";
 const { Title } = Typography;
