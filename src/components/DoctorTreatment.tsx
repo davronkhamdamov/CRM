@@ -18,6 +18,7 @@ import { FaTooth } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import TreatmentModal from "./TreatmentModal";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -27,6 +28,10 @@ const getRandomuserParams = (params: TableParams) => ({
 const DocktorTreatment = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
+  const [view, setView] = useState({
+    data: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -163,6 +168,9 @@ const DocktorTreatment = () => {
               <Space size="large">
                 <Tooltip placement="bottom" title="Ko'rish">
                   <AiOutlineFileSearch
+                    onClick={() => {
+                      setView({ data: record.cure_id, isOpen: true });
+                    }}
                     color="#3b82f6"
                     style={{ cursor: "pointer" }}
                   />
@@ -280,6 +288,7 @@ const DocktorTreatment = () => {
         }
         onChange={handleTableChange}
       />
+      <TreatmentModal setData={setView} data={view} />
     </>
   );
 };

@@ -15,6 +15,7 @@ import { FaDollarSign, FaSuitcaseMedical, FaUserDoctor } from "react-icons/fa6";
 import { GrServices } from "react-icons/gr";
 import { CiBoxList } from "react-icons/ci";
 import { SlLogout } from "react-icons/sl";
+import { BiCategory } from "react-icons/bi";
 
 const { Sider } = Layout;
 
@@ -43,6 +44,7 @@ const RootLayout = () => {
     getItem("Shifokorlar", "doctors", <FaUserDoctor />),
     getItem("To'lov turlari", "payment-type", <MdPayments />),
     getItem("Xizmatlar", "services", <GrServices />),
+    getItem("Xizmatlar toifasi", "service-category", <BiCategory />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
     getItem("Sozlamalar", "settings", <SettingOutlined />),
     getItem("Xisobot", "hisobot", <CiBoxList />),

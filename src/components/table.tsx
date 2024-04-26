@@ -216,8 +216,6 @@ const TableComponent: FC = () => {
         return res.json();
       })
       .then((results) => {
-        console.log(results);
-
         setData(results.result);
         setLoading(false);
         setTableParams({

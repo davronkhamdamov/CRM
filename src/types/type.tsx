@@ -96,6 +96,7 @@ export interface CureDataType {
   staff_surname: string;
   start_time: string;
   end_time: string;
+  id: string;
 }
 export interface ServiceType {
   name: string;
@@ -103,4 +104,10 @@ export interface ServiceType {
   raw_material_price: string;
   id: string;
   status: boolean;
+}
+
+export interface TreatmentType {
+  tooth_id: string;
+  service_name: string;
+  price: string;
 }

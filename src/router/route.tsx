@@ -23,6 +23,7 @@ import ForgetPassword from "../pages/ForgetPassword";
 import NotFoundPage from "../pages/NotFoundPage";
 import DocktorTreatment from "../pages/DocktorTreatment";
 import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
+import ServiceCategory from "../pages/ServiceCategory";
 
 const route = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +37,7 @@ const route = createBrowserRouter(
         <Route path="doctors/:id" element={<SingleDocktor />} />
         <Route path="payment-type" element={<PaymentTypes />} />
         <Route path="services" element={<Services />} />
+        <Route path="service-category" element={<ServiceCategory />} />
         <Route path="treatment" element={<Treatment />} />
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />

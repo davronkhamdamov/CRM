@@ -66,3 +66,20 @@
     align-items: center;
     justify-content: center;
 }
+
+.table_item {
+    text-align: center;
+    padding: 8px;
+    width: 33%;
+    border: 1px solid #dddddd;
+}
+
+
+.treatment_modal::-webkit-scrollbar {
+    width: 5px;
+}
+
+.treatment_modal::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 20px;
+}
