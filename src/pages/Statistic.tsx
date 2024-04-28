@@ -1,5 +1,5 @@
 import { Flex, Layout, Statistic, Typography, theme } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 const { Title } = Typography;
 import CountUp from "react-countup";
 import { FaUserMd } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { MdOutlineMedicalServices } from "react-icons/md";
 import LineChartFC from "../components/lineChart";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import PieChartFC from "../components/PieChart";
+import { StatisticType } from "../types/type";
 
 const { Content } = Layout;
 type Formatter = (value: number | string) => JSX.Element;
@@ -18,10 +19,63 @@ const formatter: Formatter = (value) => {
   return <CountUp end={numericValue} separator="," />;
 };
 const Statistica: React.FC = () => {
+  const token = localStorage.getItem("auth");
+  const [statistic, setStatistic] = useState<StatisticType>({
+    staffs: 0,
+    services: 0,
+    qarz: 0,
+    patient: 0,
+  });
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        setStatistic((prev) => {
+          return { ...prev, staffs: data.result };
+        })
+      );
+    fetch(import.meta.env.VITE_APP_URL + "/user/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        setStatistic((prev) => {
+          return { ...prev, patient: data.result };
+        })
+      );
+    fetch(import.meta.env.VITE_APP_URL + "/service/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStatistic((prev) => {
+          return { ...prev, services: data.result };
+        });
+      });
+    fetch(import.meta.env.VITE_APP_URL + "/user/qarz-count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStatistic((prev) => {
+          return { ...prev, qarz: data.result };
+        });
+      });
+  }, []);
   return (
     <Content style={{ margin: "30px 16px 0" }}>
       <div
@@ -60,7 +114,7 @@ const Statistica: React.FC = () => {
           >
             <FaUserMd size={30} />
             <Statistic
-              value={10}
+              value={statistic?.staffs}
               formatter={formatter}
               valueStyle={{ color: "white" }}
             />
@@ -80,7 +134,7 @@ const Statistica: React.FC = () => {
           >
             <FaUserLarge size={30} />
             <Statistic
-              value={341}
+              value={statistic.patient}
               valueStyle={{ color: "white" }}
               precision={2}
               formatter={formatter}
@@ -101,7 +155,7 @@ const Statistica: React.FC = () => {
           >
             <MdOutlineMedicalServices size={30} />
             <Statistic
-              value={23}
+              value={statistic.services}
               valueStyle={{ color: "white" }}
               precision={2}
               formatter={formatter}
@@ -122,7 +176,7 @@ const Statistica: React.FC = () => {
           >
             <GiReceiveMoney size={30} />
             <Statistic
-              value={12}
+              value={statistic.qarz}
               valueStyle={{ color: "white" }}
               precision={2}
               formatter={formatter}

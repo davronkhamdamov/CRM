@@ -701,7 +701,7 @@ const SingleDocktorTreatment = () => {
   ) => {
     setPayloadServices(checkedValues);
   };
-  const finish = () => {
+  const finish = (is_done: string) => {
     if (payloadServices.length !== 0 && payload.length != 0) {
       fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
         method: "PUT",
@@ -712,11 +712,14 @@ const SingleDocktorTreatment = () => {
         body: JSON.stringify({
           payload_services: payloadServices,
           payload,
+          is_done: is_done,
         }),
       })
         .then((res) => res.json())
-        .then(() => {
+        .then((data) => {
           setIsSuccess(true);
+          console.log(data);
+
           const colors = ["#FFF000", "#00FF00", "#FF0000"];
           const duration = 2 * 1000;
           const end = Date.now() + duration;
@@ -851,10 +854,7 @@ const SingleDocktorTreatment = () => {
                         <Checkbox value={e.id} key={e.id}>
                           {e.name}
                           <Tag style={{ marginLeft: "10px" }}>
-                            Xizmat narxi: {e.service_price_price} so'm
-                          </Tag>
-                          <Tag>
-                            Xom ashyo narxi: {e.raw_material_price} so'm
+                            Xizmat narxi: {e.price} so'm
                           </Tag>
                         </Checkbox>
                       );
@@ -867,7 +867,7 @@ const SingleDocktorTreatment = () => {
           <Button
             type="primary"
             style={{ width: "max-content" }}
-            onClick={finish}
+            onClick={() => finish("Yakunlandi")}
           >
             Davolashni yakunlash
           </Button>

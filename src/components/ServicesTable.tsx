@@ -69,25 +69,24 @@ const ServicesTable = () => {
       align: "center",
     },
     {
-      title: "Xizmat narxi",
-      dataIndex: "",
+      title: "Toifasi",
+      dataIndex: "category_name",
       align: "center",
-      width: "16%",
-      render: ({ price }) => `${price} so'm`,
+      width: "15%",
     },
     {
-      title: "Xom ashyo narxi",
-      dataIndex: "raw_material_price",
+      title: "Narxi",
+      dataIndex: "",
       align: "center",
-      render: (raw_material_price) => `${raw_material_price} so'm`,
-      width: "16%",
+      width: "15%",
+      render: ({ price }) => `${price} so'm`,
     },
     {
       title: "Yaratilgan vaqti",
       dataIndex: "create_at",
       align: "center",
       render: (record) => `${dayjs(record).format("DD-MM-YYYY")}`,
-      width: "16%",
+      width: "15%",
     },
     {
       title: "Xizmat holati",
@@ -125,6 +124,7 @@ const ServicesTable = () => {
       dataIndex: "operation",
       key: "operation",
       align: "center",
+      width: "10%",
       render: (_, record) => {
         return (
           <Space size="middle">

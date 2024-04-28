@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -9,13 +9,16 @@ import {
   message,
   FormProps,
   Flex,
+  Select,
 } from "antd";
 import { LoadingProvider } from "../App";
-import { ServiceFieldType } from "../types/type";
-
+import { ServiceCategoryType, ServiceFieldType } from "../types/type";
 const AddService = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [open, setOpen] = useState(false);
+  const [serviceCategory, setServiceCategory] = useState<ServiceCategoryType[]>(
+    []
+  );
   const [messageApi, contextHolder] = message.useMessage();
   const token = localStorage.getItem("auth");
 
@@ -25,6 +28,18 @@ const AddService = () => {
   const onClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/service-category", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setServiceCategory(data.result);
+      });
+  }, [open]);
+
   const onSubmit: FormProps<ServiceFieldType>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
     fetch(import.meta.env.VITE_APP_URL + "/service", {
@@ -53,7 +68,7 @@ const AddService = () => {
       </Button>
       <Drawer
         title="Yangi xizmatni qo'shish"
-        width={720}
+        width={520}
         onClose={onClose}
         open={open}
         styles={{
@@ -82,36 +97,19 @@ const AddService = () => {
             <Input placeholder="Xizmat nomini kiriting" />
           </Form.Item>
           <Form.Item
-            name="service_price_price"
-            label="Xizmat narxi"
+            name="service_category_id"
+            label="Xizmat toifasi"
             rules={[
               {
                 required: true,
-                message: "Iltimos xizmat narxini kiriting",
+                message: "Iltimos xizmat toifasini narxini kiriting",
               },
             ]}
           >
-            <Input
-              type="number"
-              min={1}
-              placeholder="Xizmat narxini kiriting"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="raw_material_price"
-            label="Xom ashyo narxi"
-            rules={[
-              {
-                required: true,
-                message: "Iltimos xom ashyo narxini kiriting!",
-              },
-            ]}
-          >
-            <Input
-              type="number"
-              min={0}
-              placeholder="Xom ashyo narxini kiriting!"
+            <Select
+              options={serviceCategory.map((e) => {
+                return { value: e.id, label: e.name };
+              })}
             />
           </Form.Item>
           <Form.Item

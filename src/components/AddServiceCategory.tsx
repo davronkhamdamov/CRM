@@ -18,7 +18,7 @@ const AddServiceCategory = () => {
   };
   const onSubmit: FormProps<ServiceFieldType>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-    fetch(import.meta.env.VITE_APP_URL + "/service", {
+    fetch(import.meta.env.VITE_APP_URL + "/service-category", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -30,11 +30,11 @@ const AddServiceCategory = () => {
       .then(() => {
         setLoadingCnx(false);
         setOpen(false);
-        messageApi.success("Xizmat muvaffaqqiyatli yaratildi", 2);
+        messageApi.success("Toifa muvaffaqqiyatli yaratildi", 2);
       })
       .catch(() => {
         setLoadingCnx(false);
-        messageApi.error("Xizmat yaratishda xatolik yuz berdi", 2);
+        messageApi.error("Toifa yaratishda xatolik yuz berdi", 2);
       });
   };
   return (
@@ -43,7 +43,7 @@ const AddServiceCategory = () => {
         Yangi xizmat toifasini qo'shish
       </Button>
       <Drawer
-        title="Yangi xizmatni qo'shish"
+        title="Yangi toifa qo'shish"
         width={400}
         onClose={onClose}
         open={open}
@@ -53,13 +53,7 @@ const AddServiceCategory = () => {
           },
         }}
       >
-        <Form
-          layout="vertical"
-          onFinish={onSubmit}
-          initialValues={{
-            isActive: true,
-          }}
-        >
+        <Form layout="vertical" onFinish={onSubmit}>
           <Form.Item
             name="name"
             label="Toifa nomi"
@@ -70,18 +64,16 @@ const AddServiceCategory = () => {
               },
             ]}
           >
-            <Input placeholder="Toifa nomini kiriting" />
-            <br />
-            <br />
-            <Flex gap={20}>
-              <Button size="large" type="primary" htmlType="submit">
-                Yaratish
-              </Button>
-              <Button size="large" onClick={onClose}>
-                Bekor qilish
-              </Button>
-            </Flex>
+            <Input placeholder="Toifa nomini kiriting" type="text" />
           </Form.Item>
+          <Flex gap={20}>
+            <Button size="large" type="primary" htmlType="submit">
+              Yaratish
+            </Button>
+            <Button size="large" onClick={onClose}>
+              Bekor qilish
+            </Button>
+          </Flex>
         </Form>
       </Drawer>
       {contextHolder}

@@ -100,8 +100,7 @@ export interface CureDataType {
 }
 export interface ServiceType {
   name: string;
-  service_price_price: string;
-  raw_material_price: string;
+  price: string;
   id: string;
   status: boolean;
 }
@@ -110,4 +109,16 @@ export interface TreatmentType {
   tooth_id: string;
   service_name: string;
   price: string;
+}
+
+export interface ServiceCategoryType {
+  id: string;
+  name: string;
+}
+
+export interface StatisticType {
+  staffs: number;
+  patient: number;
+  services: number;
+  qarz: number;
 }
