@@ -15,6 +15,7 @@ import PaymentHistory from "../components/PaymentHistory";
 import ServiceHistory from "../components/ServiceHistory ";
 import userImage from "../assets/image/Sample_User_Icon.png";
 import { TbCameraPlus } from "react-icons/tb";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 const SingleBemor: React.FC = () => {
   const params = useParams();
@@ -87,32 +88,26 @@ const SingleBemor: React.FC = () => {
               </label>
               <input type="file" style={{ display: "none" }} id="profile" />
               <Title level={4} style={{ margin: 0 }}>
-                {userData?.name ? userData?.name : "Yuklanmoqda..."}{" "}
+                {userData?.name ? userData?.name : "Yuklanmoqda..."}
                 {userData?.surname}
               </Title>
             </Flex>
           </Flex>
           <Divider type="vertical" style={{ height: "350px" }} />
           <Flex vertical style={{ width: "80%" }}>
-            <Flex
-              style={{ width: "100%", height: "60px" }}
-              gap={50}
-              align="center"
-            >
+            <Flex style={{ width: "100%" }} gap={50} align="center">
               {userData?.gender ? (
                 <Flex style={{ width: "33.3%" }} align="center" gap={10}>
-                  {" "}
                   Jinsi:{" "}
                   {userData?.gender == "male" ? (
                     <Flex>
-                      {" "}
                       Erkak <FaMale />
                     </Flex>
                   ) : (
                     <Flex>
                       Ayol <FaFemale />
                     </Flex>
-                  )}{" "}
+                  )}
                 </Flex>
               ) : (
                 <Flex style={{ width: "33.3%" }}> Jinsi: Yuklanmoqda... </Flex>
@@ -156,7 +151,22 @@ const SingleBemor: React.FC = () => {
               </Flex>
             </Flex>
             <Divider />
-
+            <Flex
+              style={{ width: "100%", minHeight: "20px" }}
+              gap={10}
+              vertical
+            >
+              <Flex gap={10} align="center">
+                <IoMdInformationCircleOutline size={20} />{" "}
+                <p>Bemor haqida ko'proq ma'lumot:</p>
+              </Flex>
+              <p style={{ marginLeft: "10px" }}>
+                {userData?.description === null
+                  ? "Hech qanday malumot topilmadi"
+                  : userData?.description}
+              </p>
+            </Flex>
+            <Divider />
             <Flex
               style={{ width: "100%", height: "60px" }}
               gap={50}
@@ -167,8 +177,16 @@ const SingleBemor: React.FC = () => {
                 gap={10}
                 align="center"
               >
-                <LuCircleDollarSign /> Balance :{" "}
-                <span style={{ fontSize: "30px" }}>
+                <LuCircleDollarSign /> Balance :
+                <span
+                  style={{
+                    fontSize: "30px",
+                    color:
+                      +(userData?.balance?.replace(" ", "") || 0) < 0
+                        ? "red"
+                        : "black",
+                  }}
+                >
                   {userData?.balance ? userData?.balance : "0"} so'm
                 </span>
               </Flex>

@@ -1,5 +1,6 @@
 import {
-  AutoComplete,
+  Form,
+  Input,
   Popconfirm,
   Space,
   Table,
@@ -19,7 +20,6 @@ import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
-import { IoIosMore } from "react-icons/io";
 import { LoadingProvider } from "../App";
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -31,6 +31,7 @@ const getRandomuserParams = (params: TableParams) => ({
 const ServicesTable = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
+  const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -64,7 +65,6 @@ const ServicesTable = () => {
     {
       title: "Xizmat nomi",
       dataIndex: "name",
-      sorter: true,
       width: "20%",
       align: "center",
     },
@@ -131,9 +131,6 @@ const ServicesTable = () => {
             <Tooltip placement="bottom" title="Tahrirlash">
               <EditTwoTone />
             </Tooltip>
-            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
-              <IoIosMore color="#3b82f6" style={{ cursor: "pointer" }} />
-            </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
               onConfirm={() => deleteService(record.id)}
@@ -150,7 +147,7 @@ const ServicesTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
+  }, [JSON.stringify(tableParams), search]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -171,7 +168,9 @@ const ServicesTable = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/service/?${qs.stringify(getRandomuserParams(tableParams))}`,
+        `/service/?${qs.stringify(
+          getRandomuserParams(tableParams)
+        )}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -192,37 +191,17 @@ const ServicesTable = () => {
       });
   };
 
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Xizmatlarni qidirish"
-      />
+      <Form
+        style={{ maxWidth: 300 }}
+        onFinish={(a: { search: string }) => setSearch(a.search)}
+      >
+        <Form.Item name="search">
+          <Input placeholder="Bemorni qidirish" />
+        </Form.Item>
+      </Form>
+      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.id}

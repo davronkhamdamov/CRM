@@ -52,10 +52,11 @@ export interface UserData {
   phone_number: string;
   gender: string;
   job: string;
-  balance?: number;
+  balance?: string;
   updated_at?: Date;
   created_at?: Date;
   img_url: string;
+  description: string;
 }
 export interface PaymentDataType {
   id: string;

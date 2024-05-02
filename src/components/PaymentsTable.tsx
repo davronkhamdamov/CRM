@@ -1,4 +1,4 @@
-import { AutoComplete, Table, message } from "antd";
+import { Form, Input, Table, message } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,6 +19,7 @@ const PaymentsTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -79,7 +80,7 @@ const PaymentsTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
+  }, [JSON.stringify(tableParams), search]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -101,7 +102,7 @@ const PaymentsTable = () => {
     fetch(
       `${import.meta.env.VITE_APP_URL}/payment/?${qs.stringify(
         getRandomuserParams(tableParams)
-      )}`,
+      )}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -129,37 +130,17 @@ const PaymentsTable = () => {
       });
   };
 
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="To'lovlarni qidirish"
-      />
+      <Form
+        style={{ maxWidth: 300 }}
+        onFinish={(a: { search: string }) => setSearch(a.search)}
+      >
+        <Form.Item name="search">
+          <Input placeholder="Bemorni qidirish" />
+        </Form.Item>
+      </Form>
+      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.id}

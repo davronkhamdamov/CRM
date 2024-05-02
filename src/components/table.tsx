@@ -1,5 +1,4 @@
 import {
-  AutoComplete,
   Popconfirm,
   Space,
   Spin,
@@ -7,6 +6,8 @@ import {
   Tooltip,
   message,
   Tag,
+  Form,
+  Input,
 } from "antd";
 import qs from "qs";
 import { FC, useEffect, useState } from "react";
@@ -28,6 +29,7 @@ const getuserParams = (params: TableParams) => ({
 const TableComponent: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
   const [doctorModal, setDoctorModal] = useState<EditModal>({
     id: "",
     isOpen: false,
@@ -86,16 +88,6 @@ const TableComponent: FC = () => {
     {
       title: "Jinsi",
       dataIndex: "gender",
-      filters: [
-        {
-          text: "Erkak",
-          value: "male",
-        },
-        {
-          text: "Ayol",
-          value: "female",
-        },
-      ],
       width: "10%",
     },
     {
@@ -184,7 +176,7 @@ const TableComponent: FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
+  }, [JSON.stringify(tableParams), search]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -205,7 +197,7 @@ const TableComponent: FC = () => {
     fetch(
       `${import.meta.env.VITE_APP_URL}/user/?${qs.stringify(
         getuserParams(tableParams)
-      )}`,
+      )}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -234,38 +226,18 @@ const TableComponent: FC = () => {
         setLoading(false);
       });
   };
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
 
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Bemorni qidirish"
-      />
+      <Form
+        style={{ maxWidth: 300 }}
+        onFinish={(a: { search: string }) => setSearch(a.search)}
+      >
+        <Form.Item name="search">
+          <Input placeholder="Bemorni qidirish" />
+        </Form.Item>
+      </Form>
+      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.id}

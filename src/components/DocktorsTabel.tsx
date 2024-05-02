@@ -1,4 +1,4 @@
-import { AutoComplete, Popconfirm, Space, Table, Tooltip, message } from "antd";
+import { Form, Input, Popconfirm, Space, Table, Tooltip, message } from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
 import {
@@ -22,6 +22,7 @@ const DoctorsTable = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("auth");
+  const [search, setSearch] = useState<string>(" ");
 
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
@@ -68,16 +69,6 @@ const DoctorsTable = () => {
       title: "Jinsi",
       dataIndex: "gender",
       render: (record) => (record === "male" ? "Erkak" : "Ayol"),
-      filters: [
-        {
-          text: "Erkak",
-          value: "male",
-        },
-        {
-          text: "Ayol",
-          value: "female",
-        },
-      ],
       width: "20%",
     },
     {
@@ -112,7 +103,7 @@ const DoctorsTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
+  }, [JSON.stringify(tableParams), search]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -133,7 +124,9 @@ const DoctorsTable = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/staffs?${qs.stringify(getRandomuserParams(tableParams))}`,
+        `/staffs?${qs.stringify(
+          getRandomuserParams(tableParams)
+        )}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -161,37 +154,16 @@ const DoctorsTable = () => {
       });
   };
 
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Shifokorni qidirish"
-      />
+      <Form
+        style={{ maxWidth: 300 }}
+        onFinish={(a: { search: string }) => setSearch(a.search)}
+      >
+        <Form.Item name="search">
+          <Input placeholder="Bemorni qidirish" />
+        </Form.Item>
+      </Form>
       <Table
         columns={columns}
         rowKey={(record) => record.id}

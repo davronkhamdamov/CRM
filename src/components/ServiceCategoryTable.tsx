@@ -1,4 +1,4 @@
-import { AutoComplete, Popconfirm, Space, Table, Tooltip, message } from "antd";
+import { Popconfirm, Space, Table, Tooltip, message } from "antd";
 import qs from "qs";
 import { useContext, useEffect, useState } from "react";
 import {
@@ -10,7 +10,6 @@ import {
 import type { TableProps } from "antd";
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { IoIosMore } from "react-icons/io";
 import { LoadingProvider } from "../App";
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -55,7 +54,6 @@ const ServicesCategoryTable = () => {
     {
       title: "Toifa nomi",
       dataIndex: "name",
-      sorter: true,
       width: "50%",
       align: "center",
     },
@@ -69,9 +67,6 @@ const ServicesCategoryTable = () => {
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
               <EditTwoTone />
-            </Tooltip>
-            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
-              <IoIosMore color="#3b82f6" style={{ cursor: "pointer" }} />
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
@@ -131,37 +126,8 @@ const ServicesCategoryTable = () => {
       });
   };
 
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Toifalarni qidirish"
-      />
       <Table
         columns={columns}
         rowKey={(record) => record.id}

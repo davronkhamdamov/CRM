@@ -15,6 +15,7 @@ import {
 
 import dayjs from "dayjs";
 import { LoadingProvider } from "../App";
+import TextArea from "antd/es/input/TextArea";
 
 const { Option } = Select;
 const CreateAccount: FC = () => {
@@ -242,6 +243,29 @@ const CreateAccount: FC = () => {
                   defaultPickerValue={dayjs("2010-04-13")}
                   maxDate={dayjs(new Date())}
                   getPopupContainer={(trigger) => trigger.parentElement!}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col style={{ width: "100%" }}>
+              <Form.Item
+                name="description"
+                label="Bemor haqida ko'proq ma'lumot"
+                rules={[
+                  {
+                    message: "Iltimos Bemor haqida ko'proq ma'lumot kiriting",
+                  },
+                ]}
+              >
+                <TextArea
+                  onChange={(e) =>
+                    setPayload((prev) => {
+                      return { ...prev, description: e.target.value };
+                    })
+                  }
+                  placeholder="Ko'proq ma'lumot"
+                  autoSize={{ minRows: 7, maxRows: 17 }}
                 />
               </Form.Item>
             </Col>

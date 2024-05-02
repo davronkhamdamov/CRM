@@ -6,15 +6,17 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
   const token = localStorage.getItem("auth");
   const [treatments, setTreatments] = useState<TreatmentType[]>([]);
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/cure/cure-service/" + data.data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(({ result }) => {
-        setTreatments(result);
-      });
+    if (data.data) {
+      fetch(import.meta.env.VITE_APP_URL + "/cure/cure-service/" + data.data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then(({ result }) => {
+          setTreatments(result);
+        });
+    }
   }, [data.data]);
 
   return (

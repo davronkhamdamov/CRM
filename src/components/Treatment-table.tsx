@@ -64,10 +64,9 @@ const Treatment = () => {
   const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
-      sorter: true,
       render: (record) => {
         return (
-          <a href={`patient/${record.id}`}>
+          <a href={`patient/${record.user_id}`}>
             {record.user_name} {record.user_surname}
           </a>
         );
@@ -76,20 +75,6 @@ const Treatment = () => {
     },
     {
       title: "Shifokor",
-      filters: [
-        {
-          text: "Birinchi doktor",
-          value: "first",
-        },
-        {
-          text: "Ikkinchi doktor",
-          value: "second",
-        },
-        {
-          text: "Uchinchi doktor",
-          value: "third",
-        },
-      ],
       render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
       width: "10%",
     },

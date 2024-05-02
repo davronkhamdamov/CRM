@@ -14,11 +14,13 @@ import {
 import dayjs from "dayjs";
 import { EditModalProps, UserData } from "../types/type";
 import { LoadingProvider } from "../App";
+import TextArea from "antd/es/input/TextArea";
 
 const { Option } = Select;
 
 const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
   const { setLoadingCnx } = useContext(LoadingProvider);
+  const [messageApi, contextHolder] = message.useMessage();
   const [user_data, setData] = useState<UserData>({
     address: "",
     gender: "",
@@ -27,6 +29,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     phone_number: "",
     img_url: "",
     surname: "",
+    description: "",
   });
   const token = localStorage.getItem("auth");
   useEffect(() => {
@@ -39,17 +42,24 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
         .then((res) => res.json())
         .then((res) => setData(res.result));
     }
-  }, [data.isOpen]);
-
-  const [messageApi, contextHolder] = message.useMessage();
+  }, [data.id]);
 
   const onClose = () => {
     setOpen({ id: "", isOpen: false });
+    setData({
+      address: "",
+      gender: "",
+      job: "",
+      name: "",
+      phone_number: "",
+      img_url: "",
+      surname: "",
+      description: "",
+    });
   };
 
   const onSubmit = () => {
     setLoadingCnx(true);
-    user_data.updated_at = new Date();
     fetch(import.meta.env.VITE_APP_URL + "/user", {
       method: "PUT",
       body: JSON.stringify(user_data),
@@ -59,8 +69,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         setOpen({ id: "", isOpen: false });
         setLoadingCnx(false);
         messageApi.success("Bemor muvaffaqqiyatli yangilandi", 2);
@@ -105,6 +114,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
               gender: user_data?.gender,
               job: user_data?.job,
               birth_date: dayjs(user_data?.date_birth),
+              description: user_data?.description,
             }}
           >
             <Row gutter={16}>
@@ -266,6 +276,29 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                     placeholder="Tug'ilgan sana"
                     maxDate={dayjs(new Date())}
                     getPopupContainer={(trigger) => trigger.parentElement!}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ width: "100%" }}>
+                <Form.Item
+                  name="description"
+                  label="Bemor haqida ko'proq ma'lumot"
+                  rules={[
+                    {
+                      message: "Iltimos Bemor haqida ko'proq ma'lumot kiriting",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    onChange={(e) => {
+                      setData((prev) => {
+                        return { ...prev, description: e.target.value };
+                      });
+                    }}
+                    placeholder="Ko'proq ma'lumot"
+                    autoSize={{ minRows: 7, maxRows: 17 }}
                   />
                 </Form.Item>
               </Col>
