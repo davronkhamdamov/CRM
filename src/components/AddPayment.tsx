@@ -87,12 +87,7 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
           </Space>
         }
       >
-        <Form
-          layout="vertical"
-          initialValues={{
-            payment_type: "Naqt",
-          }}
-        >
+        <Form layout="vertical">
           <Form.Item
             name="payment_type"
             label="To'lov turini tanlang"

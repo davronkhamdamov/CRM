@@ -52,7 +52,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
           isOpen: false,
         });
         setLoadingCnx(false);
-        messageApi.success("Bemor muvaffaqqiyatli yaratildi", 2);
+        messageApi.success("Bemor muvaffaqqiyatli biriktirildi", 2);
       })
       .catch((err) => {
         console.log(err);
@@ -88,15 +88,12 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
   };
 
   const disabledRangeTime: RangePickerProps["disabledTime"] = (_, type) => {
-    const current_time = new Date();
     if (type === "start") {
       return {
-        disabledHours: () => range(0, current_time.getHours()),
         disabledMinutes: () => range(0, 60, [0, 30]),
       };
     }
     return {
-      disabledHours: () => range(0, current_time.getHours()),
       disabledMinutes: () => range(0, 60, [0, 30]),
     };
   };

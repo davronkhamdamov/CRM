@@ -46,7 +46,7 @@ const DocktorTreatment = () => {
       render: (record) => {
         return record.user_name + " " + record.user_surname;
       },
-      width: "17%",
+      width: "13%",
     },
     {
       title: "Shifokor",
@@ -66,7 +66,7 @@ const DocktorTreatment = () => {
         },
       ],
       render: (staff) => `${staff?.staff_name + " " + staff.staff_surname}`,
-      width: "17%",
+      width: "13%",
     },
     {
       title: "Davolash vaqti",
@@ -74,41 +74,50 @@ const DocktorTreatment = () => {
         `${dayjs(date?.start_time).format("HH:MM")} - ${dayjs(
           date?.end_time
         ).format("HH:MM DD-MM-YYYY")}`,
-      width: "17%",
+      width: "15%",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
       render: (price) => (price ? price + " so'm" : "0 so'm"),
-      width: "17%",
+      width: "10%",
+    },
+    {
+      title: "To'langan summa",
+      dataIndex: "payed_price",
+      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      width: "10%",
     },
     {
       title: "To'lov holati",
-      dataIndex: "is_done",
+      dataIndex: "",
       width: "7%",
-      render: () => {
-        return (
-          <>
-            {/* <Tag icon={<CheckCircleOutlined />} color="success">
-                    To'landi
-                </Tag> */}
+      render: (record) => {
+        if (record.price === 0) {
+          return (
+            <Tag icon={<ClockCircleOutlined />} color="default">
+              Kutilmoqda
+            </Tag>
+          );
+        } else if (record.payed_price === record.price) {
+          return (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              To'landi
+            </Tag>
+          );
+        } else if (record.payed_price == 0) {
+          return (
             <Tag icon={<CloseCircleOutlined />} color="error">
               To'lanmadi
             </Tag>
-            {/* <Tag icon={<SyncOutlined spin />} color="processing">
-                      To'liq to'lanmadi
-                  </Tag>
-                  <Tag icon={<CloseCircleOutlined />} color="error">
-                      To'lanmadi
-                  </Tag>
-                  <Tag icon={<ClockCircleOutlined />} color="default">
-                      Kutilmoqda
-                  </Tag>
-                  <Tag icon={<MinusCircleOutlined />} color="default">
-                      To'lanmadi
-                  </Tag> */}
-          </>
-        );
+          );
+        } else {
+          return (
+            <Tag icon={<SyncOutlined />} color="processing">
+              To'liq to'lanmadi
+            </Tag>
+          );
+        }
       },
     },
     {

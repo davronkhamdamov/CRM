@@ -114,7 +114,7 @@ const TableComponent: FC = () => {
       title: "Balans",
       dataIndex: "balance",
       render: (balance) => {
-        if (balance < 0) {
+        if (+balance.replace(" ", "") < 0) {
           return <Tag color="error">{balance} so'm</Tag>;
         }
         return <Tag color="default">{balance} so'm</Tag>;

@@ -28,6 +28,8 @@ export interface DataType {
   created_at: string;
   updated_at: string;
   cure_id: string;
+  payed_price: number;
+  price: number;
 }
 export type themeMode = "light" | "dark" | "system";
 
@@ -97,6 +99,8 @@ export interface CureDataType {
   start_time: string;
   end_time: string;
   id: string;
+  payed_price: number;
+  price: number;
 }
 export interface ServiceType {
   name: string;
@@ -114,6 +118,7 @@ export interface TreatmentType {
 export interface ServiceCategoryType {
   id: string;
   name: string;
+  services: ServiceType[];
 }
 
 export interface StatisticType {
@@ -121,4 +126,14 @@ export interface StatisticType {
   patient: number;
   services: number;
   qarz: number;
+}
+
+export interface PayloadType {
+  id?: number;
+  services?: string[];
+}
+export interface CureFieldType {
+  cash_amount?: number;
+  balance_amount?: number;
+  payment_type: string;
 }

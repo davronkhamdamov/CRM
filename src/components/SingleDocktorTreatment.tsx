@@ -7,13 +7,19 @@ import {
   Descriptions,
   DescriptionsProps,
   Flex,
-  GetProp,
+  Modal,
   Tag,
   message,
   theme,
 } from "antd";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
-import { CureDataType, ServiceType } from "../types/type";
+import {
+  CureDataType,
+  PayloadType,
+  ServiceCategoryType,
+  ServiceType,
+} from "../types/type";
 import dayjs from "dayjs";
 import Successfully from "./Success";
 import confetti from "canvas-confetti";
@@ -49,15 +55,17 @@ import twentynine from "../assets/image/teeth/29-removebg-preview.png";
 import thirty from "../assets/image/teeth/30-removebg-preview (1).png";
 import thirtyone from "../assets/image/teeth/31-removebg-preview.png";
 import thirtytwo from "../assets/image/teeth/32-removebg-preview.png";
+import { PiToothFill } from "react-icons/pi";
+import { GiTooth } from "react-icons/gi";
 
 const SingleDocktorTreatment = () => {
   const params = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [cureData, setCureData] = useState<CureDataType>();
-  const [services, setServices] = useState<ServiceType[]>([]);
+  const [services, setServices] = useState<ServiceCategoryType[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [payload, setPayload] = useState<number[]>([]);
-  const [payloadServices, setPayloadServices] = useState<string[]>([]);
+  const [payload, setPayload] = useState<PayloadType[]>([]);
+  const [saved_payload, setSaved_payload] = useState<PayloadType[]>([]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -74,7 +82,7 @@ const SingleDocktorTreatment = () => {
       .then((data) => {
         setCureData(data.result);
       });
-    fetch(import.meta.env.VITE_APP_URL + "/service", {
+    fetch(import.meta.env.VITE_APP_URL + "/service/by-category", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -83,7 +91,7 @@ const SingleDocktorTreatment = () => {
       .then((data) => {
         setServices(data.result);
       });
-  }, [params.id]);
+  }, [params.id, saved_payload]);
 
   const teeth = [
     {
@@ -696,13 +704,8 @@ const SingleDocktorTreatment = () => {
     },
   ];
 
-  const onChange: GetProp<typeof Checkbox.Group, "onChange"> = (
-    checkedValues: any
-  ) => {
-    setPayloadServices(checkedValues);
-  };
   const finish = (is_done: string) => {
-    if (payloadServices.length !== 0 && payload.length != 0) {
+    if (saved_payload.length != 0) {
       fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
         method: "PUT",
         headers: {
@@ -710,8 +713,8 @@ const SingleDocktorTreatment = () => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          payload_services: payloadServices,
-          payload,
+          payload_services: saved_payload,
+          price: calculateSumOfPayload(),
           is_done: is_done,
         }),
       })
@@ -754,13 +757,33 @@ const SingleDocktorTreatment = () => {
       messageApi.warning("Tish yoki xizmat tanladingiz!");
     }
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const getName = (e: string) => {
+    const service: ServiceType[] = [];
+    services.forEach((e) => {
+      service.push(...e.services.map((e) => e));
+    });
+    return service.find((el) => el.id == e);
+  };
+  const calculateSumOfPayload = () => {
+    const _services: any[] = [];
+    saved_payload?.forEach((e) => {
+      e?.services?.forEach((e) => {
+        _services.push(getName(e)?.price);
+      });
+    });
+    return _services.reduce((a, e) => a + e, 0);
+  };
   return (
-    <Content
-      style={{
-        height: "80vh",
-        overflowY: "scroll",
-      }}
-    >
+    <Content>
       <div>
         <Flex
           vertical
@@ -787,7 +810,9 @@ const SingleDocktorTreatment = () => {
             }}
           >
             <Flex align="center" style={{ width: "50%" }} vertical>
-              <h3 style={{ width: "100%", textAlign: "center" }}>
+              <h3
+                style={{ width: "100%", textAlign: "center", fontSize: "20px" }}
+              >
                 Davolamoqchi bo'lgan tishlarni tanlang:
               </h3>
               <div
@@ -798,15 +823,17 @@ const SingleDocktorTreatment = () => {
                 }}
               >
                 {teeth.map((e) => {
-                  const check = payload.includes(e.id);
+                  const check = payload.find((el) => el.id == e.id);
                   return (
                     <button
                       key={e.id}
                       onClick={() => {
                         if (!check) {
-                          setPayload((prev) => [...prev, e.id]);
+                          setPayload((prev) => [...prev, { id: e.id }]);
                         } else {
-                          setPayload(payload.filter((el) => el !== e.id));
+                          setPayload((prev) =>
+                            prev.filter((el) => el.id !== e.id)
+                          );
                         }
                       }}
                       style={{
@@ -838,29 +865,243 @@ const SingleDocktorTreatment = () => {
               </div>
             </Flex>
             <Flex vertical style={{ width: "50%" }} align="center">
-              <h3 style={{ width: "100%", textAlign: "center" }}>
-                Mavjud xizmatlar:
-              </h3>
-              <br />
-              <br />
-              <br />
-              <br />
-              <Checkbox.Group onChange={onChange}>
-                <Flex gap={20} vertical>
-                  {services
-                    ?.filter((e) => e.status)
-                    ?.map((e) => {
+              <Flex
+                vertical
+                align="center"
+                style={{
+                  maxHeight: "55%",
+                  overflowY: "auto",
+                  paddingBottom: "10px",
+                }}
+              >
+                <h2>Tanlangan tishlar</h2>
+                <br />
+                <Flex gap={20} wrap="wrap">
+                  {payload[0] ? (
+                    payload.map((e) => {
                       return (
-                        <Checkbox value={e.id} key={e.id}>
-                          {e.name}
-                          <Tag style={{ marginLeft: "10px" }}>
-                            Xizmat narxi: {e.price} so'm
-                          </Tag>
-                        </Checkbox>
+                        <Flex
+                          key={e.id}
+                          gap={10}
+                          align="center"
+                          justify="center"
+                          style={{
+                            background: "rgba(0, 0, 0, 0.03)",
+                            width: "100px",
+                            borderRadius: "10px",
+                            height: "40px",
+                          }}
+                        >
+                          <p style={{ fontSize: "20px" }}>{e.id}</p>
+                          <Button
+                            onClick={() => {
+                              setPayload((prev) =>
+                                prev.filter((el) => el != e)
+                              );
+                            }}
+                            type="default"
+                            style={{ color: "red", border: "1px solid red" }}
+                            icon={<DeleteOutlined />}
+                          />
+                        </Flex>
                       );
-                    })}
+                    })
+                  ) : (
+                    <Flex align="center" vertical gap={10}>
+                      <PiToothFill size={40} />
+                      <p>Hech qanday tish tanlanmagan</p>
+                    </Flex>
+                  )}
                 </Flex>
-              </Checkbox.Group>
+
+                {payload[0] && (
+                  <Flex style={{ marginTop: "30px" }} vertical align="center">
+                    <h2 style={{ textAlign: "center" }}>Tanlangan xizmatlar</h2>
+                    <br />
+                    <br />
+                    <Flex gap={10} justify="center" wrap="wrap">
+                      {payload[0]?.services?.length ? (
+                        payload[0]?.services?.map((e) => {
+                          return (
+                            <Flex
+                              key={e}
+                              gap={10}
+                              align="center"
+                              justify="center"
+                              style={{
+                                background: "rgba(0, 0, 0 , 0.02)",
+                                width: "max-content",
+                                padding: "0 10px",
+                                borderRadius: "10px",
+                                height: "40px",
+                              }}
+                            >
+                              <p style={{ fontSize: "20px" }}>
+                                {getName(e)?.name}
+                              </p>
+                              <Tag style={{ marginLeft: "10px" }}>
+                                Xizmat narxi: {getName(e)?.price} so'm
+                              </Tag>
+                            </Flex>
+                          );
+                        })
+                      ) : (
+                        <Flex align="center" vertical gap={10}>
+                          <PiToothFill size={40} />
+                          <p>Hech qanday xizmat tanlanmagan</p>
+                        </Flex>
+                      )}
+                    </Flex>
+                    <Flex gap={20}>
+                      <Button
+                        style={{
+                          width: "max-content",
+                          marginTop: "40px",
+                        }}
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => setIsModalOpen(true)}
+                      >
+                        Yangi ximat qo'shish
+                      </Button>
+                      <Button
+                        style={{
+                          width: "max-content",
+                          marginTop: "40px",
+                        }}
+                        type="primary"
+                        icon={<GiTooth />}
+                        onClick={() => {
+                          if (
+                            payload.length > 0 &&
+                            payload.some(
+                              (el) => (el?.services?.length || 0) > 0
+                            )
+                          ) {
+                            setPayload([]);
+                            setSaved_payload((prev) => [...prev, ...payload]);
+                          } else {
+                            messageApi.warning("Tish yoki xizmat tanladingiz!");
+                          }
+                        }}
+                      >
+                        Saqlash
+                      </Button>
+                    </Flex>
+                  </Flex>
+                )}
+                <Modal
+                  width={1200}
+                  title="Mavjud xizmatlar"
+                  open={isModalOpen}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                >
+                  <Flex style={{ minHeight: "400px", overflowY: "auto" }}>
+                    <Flex gap={20} wrap="wrap" style={{ width: "100%" }}>
+                      {services?.map((category) => {
+                        return (
+                          <div key={category.id}>
+                            <p
+                              style={{
+                                width: "100%",
+                                height: "40px",
+                                background: "rgba(0, 0, 0, 0.02)",
+                                borderRadius: "6px",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              {category.name}
+                            </p>
+                            {category.services.map((service) => {
+                              return (
+                                <Checkbox
+                                  key={service.id}
+                                  checked={payload.some((el) =>
+                                    el.services?.find((e) => e == service.id)
+                                  )}
+                                  onChange={() => {
+                                    setPayload((prev) =>
+                                      prev?.map((e) => {
+                                        if (!e.services?.includes(service.id)) {
+                                          return {
+                                            id: e.id,
+                                            services: [
+                                              ...(e.services || []),
+                                              service.id,
+                                            ],
+                                          };
+                                        }
+                                        return {
+                                          id: e.id,
+                                          services: [
+                                            ...(e.services.filter(
+                                              (ele) => ele !== service.id
+                                            ) || []),
+                                          ],
+                                        };
+                                      })
+                                    );
+                                  }}
+                                >
+                                  {service.name}
+                                  <Tag style={{ marginLeft: "10px" }}>
+                                    Xizmat narxi: {service.price} so'm
+                                  </Tag>
+                                </Checkbox>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                    </Flex>
+                  </Flex>
+                </Modal>
+              </Flex>
+              <Flex
+                style={{ paddingTop: "20px", height: "45%", width: "100%" }}
+                vertical
+              >
+                <h2 style={{ textAlign: "center" }}>Saqlangan davolashlar</h2>
+                <br />
+                {saved_payload[0] ? (
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <tr className="table_wrapper">
+                      <th className="table_item">Tish id</th>
+                      <th className="table_item">Xizmat nomi</th>
+                      <th className="table_item">Xizmat narxi</th>
+                    </tr>
+                    {saved_payload?.map((tooth) => {
+                      return tooth.services?.map((service: string) => {
+                        return (
+                          <tr className="table_wrapper">
+                            <td className="table_item">{tooth.id}</td>
+                            <td className="table_item">
+                              {getName(service)?.name}
+                            </td>
+                            <td className="table_item">
+                              {getName(service)?.price}
+                            </td>
+                          </tr>
+                        );
+                      });
+                    })}
+                    <tr className="table_wrapper">
+                      <th className="table_item"></th>
+                      <th className="table_item">Jami</th>
+                      <th className="table_item">{calculateSumOfPayload()}</th>
+                    </tr>
+                  </table>
+                ) : (
+                  <Flex align="center" vertical gap={10}>
+                    <PiToothFill size={40} />
+                    <p>Hech qanday xizmat tanlanmagan</p>
+                  </Flex>
+                )}
+              </Flex>
             </Flex>
           </Flex>
           <br />

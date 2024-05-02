@@ -23,10 +23,11 @@ import {
 import type { TableProps } from "antd";
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { MdEdit, MdOutlinePayment } from "react-icons/md";
+import { MdOutlinePayment } from "react-icons/md";
 import dayjs from "dayjs";
 import { IoIosMore } from "react-icons/io";
-import AddPayment from "./AddPayment";
+import AddPaymentCure from "./AddPaymentCure";
+import TreatmentModal from "./TreatmentModal";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -39,6 +40,10 @@ const Treatment = () => {
   const [loading, setLoading] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
     id: "",
+    isOpen: false,
+  });
+  const [view, setView] = useState({
+    data: "",
     isOpen: false,
   });
   const [toLoading, setToLoading] = useState(false);
@@ -103,37 +108,46 @@ const Treatment = () => {
       width: "10%",
     },
     {
-      title: "Sana",
-      dataIndex: "created_at",
-      render: (date) => `${dayjs(date).format("DD-MM-YYYY HH:mm")}`,
-      width: "13%",
+      title: "To'langan summa",
+      dataIndex: "payed_price",
+      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      width: "10%",
     },
     {
       title: "To'lov holati",
       width: "6%",
-      render: () => {
-        return (
-          <>
-            {/* <Tag icon={<CheckCircleOutlined />} color="success">
-                      To'landi
-                  </Tag> */}
+      render: (record) => {
+        if (record.price === 0) {
+          return (
+            <Tag icon={<ClockCircleOutlined />} color="default">
+              Kutilmoqda
+            </Tag>
+          );
+        } else if (record.payed_price === record.price) {
+          return (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              To'landi
+            </Tag>
+          );
+        } else if (record.payed_price == record.price) {
+          return (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              To'landi
+            </Tag>
+          );
+        } else if (record.payed_price == 0) {
+          return (
             <Tag icon={<CloseCircleOutlined />} color="error">
               To'lanmadi
             </Tag>
-            {/* <Tag icon={<SyncOutlined spin />} color="processing">
-                        To'liq to'lanmadi
-                    </Tag>
-                    <Tag icon={<CloseCircleOutlined />} color="error">
-                        To'lanmadi
-                    </Tag>
-                    <Tag icon={<ClockCircleOutlined />} color="default">
-                        Kutilmoqda
-                    </Tag>
-                    <Tag icon={<MinusCircleOutlined />} color="default">
-                        To'lanmadi
-                    </Tag> */}
-          </>
-        );
+          );
+        } else {
+          return (
+            <Tag icon={<SyncOutlined />} color="processing">
+              To'liq to'lanmadi
+            </Tag>
+          );
+        }
       },
     },
     {
@@ -184,26 +198,32 @@ const Treatment = () => {
       render: (_, record) => {
         return (
           <Space size="middle">
-            <Tooltip placement="bottom" title="To'lash">
-              <MdOutlinePayment
+            {record.payed_price !== record.price && (
+              <Tooltip placement="bottom" title="To'lash">
+                <MdOutlinePayment
+                  style={{ cursor: "pointer" }}
+                  color="dodgerblue"
+                  onClick={() => {
+                    if (openPaymentModal.id !== record.cure_id) {
+                      setOpenPaymentModal({
+                        id: record.cure_id,
+                        isOpen: true,
+                      });
+                    }
+                  }}
+                />
+              </Tooltip>
+            )}
+            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
+              <IoIosMore
+                color="#3b82f6"
                 style={{ cursor: "pointer" }}
-                color="dodgerblue"
                 onClick={() => {
-                  if (openPaymentModal.id !== record.user_id) {
-                    setOpenPaymentModal({
-                      id: record.user_id,
-                      isOpen: true,
-                    });
-                  }
+                  setView({ data: record.cure_id, isOpen: true });
                 }}
               />
             </Tooltip>
-            <Tooltip placement="bottom" title="Tahrirlash">
-              <MdEdit color="#3b82f6" style={{ cursor: "pointer" }} />
-            </Tooltip>
-            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
-              <IoIosMore color="#3b82f6" style={{ cursor: "pointer" }} />
-            </Tooltip>
+
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
               onConfirm={cancel}
@@ -315,12 +335,13 @@ const Treatment = () => {
         }
         onChange={handleTableChange}
       />
+      <TreatmentModal setData={setView} data={view} />
       <Spin
         indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
         spinning={toLoading}
         fullscreen
       />
-      <AddPayment data={openPaymentModal} setOpen={setOpenPaymentModal} />
+      <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
       {contextHolder}
     </>
   );
