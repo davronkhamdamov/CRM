@@ -8,9 +8,10 @@ import {
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
+import EditDoctor from "./EditDocktor";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -23,7 +24,10 @@ const DoctorsTable = () => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("auth");
   const [search, setSearch] = useState<string>(" ");
-
+  const [doctorModal, setDoctorModal] = useState<EditModal>({
+    id: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -84,7 +88,12 @@ const DoctorsTable = () => {
         return (
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
-              <EditTwoTone style={{ cursor: "pointer" }} />
+              <EditTwoTone
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setDoctorModal({ id: record.id, isOpen: true });
+                }}
+              />
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
@@ -186,6 +195,7 @@ const DoctorsTable = () => {
         }
         onChange={handleTableChange}
       />
+      <EditDoctor data={doctorModal} setOpen={setDoctorModal} />
       {contextHolder}
     </>
   );

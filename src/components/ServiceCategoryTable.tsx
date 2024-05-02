@@ -8,9 +8,10 @@ import {
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { LoadingProvider } from "../App";
+import EditServiceCategory from "./EditServiceCategory";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -23,6 +24,10 @@ const ServicesCategoryTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
+  const [serviceCategoryModal, setServiceCategoryModal] = useState<EditModal>({
+    id: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -66,7 +71,14 @@ const ServicesCategoryTable = () => {
         return (
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
-              <EditTwoTone />
+              <EditTwoTone
+                onClick={() => {
+                  setServiceCategoryModal({
+                    id: record.id,
+                    isOpen: true,
+                  });
+                }}
+              />
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
@@ -149,6 +161,10 @@ const ServicesCategoryTable = () => {
             : false
         }
         onChange={handleTableChange}
+      />
+      <EditServiceCategory
+        data={serviceCategoryModal}
+        setOpen={setServiceCategoryModal}
       />
       {contextHolder}
     </>

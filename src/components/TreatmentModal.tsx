@@ -17,7 +17,7 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
           setTreatments(result);
         });
     }
-  }, [data.data]);
+  }, [data.data, token]);
 
   return (
     <>

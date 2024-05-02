@@ -81,8 +81,14 @@ export interface ServiceFieldType {
   service_name: string;
 }
 export interface Staffs {
+  address: string;
+  surname: string;
+  phone_number: string;
+  login: string;
   role: string;
   id: string;
+  gender: string;
+  password: string;
   name: string;
 }
 
