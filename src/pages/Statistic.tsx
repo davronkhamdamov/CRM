@@ -75,7 +75,7 @@ const Statistica: React.FC = () => {
           return { ...prev, qarz: data.result };
         });
       });
-  }, []);
+  }, [token]);
   return (
     <Content style={{ margin: "30px 16px 0" }}>
       <div
