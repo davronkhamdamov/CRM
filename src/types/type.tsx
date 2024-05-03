@@ -44,6 +44,7 @@ export interface EditModalProps {
   setOpen: (arg: EditModal) => void;
 }
 export interface UserData {
+  login: string;
   id?: string;
   name: string;
   surname: string;

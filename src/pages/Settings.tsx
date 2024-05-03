@@ -1,5 +1,6 @@
 import { Flex, Layout, Typography, theme } from "antd";
 import React from "react";
+import EditProfile from "../components/EditProfile";
 const { Title } = Typography;
 const { Content } = Layout;
 
@@ -22,6 +23,7 @@ const Settings: React.FC = () => {
           <Title style={{ margin: 0 }}>Sozlamalar</Title>
         </Flex>
       </div>
+      <EditProfile />
     </Content>
   );
 };
