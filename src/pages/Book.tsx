@@ -4,9 +4,9 @@ import { Button, DatePicker, Form, Input, Space } from "antd";
 import dayjs from "dayjs";
 
 const Book: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-  };
+  // const onFinish = (values: any) => {
+  //   console.log("Received values of form: ", values);
+  // };
 
   return (
     <div className="book_wrapper">
@@ -14,7 +14,7 @@ const Book: React.FC = () => {
         name="normal_login"
         className="login-form"
         initialValues={{ remember: true }}
-        onFinish={onFinish}
+        // onFinish={onFinish}
       >
         <Space direction="vertical" style={{ width: "100%" }}>
           <Form.Item

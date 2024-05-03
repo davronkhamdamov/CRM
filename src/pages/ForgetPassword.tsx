@@ -3,9 +3,9 @@ import { UserOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input } from "antd";
 
 const App: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-  };
+  // const onFinish = (values: any) => {
+  //   console.log("Received values of form: ", values);
+  // };
 
   return (
     <Flex align="center" justify="center" style={{ height: "100vh" }}>
@@ -13,7 +13,7 @@ const App: React.FC = () => {
         name="normal_login"
         className="login-form"
         initialValues={{ remember: true }}
-        onFinish={onFinish}
+        // onFinish={onFinish}
       >
         <Form.Item
           name="username"

@@ -30,6 +30,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     img_url: "",
     surname: "",
     description: "",
+    login: "",
   });
   const token = localStorage.getItem("auth");
   useEffect(() => {
@@ -55,6 +56,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
       img_url: "",
       surname: "",
       description: "",
+      login: "",
     });
   };
 
