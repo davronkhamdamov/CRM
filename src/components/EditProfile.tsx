@@ -11,7 +11,7 @@ import {
   message,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const { Title } = Typography;
 const { Content } = Layout;
 import { Staffs, UserData } from "../types/type";
