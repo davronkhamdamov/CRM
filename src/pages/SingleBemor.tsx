@@ -41,12 +41,12 @@ const SingleBemor: React.FC = () => {
     {
       icon: MdOutlinePayments,
       title: "To'lovlar tarixi",
-      children: <PaymentHistory />,
+      children: <PaymentHistory patient_id={params?.id} />,
     },
     {
       icon: GrServices,
       title: "Foydalanilgan xizmatlar tarixi",
-      children: <ServiceHistory />,
+      children: <ServiceHistory patient_id={params?.id} />,
     },
   ];
 
@@ -88,7 +88,7 @@ const SingleBemor: React.FC = () => {
               </label>
               <input type="file" style={{ display: "none" }} id="profile" />
               <Title level={4} style={{ margin: 0 }}>
-                {userData?.name ? userData?.name : "Yuklanmoqda..."}
+                {userData?.name ? userData?.name : "Yuklanmoqda..."}{" "}
                 {userData?.surname}
               </Title>
             </Flex>

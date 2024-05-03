@@ -51,7 +51,7 @@ const ServicesCategoryTable = () => {
       })
       .catch(() => {
         setLoadingCnx(false);
-        messageApi.success("Xizmat toifasi o'chirishda muommo paydo bo'ldi", 2);
+        messageApi.error("Xizmat toifasi o'chirishda muommo paydo bo'ldi", 2);
       });
   };
 

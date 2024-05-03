@@ -11,13 +11,13 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 
-const ServiceHistory: FC<{ patient_id: string | undefined }> = ({
+const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
   patient_id,
 }) => {
   const [data, setData] = useState();
   const token = localStorage.getItem("auth");
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + `/cure/for-patient/` + patient_id, {
+    fetch(import.meta.env.VITE_APP_URL + `/cure/for-staff/` + patient_id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,8 +29,14 @@ const ServiceHistory: FC<{ patient_id: string | undefined }> = ({
   }, [patient_id]);
   const columns: ColumnsType<DataType> = [
     {
-      title: "Shifokor",
-      render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
+      title: "Ismi",
+      render: (record) => {
+        return (
+          <a href={`patient/${record.user_id}`}>
+            {record.user_name} {record.user_surname}
+          </a>
+        );
+      },
       width: "10%",
     },
     {
@@ -132,4 +138,4 @@ const ServiceHistory: FC<{ patient_id: string | undefined }> = ({
   ];
   return <Table columns={columns} dataSource={data} />;
 };
-export default ServiceHistory;
+export default DocktorTreatmentTable;

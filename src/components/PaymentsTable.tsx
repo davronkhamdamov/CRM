@@ -32,7 +32,6 @@ const PaymentsTable = () => {
     {
       title: "Ism Familyasi",
       dataIndex: "",
-      sorter: true,
       render: (user) => (
         <a href={`patient/${user.user_id}`}>
           {user.username} {user.surname}

@@ -1,13 +1,4 @@
-import {
-  AutoComplete,
-  Popconfirm,
-  Space,
-  Spin,
-  Table,
-  Tag,
-  Tooltip,
-  message,
-} from "antd";
+import { Popconfirm, Space, Spin, Table, Tag, Tooltip, message } from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -29,7 +20,7 @@ import { IoIosMore } from "react-icons/io";
 import AddPaymentCure from "./AddPaymentCure";
 import TreatmentModal from "./TreatmentModal";
 
-const getRandomuserParams = (params: TableParams) => ({
+const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
   page: params.pagination?.current,
   ...params,
@@ -53,13 +44,13 @@ const Treatment = () => {
       pageSize: 10,
     },
   });
-  const cancel = () => {
-    setToLoading(true);
-    setTimeout(() => {
-      setToLoading(false);
-      messageApi.success("Davolash muvaffaqqiyatli o'chirildi", 2);
-    }, 2000);
-  };
+  // const cancel = () => {
+  //   setToLoading(true);
+  //   setTimeout(() => {
+  //     setToLoading(false);
+  //     messageApi.success("Davolash muvaffaqqiyatli o'chirildi", 2);
+  //   }, 2000);
+  // };
 
   const columns: ColumnsType<DataType> = [
     {
@@ -208,15 +199,14 @@ const Treatment = () => {
                 }}
               />
             </Tooltip>
-
-            <Popconfirm
+            {/* <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
               onConfirm={cancel}
             >
               <Tooltip placement="bottom" title="O'chirish">
                 <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
               </Tooltip>
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },
@@ -247,7 +237,7 @@ const Treatment = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure?${qs.stringify(getRandomuserParams(tableParams))}`,
+        `/cure?${qs.stringify(getUserParams(tableParams))}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -267,38 +257,9 @@ const Treatment = () => {
         });
       });
   };
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
 
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Davolashni qidirish"
-      />
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}

@@ -57,7 +57,7 @@ const ServicesTable = () => {
       })
       .catch(() => {
         setLoadingCnx(false);
-        messageApi.success("Xizmat o'chirishda muommo paydo bo'ldi", 2);
+        messageApi.error("Xizmat o'chirishda muommo paydo bo'ldi", 2);
       });
   };
 

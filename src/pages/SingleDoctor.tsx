@@ -11,6 +11,7 @@ import { BsCalendar2Date } from "react-icons/bs";
 import { GrPhone } from "react-icons/gr";
 import userImage from "../assets/image/Sample_User_Icon.png";
 import { TbCameraPlus } from "react-icons/tb";
+import DocktorTreatmentTable from "../components/DoctorTreatmentTable";
 
 const SingleDocktor: React.FC = () => {
   const params = useParams();
@@ -75,6 +76,9 @@ const SingleDocktor: React.FC = () => {
                 {userData?.name ? userData?.name : "Yuklanmoqda..."}{" "}
                 {userData?.surname}
               </Title>
+              <Title level={5} style={{ margin: 0 }}>
+                Login: {userData?.login ? userData?.login : "Yuklanmoqda..."}
+              </Title>
             </Flex>
           </Flex>
           <Divider type="vertical" style={{ height: "350px" }} />
@@ -131,6 +135,7 @@ const SingleDocktor: React.FC = () => {
             <Divider />
           </Flex>
         </Flex>
+        <DocktorTreatmentTable patient_id={params.id} />
       </div>
     </Content>
   );
