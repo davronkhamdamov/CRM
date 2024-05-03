@@ -1,10 +1,9 @@
-import { Popconfirm, Space, Spin, Table, Tag, Tooltip, message } from "antd";
+import { Space, Spin, Table, Tag, Tooltip } from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
 import {
   LoadingOutlined,
-  DeleteOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   SyncOutlined,
@@ -26,7 +25,7 @@ const getUserParams = (params: TableParams) => ({
   ...params,
 });
 const Treatment = () => {
-  const [messageApi, contextHolder] = message.useMessage();
+  // const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
@@ -37,7 +36,7 @@ const Treatment = () => {
     data: "",
     isOpen: false,
   });
-  const [toLoading, setToLoading] = useState(false);
+  // const [toLoading, setToLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -284,11 +283,11 @@ const Treatment = () => {
       <TreatmentModal setData={setView} data={view} />
       <Spin
         indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-        spinning={toLoading}
+        // spinning={toLoading}
         fullscreen
       />
       <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
-      {contextHolder}
+      {/* {contextHolder} */}
     </>
   );
 };
