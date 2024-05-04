@@ -1017,6 +1017,7 @@ const SingleDocktorTreatment = () => {
                               {category.name}
                             </p>
                             {category.services.map((service) => {
+alert(service.name)
                               return (
                                 <Checkbox
                                   key={service.id}
