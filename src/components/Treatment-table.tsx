@@ -1,4 +1,4 @@
-import { Space, Spin, Table, Tag, Tooltip } from "antd";
+import { Space, Table, Tag, Tooltip } from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -281,11 +281,6 @@ const Treatment = () => {
         onChange={handleTableChange}
       />
       <TreatmentModal setData={setView} data={view} />
-      <Spin
-        indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-        // spinning={toLoading}
-        fullscreen
-      />
       <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
       {/* {contextHolder} */}
     </>
