@@ -17,10 +17,11 @@ import {
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { LoadingProvider } from "../App";
+import EditService from "./EditService";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -34,6 +35,10 @@ const ServicesTable = () => {
   const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
+  const [serviceModal, setServiceModal] = useState<EditModal>({
+    id: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -111,7 +116,7 @@ const ServicesTable = () => {
               minWidth: "80px",
               textAlign: "center",
             }}
-            color="default"
+            color="error"
           >
             Foal emas
           </Tag>
@@ -129,7 +134,9 @@ const ServicesTable = () => {
         return (
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
-              <EditTwoTone />
+              <EditTwoTone
+                onClick={() => setServiceModal({ id: record.id, isOpen: true })}
+              />
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
@@ -224,6 +231,7 @@ const ServicesTable = () => {
         }
         onChange={handleTableChange}
       />
+      <EditService data={serviceModal} setOpen={setServiceModal} />
       {contextHolder}
     </>
   );

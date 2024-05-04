@@ -115,6 +115,7 @@ export interface ServiceType {
   price: string;
   id: string;
   status: boolean;
+  service_category_id: string;
 }
 
 export interface TreatmentType {
