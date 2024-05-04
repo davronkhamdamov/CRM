@@ -91,7 +91,7 @@ const SingleDocktorTreatment = () => {
       .then((data) => {
         setServices(data.result);
       });
-  }, [params.id, saved_payload]);
+  }, [params.id, saved_payload,payload]);
 
   const teeth = [
     {
