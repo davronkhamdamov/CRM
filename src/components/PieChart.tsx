@@ -1,12 +1,5 @@
+import { useEffect, useState } from "react";
 import { PieChart, Tooltip, Pie, Cell, ResponsiveContainer } from "recharts";
-
-const data = [
-  { name: "Qo'rgontepa", value: 250 },
-  { name: "Andijon", value: 300 },
-  { name: "Qorasuv", value: 300 },
-  { name: "Xonobod", value: 200 },
-  { name: "Asaka", value: 100 },
-];
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -45,24 +38,42 @@ const renderCustomizedLabel = ({
 };
 
 const PieChartFC = () => {
+  const [statistic, setStatistic] = useState<any>();
+  const token = localStorage.getItem("auth");
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/user/statistic_by_address", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setStatistic(data.result));
+  }, []);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={renderCustomizedLabel}
-          outerRadius={(window.screen.width / 100) * 10}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          <Tooltip />
-          {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
+        {statistic && (
+          <Pie
+            data={Object.keys(statistic)?.map((e) => {
+              return { name: e, value: statistic[e] };
+            })}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={(window.screen.width / 100) * 10}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            <Tooltip />
+            {Object.keys(statistic).map((_, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        )}
         <Tooltip />
       </PieChart>
     </ResponsiveContainer>

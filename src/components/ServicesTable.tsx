@@ -192,7 +192,7 @@ const ServicesTable = () => {
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 1,
+            total: result.total,
           },
         });
       });

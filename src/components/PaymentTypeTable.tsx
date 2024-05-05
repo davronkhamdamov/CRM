@@ -14,7 +14,7 @@ import {
   EditTwoTone,
 } from "@ant-design/icons";
 
-import { PaymentDataType, TableParams } from "../types/type";
+import { EditModal, PaymentDataType, TableParams } from "../types/type";
 import { ColumnsType, TableProps } from "antd/es/table";
 
 import { HiOutlineCash } from "react-icons/hi";
@@ -22,6 +22,7 @@ import { IoCardOutline } from "react-icons/io5";
 import dayjs from "dayjs";
 import { CiCalendarDate } from "react-icons/ci";
 import qs from "qs";
+import EditPaymentType from "./EditPaymentType";
 
 const getPaymentTypeParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -31,6 +32,12 @@ const getPaymentTypeParams = (params: TableParams) => ({
 const PaymentTypeTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<PaymentDataType[]>();
+  const [paymentTypeModalModal, setPaymentTypeModalModal] = useState<EditModal>(
+    {
+      id: "",
+      isOpen: false,
+    }
+  );
   const [loading, setLoading] = useState(false);
   const [toLoading, setToLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -108,7 +115,14 @@ const PaymentTypeTable = () => {
         return (
           <Space size="middle">
             <Tooltip placement="bottom" title="Tahrirlash">
-              <EditTwoTone />
+              <EditTwoTone
+                onClick={() =>
+                  setPaymentTypeModalModal({
+                    id: record.id,
+                    isOpen: true,
+                  })
+                }
+              />
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
@@ -223,6 +237,10 @@ const PaymentTypeTable = () => {
             : false
         }
         onChange={handleTableChange}
+      />
+      <EditPaymentType
+        data={paymentTypeModalModal}
+        setOpen={setPaymentTypeModalModal}
       />
       <Spin
         indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
