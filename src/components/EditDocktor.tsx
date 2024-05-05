@@ -61,7 +61,6 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
   const token = localStorage.getItem("auth");
   const onSubmit: FormProps<Staffs>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-    console.log(actionData);
 
     fetch(import.meta.env.VITE_APP_URL + "/staffs", {
       method: "PUT",
@@ -84,6 +83,7 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
       .then((res) => res.json())
       .then(() => {
         setLoadingCnx(false);
+        location.reload();
         setOpen({ id: "", isOpen: false });
         messageApi.success("Shifokor muvaffaqqiyatli yaratildi", 2);
       })

@@ -30,6 +30,7 @@ const CreatePaymentType = () => {
       .then((res) => res.json())
       .then(() => {
         setOpen(false);
+        location.reload();
         setLoadingCnx(false);
         messageApi.success("To'lov turi muvaffaqqiyatli yaratildi", 2);
       })

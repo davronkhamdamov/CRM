@@ -48,6 +48,7 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
         setPaymentTypeData(results.result);
         setOpen({ isOpen: false, id: "" });
         setLoadingCnx(false);
+        location.reload();
         messageApi.success("To'lov qilindi", 2);
       })
       .catch(() => {
@@ -71,6 +72,7 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
     })
       .then((res) => res.json())
       .then((results) => {
+        location.reload();
         setLoading(false);
         setPaymentTypeData(results.result);
         setOpen({ isOpen: false, id: "" });

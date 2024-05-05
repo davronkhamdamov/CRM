@@ -5,6 +5,7 @@ import {
   DatePicker,
   Drawer,
   Form,
+  FormProps,
   Input,
   Row,
   Select,
@@ -31,6 +32,11 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     surname: "",
     description: "",
     login: "",
+    disease_progression: "",
+    milk: "",
+    objective_check: "",
+    placental_diseases: "",
+    prikus: "",
   });
   const token = localStorage.getItem("auth");
   useEffect(() => {
@@ -57,14 +63,19 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
       surname: "",
       description: "",
       login: "",
+      disease_progression: "",
+      milk: "",
+      objective_check: "",
+      placental_diseases: "",
+      prikus: "",
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-    fetch(import.meta.env.VITE_APP_URL + "/user", {
+    fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id, {
       method: "PUT",
-      body: JSON.stringify(user_data),
+      body: JSON.stringify(actionData),
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -74,6 +85,9 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
       .then(() => {
         setOpen({ id: "", isOpen: false });
         setLoadingCnx(false);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
         messageApi.success("Bemor muvaffaqqiyatli yangilandi", 2);
       })
       .catch((err) => {
@@ -96,33 +110,31 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
             paddingBottom: 80,
           },
         }}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Bekor qilish</Button>
-            <Button onClick={onSubmit} type="primary">
-              Yangilash
-            </Button>
-          </Space>
-        }
       >
         {user_data.created_at && (
           <Form
             layout="vertical"
+            onFinish={onSubmit}
             initialValues={{
-              first_name: user_data?.name,
-              last_name: user_data?.surname,
-              adress: user_data?.address,
-              phone: user_data?.phone_number,
+              name: user_data?.name,
+              surname: user_data?.surname,
+              address: user_data?.address,
+              phone_number: user_data?.phone_number,
               gender: user_data?.gender,
               job: user_data?.job,
-              birth_date: dayjs(user_data?.date_birth),
+              date_birth: dayjs(user_data?.date_birth),
               description: user_data?.description,
+              prikus: user_data?.prikus,
+              disease_progression: user_data?.disease_progression,
+              objective_check: user_data?.objective_check,
+              milk: user_data?.milk,
+              placental_diseases: user_data?.placental_diseases,
             }}
           >
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  name="first_name"
+                  name="name"
                   label="Ism"
                   rules={[
                     {
@@ -143,7 +155,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  name="last_name"
+                  name="surname"
                   label="Familya"
                   rules={[
                     {
@@ -166,7 +178,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  name="adress"
+                  name="address"
                   label="Yashash joyi"
                   rules={[
                     {
@@ -187,7 +199,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  name="phone"
+                  name="phone_number"
                   label="Telefon"
                   rules={[
                     {
@@ -196,14 +208,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder="Iltimos telefon nomer kiriting"
-                    onChange={(e) =>
-                      setData((prev) => {
-                        return { ...prev, phone_number: e.target.value };
-                      })
-                    }
-                  />
+                  <Input placeholder="Iltimos telefon nomer kiriting" />
                 </Form.Item>
               </Col>
             </Row>
@@ -254,10 +259,10 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row>
-              <Col>
+            <Row gutter={16}>
+              <Col span={12}>
                 <Form.Item
-                  name="birth_date"
+                  name="date_birth"
                   label="Tug'ilgan sana"
                   rules={[
                     {
@@ -270,15 +275,98 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                     style={{
                       width: "100%",
                     }}
-                    onChange={(e) => {
-                      setData((prev) => {
-                        return { ...prev, date_birth: dayjs(e).add(1, "day") };
-                      });
-                    }}
                     placeholder="Tug'ilgan sana"
+                    defaultPickerValue={dayjs("2010-04-13")}
                     maxDate={dayjs(new Date())}
                     getPopupContainer={(trigger) => trigger.parentElement!}
                   />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="prikus"
+                  label="Prikus"
+                  rules={[
+                    {
+                      message: "Prikus",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Prikus">
+                    <Option value="ortognatik">Ortognatik</Option>
+                    <Option value="progenik">Progenik</Option>
+                    <Option value="biprognatik">Biprognatik</Option>
+                    <Option value="distal">Distal</Option>
+                    <Option value="mezial">Mezial</Option>
+                    <Option value="chuqur">Chuqur</Option>
+                    <Option value="ochiq">Ochiq</Option>
+                    <Option value="kesuvchi">Kesuvchi</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col style={{ width: "100%" }}>
+                <Form.Item
+                  name="placental_diseases"
+                  label="Boshidan o'tkazgan yo'ldosh kasalliklarini"
+                  rules={[
+                    {
+                      message:
+                        "Boshidan o'tkazgan yo'ldosh kasalliklarini kiriting",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    placeholder="Boshidan o'tkazgan yo'ldosh kasalliklarini..."
+                    autoSize={{ minRows: 2, maxRows: 5 }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ width: "100%" }}>
+                <Form.Item
+                  name="milk"
+                  label="Milk va olveola xolati"
+                  rules={[
+                    {
+                      message: "Milk va olveola xolati",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    placeholder="Milk va olveola xolati"
+                    autoSize={{ minRows: 2, maxRows: 5 }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="disease_progression"
+                  label="Ushbu kasallikning rivojlanishi"
+                  rules={[
+                    {
+                      message: "Ushbu kasallikning rivojlanishi",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Ushbu kasallikning rivojlanishi..." />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="objective_check"
+                  label="Obyektiv tekshiruv"
+                  rules={[
+                    {
+                      message: "Obyektiv tekshiruv",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Obyektiv tekshiruv kiriting" />
                 </Form.Item>
               </Col>
             </Row>
@@ -294,17 +382,20 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
                   ]}
                 >
                   <TextArea
-                    onChange={(e) => {
-                      setData((prev) => {
-                        return { ...prev, description: e.target.value };
-                      });
-                    }}
                     placeholder="Ko'proq ma'lumot"
                     autoSize={{ minRows: 7, maxRows: 17 }}
                   />
                 </Form.Item>
               </Col>
             </Row>
+            <Space>
+              <Button onClick={onClose} htmlType="button">
+                Bekor qilish
+              </Button>
+              <Button type="primary" htmlType="submit">
+                Yaratish
+              </Button>
+            </Space>
           </Form>
         )}
       </Drawer>

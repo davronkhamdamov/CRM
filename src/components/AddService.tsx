@@ -54,6 +54,7 @@ const AddService = () => {
       .then(() => {
         setLoadingCnx(false);
         setOpen(false);
+        location.reload();
         messageApi.success("Xizmat muvaffaqqiyatli yaratildi", 2);
       })
       .catch(() => {

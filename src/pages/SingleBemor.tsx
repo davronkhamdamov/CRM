@@ -93,7 +93,7 @@ const SingleBemor: React.FC = () => {
               </Title>
             </Flex>
           </Flex>
-          <Divider type="vertical" style={{ height: "350px" }} />
+          <Divider type="vertical" style={{ height: "550px" }} />
           <Flex vertical style={{ width: "80%" }}>
             <Flex style={{ width: "100%" }} gap={50} align="center">
               {userData?.gender ? (
@@ -152,12 +152,37 @@ const SingleBemor: React.FC = () => {
             </Flex>
             <Divider />
             <Flex
-              style={{ width: "100%", minHeight: "20px" }}
-              gap={10}
-              vertical
+              style={{ width: "100%", height: "60px" }}
+              align="center"
+              gap={50}
             >
+              <Flex align="center" gap={10} style={{ width: "33.3%" }}>
+                Boshidan o'tkazgan yo'ldosh kasalliklari:{" "}
+                {userData?.placental_diseases
+                  ? userData?.placental_diseases
+                  : "Yuklanmoqda.."}
+              </Flex>
+              <Divider type="vertical" style={{ height: "100px" }} />
+              <Flex align="center" gap={10} style={{ width: "33.3%" }}>
+                Ushbu kasallikning rivojlanishi:{" "}
+                {userData?.disease_progression
+                  ? userData?.disease_progression
+                  : "Yuklanmoqda.."}
+              </Flex>
+              <Divider type="vertical" style={{ height: "100px" }} />
+              <Flex align="center" gap={10} style={{ width: "33.3%" }}>
+                Obyektiv tekshiruv:
+                <p>
+                  {userData?.objective_check
+                    ? userData?.objective_check
+                    : "Yuklanmoqda..."}
+                </p>
+              </Flex>
+            </Flex>
+            <Divider />
+            <Flex style={{ width: "100%", height: "60px" }} align="center">
               <Flex gap={10} align="center">
-                <IoMdInformationCircleOutline size={20} />{" "}
+                <IoMdInformationCircleOutline size={20} />
                 <p>Bemor haqida ko'proq ma'lumot:</p>
               </Flex>
               <p style={{ marginLeft: "10px" }}>

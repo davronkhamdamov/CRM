@@ -62,6 +62,7 @@ const EditProfile = () => {
     })
       .then((res) => res.json())
       .then(() => {
+        window.location.reload();
         setLoadingCnx(false);
         messageApi.success("Profile yangilandi", 2);
       })

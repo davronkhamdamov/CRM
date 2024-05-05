@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Badge,
   Button,
   Checkbox,
   Descriptions,
@@ -23,38 +22,7 @@ import {
 import dayjs from "dayjs";
 import Successfully from "./Success";
 import confetti from "canvas-confetti";
-import one from "../assets/image/teeth/1-removebg.png";
-import two from "../assets/image/teeth/2-removebg-preview.png";
-import three from "../assets/image/teeth/3-removebg-preview.png";
-import four from "../assets/image/teeth/4-removebg-preview.png";
-import five from "../assets/image/teeth/5-removebg-preview.png";
-import six from "../assets/image/teeth/6-removebg-preview.png";
-import seven from "../assets/image/teeth/7-removebg-preview.png";
-import eight from "../assets/image/teeth/8-removebg-preview.png";
-import nine from "../assets/image/teeth/9-removebg-preview.png";
-import ten from "../assets/image/teeth/10-removebg-preview.png";
-import eleven from "../assets/image/teeth/11-removebg-preview.png";
-import twelve from "../assets/image/teeth/12-removebg-preview.png";
-import thirteen from "../assets/image/teeth/13-removebg-preview.png";
-import fourteen from "../assets/image/teeth/14-removebg-preview.png";
-import fifteen from "../assets/image/teeth/15-removebg-preview.png";
-import sixteen from "../assets/image/teeth/16-removebg-preview.png";
-import seventeen from "../assets/image/teeth/17-removebg-preview.png";
-import eighteen from "../assets/image/teeth/18-removebg-preview.png";
-import nineteen from "../assets/image/teeth/19-removebg-preview.png";
-import twenty from "../assets/image/teeth/20-removebg-preview.png";
-import twentyone from "../assets/image/teeth/21-removebg-preview.png";
-import twentytwo from "../assets/image/teeth/22-removebg-preview.png";
-import twentythree from "../assets/image/teeth/23-removebg-preview.png";
-import twentyfour from "../assets/image/teeth/24-removebg-preview.png";
-import twentyfive from "../assets/image/teeth/25-removebg-preview.png";
-import twentysix from "../assets/image/teeth/26-removebg-preview.png";
-import twentyseven from "../assets/image/teeth/27-removebg-preview.png";
-import twentyeight from "../assets/image/teeth/28-removebg-preview.png";
-import twentynine from "../assets/image/teeth/29-removebg-preview.png";
-import thirty from "../assets/image/teeth/30-removebg-preview (1).png";
-import thirtyone from "../assets/image/teeth/31-removebg-preview.png";
-import thirtytwo from "../assets/image/teeth/32-removebg-preview.png";
+import teeth from "../lib/teeth";
 import { PiToothFill } from "react-icons/pi";
 import { GiTooth } from "react-icons/gi";
 
@@ -80,6 +48,7 @@ const SingleDocktorTreatment = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data.result);
         setCureData(data.result);
       });
     fetch(import.meta.env.VITE_APP_URL + "/service/by-category", {
@@ -91,586 +60,7 @@ const SingleDocktorTreatment = () => {
       .then((data) => {
         setServices(data.result);
       });
-  }, [params.id, saved_payload,payload]);
-
-  const teeth = [
-    {
-      id: 1,
-      img: one,
-      style: {
-        width: "60px",
-        transform: "translate(-15px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 20px)",
-      },
-      selected: false,
-      div_style: {
-        width: "50px",
-        height: "50px",
-        left: "37px",
-        top: "400px",
-      },
-    },
-    {
-      id: 2,
-      img: two,
-      style: {
-        width: "60px",
-        transform: "translate(-5px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "40px",
-        top: "335px",
-        width: "60px",
-        height: "60px",
-      },
-    },
-    {
-      id: 3,
-      img: three,
-      style: {
-        width: "60px",
-        transform: "translate(-7px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 15px)",
-      },
-      selected: false,
-      div_style: {
-        left: "50px",
-        top: "271px",
-        width: "65px",
-        height: "63px",
-      },
-    },
-    {
-      id: 4,
-      img: four,
-      style: {
-        width: "60px",
-        transform: "translate(-12px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, -15px)",
-      },
-      selected: false,
-      div_style: {
-        top: "225px",
-        left: "70px",
-        width: "55px",
-        height: "45px",
-      },
-    },
-    {
-      id: 5,
-      img: five,
-      style: {
-        width: "60px",
-        transform: "translate(-12px, 0)",
-      },
-      text_style: {
-        transform: "translate(-15px, -20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "90px",
-        top: "180px",
-        width: "55px",
-        height: "45px",
-      },
-    },
-    {
-      id: 6,
-      img: six,
-      style: {
-        width: "60px",
-        transform: "translate(-12px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, -20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "110px",
-        top: "135px",
-        width: "55px",
-        height: "45px",
-      },
-    },
-    {
-      id: 7,
-      img: seven,
-      style: {
-        width: "60px",
-        transform: "translate(-16px, 0)",
-      },
-      text_style: {
-        transform: "translate(-15px, -15px)",
-      },
-      selected: false,
-      div_style: {
-        left: "140px",
-        top: "90px",
-        width: "50px",
-        height: "45px",
-      },
-    },
-    {
-      id: 8,
-      img: eight,
-      style: {
-        width: "60px",
-        transform: "translate(-13px, 0)",
-      },
-      text_style: {
-        transform: "translate(20px, -25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "190px",
-        top: "70px",
-        width: "50px",
-        height: "50px",
-      },
-    },
-    {
-      id: 9,
-      img: nine,
-      style: {
-        width: "60px",
-        transform: "translate(-16px, 0)",
-      },
-      text_style: {
-        transform: "translate(20px, -25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "240px",
-        top: "70px",
-        width: "50px",
-        height: "50px",
-      },
-    },
-    {
-      id: 10,
-      img: ten,
-      style: {
-        width: "60px",
-        transform: "translate(-30px, 0)",
-      },
-      text_style: {
-        transform: "translate(45px, -20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "290px",
-        top: "90px",
-        width: "45px",
-        height: "45px",
-      },
-    },
-    {
-      id: 11,
-      img: eleven,
-      style: {
-        width: "60px",
-        transform: "translate(-22px, 0)",
-      },
-      text_style: {
-        transform: "translate(55px, 10px)",
-      },
-      selected: false,
-      div_style: {
-        left: "310px",
-        top: "135px",
-        width: "50px",
-        height: "45px",
-      },
-    },
-    {
-      id: 12,
-      img: twelve,
-      style: {
-        width: "60px",
-        transform: "translate(-18px, 0)",
-      },
-      text_style: {
-        transform: "translate(60px, 15px)",
-      },
-      selected: false,
-      div_style: {
-        left: "330px",
-        top: "180px",
-        width: "60px",
-        height: "50px",
-      },
-    },
-    {
-      id: 13,
-      img: thirteen,
-      style: {
-        width: "60px",
-        transform: "translate(-22px, 0)",
-      },
-      text_style: {
-        transform: "translate(60px, 10px)",
-      },
-      selected: false,
-      div_style: {
-        left: "345px",
-        top: "230px",
-        width: "55px",
-        height: "45px",
-      },
-    },
-    {
-      id: 14,
-      img: fourteen,
-      style: {
-        width: "60px",
-        transform: "translate(-17px, 0)",
-      },
-      text_style: {
-        transform: "translate(65px, 20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "355px",
-        top: "275px",
-        width: "60px",
-        height: "65px",
-      },
-    },
-    {
-      id: 15,
-      img: fifteen,
-      style: {
-        width: "60px",
-        transform: "translate(-25px, 0)",
-      },
-      text_style: {
-        transform: "translate(60px, 15px)",
-      },
-      selected: false,
-      div_style: {
-        left: "370px",
-        top: "340px",
-        width: "50px",
-        height: "60px",
-      },
-    },
-    {
-      id: 16,
-      img: sixteen,
-      style: {
-        width: "65px",
-        transform: "translate(-22px, 0)",
-      },
-      text_style: {
-        transform: "translate(60px, 10px)",
-      },
-      selected: false,
-      div_style: {
-        left: "375px",
-        top: "400px",
-        width: "55px",
-        height: "55px",
-      },
-    },
-    {
-      id: 17,
-      img: seventeen,
-      style: {
-        width: "65px",
-        transform: "translate(-25px, 0)",
-      },
-      text_style: {
-        transform: "translate(80px, 20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "370px",
-        top: "485px",
-        width: "60px",
-        height: "64px",
-      },
-    },
-    {
-      id: 18,
-      img: eighteen,
-      style: {
-        width: "60px",
-        transform: "translate(-20px, 0)",
-      },
-      text_style: {
-        transform: "translate(80px, 20px)",
-      },
-      selected: false,
-      div_style: {
-        left: "365px",
-        top: "555px",
-        width: "65px",
-        height: "64px",
-      },
-    },
-    {
-      id: 19,
-      img: nineteen,
-      style: {
-        width: "65px",
-        transform: "translate(-18px, 0)",
-      },
-      text_style: {
-        transform: "translate(80px, 30px)",
-      },
-      selected: false,
-      div_style: {
-        left: "355px",
-        top: "625px",
-        width: "70px",
-        height: "70px",
-      },
-    },
-    {
-      id: 20,
-      img: twenty,
-      style: {
-        width: "60px",
-        transform: "translate(-22px, 0)",
-      },
-      text_style: {
-        transform: "translate(60px, 15px)",
-      },
-      selected: false,
-      div_style: {
-        left: "350px",
-        top: "695px",
-        width: "50px",
-        height: "50px",
-      },
-    },
-    {
-      id: 21,
-      img: twentyone,
-      style: {
-        width: "60px",
-        transform: "translate(-23px, 0)",
-      },
-      text_style: {
-        transform: "translate(55px, 30px)",
-      },
-      selected: false,
-      div_style: {
-        left: "330px",
-        top: "745px",
-        width: "50px",
-        height: "45px",
-      },
-    },
-    {
-      id: 22,
-      img: twentytwo,
-      style: {
-        width: "45px",
-        transform: "translate(-20px, 0)",
-      },
-      text_style: {
-        transform: "translate(40px, 45px)",
-      },
-      selected: false,
-      div_style: {
-        left: "320px",
-        top: "790px",
-        width: "40px",
-        height: "50px",
-      },
-    },
-    {
-      id: 23,
-      img: twentythree,
-      style: {
-        width: "40px",
-        transform: "translate(-20px, 0)",
-      },
-      text_style: {
-        transform: "translate(10px, 50px)",
-      },
-      selected: false,
-      div_style: {
-        left: "280px",
-        top: "810px",
-        width: "35px",
-        height: "55px",
-      },
-    },
-    {
-      id: 24,
-      img: twentyfour,
-      style: {
-        width: "40px",
-        transform: "translate(-20px, 0)",
-      },
-      text_style: {
-        transform: "translate(10px, 50px)",
-      },
-      selected: false,
-      div_style: {
-        left: "240px",
-        top: "815px",
-        width: "35px",
-        height: "50px",
-      },
-    },
-    {
-      id: 25,
-      img: twentyfive,
-      style: {
-        width: "40px",
-        transform: "translate(-18px, 0)",
-      },
-      text_style: {
-        transform: "translate(10px, 55px)",
-      },
-      selected: false,
-      div_style: {
-        left: "195px",
-        top: "815px",
-        width: "40px",
-        height: "50px",
-      },
-    },
-    {
-      id: 26,
-      img: twentysix,
-      style: {
-        width: "40px",
-        transform: "translate(-17px, 0)",
-      },
-      text_style: {
-        transform: "translate(10px, 50px)",
-      },
-      selected: false,
-      div_style: {
-        left: "155px",
-        top: "810px",
-        width: "40px",
-        height: "50px",
-      },
-    },
-    {
-      id: 27,
-      img: twentyseven,
-      style: {
-        width: "45px",
-        transform: "translate(-15px, -3px)",
-      },
-      text_style: {
-        transform: "translate(-25px, 45px)",
-      },
-      selected: false,
-      div_style: {
-        left: "105px",
-        top: "790px",
-        width: "50px",
-        height: "50px",
-      },
-    },
-    {
-      id: 28,
-      img: twentyeight,
-      style: {
-        width: "60px",
-        transform: "translate(-25px, 0)",
-      },
-      text_style: {
-        transform: "translate(-25px, 50px)",
-      },
-      selected: false,
-      div_style: {
-        left: "80px",
-        top: "745px",
-        height: "45px",
-        width: "45px",
-      },
-    },
-    {
-      id: 29,
-      img: twentynine,
-      style: {
-        width: "60px",
-        transform: "translate(-22px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "65px",
-        top: "695px",
-        height: "50px",
-        width: "53px",
-      },
-    },
-    {
-      id: 30,
-      img: thirty,
-      style: {
-        width: "60px",
-        transform: "translate(-15px, 0)",
-      },
-      text_style: {
-        transform: "translate(-25px , 25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "45px",
-        top: "625px",
-        width: "65px",
-        height: "68px",
-      },
-    },
-    {
-      id: 31,
-      img: thirtyone,
-      style: {
-        width: "60px",
-        transform: "translate(-15px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "35px",
-        top: "550px",
-        height: "70px",
-        width: "65px",
-      },
-    },
-    {
-      id: 32,
-      img: thirtytwo,
-      style: {
-        width: "60px",
-        transform: "translate(-20px, 0)",
-      },
-      text_style: {
-        transform: "translate(-20px, 25px)",
-      },
-      selected: false,
-      div_style: {
-        left: "25px",
-        top: "485px",
-        width: "60px",
-        height: "60px",
-      },
-    },
-  ];
+  }, [params.id, saved_payload, payload]);
 
   const items: DescriptionsProps["items"] = [
     {
@@ -695,12 +85,38 @@ const SingleDocktorTreatment = () => {
     },
     {
       key: "5",
-      label: "Holati",
-      children: (
-        <Flex gap={100} align="center">
-          <Badge status="processing" text={cureData?.is_done} />
-        </Flex>
-      ),
+      label: "Boshidan o'tkazgan yo'ldosh kasalliklari",
+      children: cureData?.placental_disease
+        ? cureData?.placental_disease
+        : "Hech qanday malumot topilmadi",
+    },
+    {
+      key: "6",
+      label: "Ushbu kasallikning rivojlanishi",
+      children: cureData?.disease_progression
+        ? cureData?.disease_progression
+        : "Hech qanday malumot topilmadi",
+    },
+    {
+      key: "7",
+      label: "Obyektiv tekshiruv",
+      children: cureData?.objective_check
+        ? cureData?.objective_check
+        : "Hech qanday malumot topilmadi",
+    },
+    {
+      key: "8",
+      label: "Milk va olveola xolati",
+      children: cureData?.milk
+        ? cureData?.milk
+        : "Hech qanday malumot topilmadi",
+    },
+    {
+      key: "9",
+      label: "Bemor xaqida malumot",
+      children: cureData?.description
+        ? cureData?.description
+        : "Hech qanday malumot topilmadi",
     },
   ];
 
@@ -802,6 +218,15 @@ const SingleDocktorTreatment = () => {
           />
           <br />
           <br />
+          <Button
+            type="primary"
+            style={{ width: "200px", height: "40px" }}
+            onClick={() => finish("Yakunlandi")}
+          >
+            Davolashni yakunlash
+          </Button>
+          <br />
+          <br />
           <Flex
             justify="space-around"
             style={{
@@ -864,10 +289,9 @@ const SingleDocktorTreatment = () => {
                 })}
               </div>
             </Flex>
-            <Flex vertical style={{ width: "50%" }} align="center">
+            <Flex vertical style={{ width: "50%" }}>
               <Flex
                 vertical
-                align="center"
                 style={{
                   maxHeight: "55%",
                   overflowY: "auto",
@@ -915,11 +339,11 @@ const SingleDocktorTreatment = () => {
                 </Flex>
 
                 {payload[0] && (
-                  <Flex style={{ marginTop: "30px" }} vertical align="center">
-                    <h2 style={{ textAlign: "center" }}>Tanlangan xizmatlar</h2>
+                  <Flex style={{ marginTop: "30px" }} vertical>
+                    <h2>Tanlangan xizmatlar</h2>
                     <br />
                     <br />
-                    <Flex gap={10} justify="center" wrap="wrap">
+                    <Flex gap={10} wrap="wrap">
                       {payload[0]?.services?.length ? (
                         payload[0]?.services?.map((e) => {
                           return (
@@ -933,7 +357,7 @@ const SingleDocktorTreatment = () => {
                                 width: "max-content",
                                 padding: "0 10px",
                                 borderRadius: "10px",
-                                height: "40px",
+                                height: "35px",
                               }}
                             >
                               <p style={{ fontSize: "20px" }}>
@@ -1016,44 +440,48 @@ const SingleDocktorTreatment = () => {
                             >
                               {category.name}
                             </p>
-                            {category.services.map((service) => {
-                              return (
-                                <Checkbox
-                                  key={service.id}
-                                  checked={payload.some((el) =>
-                                    el.services?.find((e) => e == service.id)
-                                  )}
-                                  onChange={() => {
-                                    setPayload((prev) =>
-                                      prev?.map((e) => {
-                                        if (!e.services?.includes(service.id)) {
+                            <Flex vertical gap={10}>
+                              {category.services.map((service) => {
+                                return (
+                                  <Checkbox
+                                    key={service.id}
+                                    checked={payload.some((el) =>
+                                      el.services?.find((e) => e == service.id)
+                                    )}
+                                    onChange={() => {
+                                      setPayload((prev) =>
+                                        prev?.map((e) => {
+                                          if (
+                                            !e.services?.includes(service.id)
+                                          ) {
+                                            return {
+                                              id: e.id,
+                                              services: [
+                                                ...(e.services || []),
+                                                service.id,
+                                              ],
+                                            };
+                                          }
                                           return {
                                             id: e.id,
                                             services: [
-                                              ...(e.services || []),
-                                              service.id,
+                                              ...(e.services.filter(
+                                                (ele) => ele !== service.id
+                                              ) || []),
                                             ],
                                           };
-                                        }
-                                        return {
-                                          id: e.id,
-                                          services: [
-                                            ...(e.services.filter(
-                                              (ele) => ele !== service.id
-                                            ) || []),
-                                          ],
-                                        };
-                                      })
-                                    );
-                                  }}
-                                >
-                                  {service.name}
-                                  <Tag style={{ marginLeft: "10px" }}>
-                                    Xizmat narxi: {service.price} so'm
-                                  </Tag>
-                                </Checkbox>
-                              );
-                            })}
+                                        })
+                                      );
+                                    }}
+                                  >
+                                    {service.name}
+                                    <Tag style={{ marginLeft: "10px" }}>
+                                      Xizmat narxi: {service.price} so'm
+                                    </Tag>
+                                  </Checkbox>
+                                );
+                              })}
+                            </Flex>
                           </div>
                         );
                       })}
@@ -1062,13 +490,22 @@ const SingleDocktorTreatment = () => {
                 </Modal>
               </Flex>
               <Flex
-                style={{ paddingTop: "20px", height: "45%", width: "100%" }}
+                style={{
+                  paddingTop: "20px",
+                  height: "45%",
+                }}
                 vertical
               >
-                <h2 style={{ textAlign: "center" }}>Saqlangan davolashlar</h2>
+                <h2>Saqlangan davolashlar</h2>
                 <br />
                 {saved_payload[0] ? (
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <table
+                    style={{
+                      width: "100%",
+                      marginBottom: "100px",
+                      borderCollapse: "collapse",
+                    }}
+                  >
                     <tr className="table_wrapper">
                       <th className="table_item">Tish id</th>
                       <th className="table_item">Xizmat nomi</th>
@@ -1096,22 +533,22 @@ const SingleDocktorTreatment = () => {
                     </tr>
                   </table>
                 ) : (
-                  <Flex align="center" vertical gap={10}>
-                    <PiToothFill size={40} />
-                    <p>Hech qanday xizmat tanlanmagan</p>
-                  </Flex>
+                  <div>
+                    <Flex
+                      style={{ width: "max-content" }}
+                      vertical
+                      align="center"
+                      gap={10}
+                    >
+                      <PiToothFill size={40} />
+                      <p>Hech qanday xizmat tanlanmagan</p>
+                    </Flex>
+                  </div>
                 )}
+                <br />
               </Flex>
             </Flex>
           </Flex>
-          <br />
-          <Button
-            type="primary"
-            style={{ width: "max-content" }}
-            onClick={() => finish("Yakunlandi")}
-          >
-            Davolashni yakunlash
-          </Button>
         </Flex>
       </div>
       {isSuccess && (

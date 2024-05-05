@@ -39,6 +39,7 @@ const CreatePaymentType: React.FC<EditModalProps> = ({ data, setOpen }) => {
       .then(() => {
         setOpen({ id: "", isOpen: false });
         setLoadingCnx(false);
+        location.reload();
         messageApi.success("To'lov turi muvaffaqqiyatli yangilandi", 2);
       })
       .catch((err) => {

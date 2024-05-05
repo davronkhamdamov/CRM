@@ -58,6 +58,11 @@ export interface UserData {
   created_at?: Date;
   img_url: string;
   description: string;
+  prikus: string;
+  disease_progression: string;
+  objective_check: string;
+  milk: string;
+  placental_diseases: string;
 }
 export interface PaymentDataType {
   id: string;
@@ -78,7 +83,6 @@ export interface SuccessProps {
 export interface ServiceFieldType {
   isActive: boolean;
   price: number;
-  product_price: number;
   service_name: string;
 }
 export interface Staffs {
@@ -109,6 +113,12 @@ export interface CureDataType {
   id: string;
   payed_price: number;
   price: number;
+  description: string;
+  placental_disease: string;
+  prikus: string;
+  disease_progression: string;
+  objective_check: string;
+  milk: string;
 }
 export interface ServiceType {
   name: string;

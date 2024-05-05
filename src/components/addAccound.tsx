@@ -6,6 +6,7 @@ import {
   DatePicker,
   Drawer,
   Form,
+  FormProps,
   Input,
   Row,
   Select,
@@ -16,11 +17,11 @@ import {
 import dayjs from "dayjs";
 import { LoadingProvider } from "../App";
 import TextArea from "antd/es/input/TextArea";
+import { UserData } from "../types/type";
 
 const { Option } = Select;
 const CreateAccount: FC = () => {
   const [open, setOpen] = useState(false);
-  const [payload, setPayload] = useState({});
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -31,12 +32,15 @@ const CreateAccount: FC = () => {
     setOpen(false);
   };
   const token = localStorage.getItem("auth");
-  const onSubmit = () => {
+
+  const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
+    console.log(actionData);
+
     setLoadingCnx(true);
     messageApi.loading("Bemor yaratilmoqda");
     fetch(import.meta.env.VITE_APP_URL + "/user", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify(actionData),
       headers: {
         "Content-type": "application/json",
 
@@ -73,20 +77,12 @@ const CreateAccount: FC = () => {
             paddingBottom: 80,
           },
         }}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Bekor qilish</Button>
-            <Button onClick={onSubmit} type="primary">
-              Yaratish
-            </Button>
-          </Space>
-        }
       >
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={onSubmit}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="first_name"
+                name="name"
                 label="Ism"
                 rules={[
                   {
@@ -95,19 +91,12 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos ism kiriting"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, name: e.target.value };
-                    })
-                  }
-                />
+                <Input placeholder="Iltimos ism kiriting" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="last_name"
+                name="surname"
                 label="Familya"
                 rules={[
                   {
@@ -116,21 +105,14 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Familya kiriting"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, surname: e.target.value };
-                    })
-                  }
-                />
+                <Input placeholder="Familya kiriting" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="adress"
+                name="address"
                 label="Yashash joyi"
                 rules={[
                   {
@@ -139,19 +121,12 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos yashash joyini kiriting"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, address: e.target.value };
-                    })
-                  }
-                />
+                <Input placeholder="Iltimos yashash joyini kiriting" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="phone"
+                name="phone_number"
                 label="Telefon"
                 rules={[
                   {
@@ -160,14 +135,7 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos telefon nomer kiriting"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, phone_number: e.target.value };
-                    })
-                  }
-                />
+                <Input placeholder="Iltimos telefon nomer kiriting" />
               </Form.Item>
             </Col>
           </Row>
@@ -183,14 +151,7 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Select
-                  placeholder="Iltimos jinsingizni tanlang"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, gender: e };
-                    })
-                  }
-                >
+                <Select placeholder="Iltimos jinsingizni tanlang">
                   <Option value="male">Erkak</Option>
                   <Option value="female">Ayol</Option>
                 </Select>
@@ -207,21 +168,14 @@ const CreateAccount: FC = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos kasbingizni kiriting"
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, job: e.target.value };
-                    })
-                  }
-                />
+                <Input placeholder="Iltimos kasbingizni kiriting" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="birth_date"
+                name="date_birth"
                 label="Tug'ilgan sana"
                 rules={[
                   {
@@ -234,16 +188,98 @@ const CreateAccount: FC = () => {
                   style={{
                     width: "100%",
                   }}
-                  onChange={(e) => {
-                    setPayload((prev) => {
-                      return { ...prev, date_birth: dayjs(e).add(1, "day") };
-                    });
-                  }}
                   placeholder="Tug'ilgan sana"
                   defaultPickerValue={dayjs("2010-04-13")}
                   maxDate={dayjs(new Date())}
                   getPopupContainer={(trigger) => trigger.parentElement!}
                 />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="prikus"
+                label="Prikus"
+                rules={[
+                  {
+                    message: "Prikus",
+                  },
+                ]}
+              >
+                <Select placeholder="Prikus">
+                  <Option value="ortognatik">Ortognatik</Option>
+                  <Option value="progenik">Progenik</Option>
+                  <Option value="biprognatik">Biprognatik</Option>
+                  <Option value="distal">Distal</Option>
+                  <Option value="mezial">Mezial</Option>
+                  <Option value="chuqur">Chuqur</Option>
+                  <Option value="ochiq">Ochiq</Option>
+                  <Option value="kesuvchi">Kesuvchi</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col style={{ width: "100%" }}>
+              <Form.Item
+                name="placental_diseases"
+                label="Boshidan o'tkazgan yo'ldosh kasalliklarini"
+                rules={[
+                  {
+                    message:
+                      "Boshidan o'tkazgan yo'ldosh kasalliklarini kiriting",
+                  },
+                ]}
+              >
+                <TextArea
+                  placeholder="Boshidan o'tkazgan yo'ldosh kasalliklarini..."
+                  autoSize={{ minRows: 2, maxRows: 5 }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col style={{ width: "100%" }}>
+              <Form.Item
+                name="milk"
+                label="Milk va olveola xolati"
+                rules={[
+                  {
+                    message: "Milk va olveola xolati",
+                  },
+                ]}
+              >
+                <TextArea
+                  placeholder="Milk va olveola xolati"
+                  autoSize={{ minRows: 2, maxRows: 5 }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="disease_progression"
+                label="Ushbu kasallikning rivojlanishi"
+                rules={[
+                  {
+                    message: "Ushbu kasallikning rivojlanishi",
+                  },
+                ]}
+              >
+                <Input placeholder="Ushbu kasallikning rivojlanishi..." />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="objective_check"
+                label="Obyektiv tekshiruv"
+                rules={[
+                  {
+                    message: "Obyektiv tekshiruv",
+                  },
+                ]}
+              >
+                <Input placeholder="Obyektiv tekshiruv kiriting" />
               </Form.Item>
             </Col>
           </Row>
@@ -259,17 +295,20 @@ const CreateAccount: FC = () => {
                 ]}
               >
                 <TextArea
-                  onChange={(e) =>
-                    setPayload((prev) => {
-                      return { ...prev, description: e.target.value };
-                    })
-                  }
                   placeholder="Ko'proq ma'lumot"
                   autoSize={{ minRows: 7, maxRows: 17 }}
                 />
               </Form.Item>
             </Col>
           </Row>
+          <Space>
+            <Button onClick={onClose} htmlType="button">
+              Bekor qilish
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Yaratish
+            </Button>
+          </Space>
         </Form>
         {contextHolder}
       </Drawer>

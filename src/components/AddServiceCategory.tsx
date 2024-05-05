@@ -30,6 +30,7 @@ const AddServiceCategory = () => {
       .then(() => {
         setLoadingCnx(false);
         setOpen(false);
+        location.reload();
         messageApi.success("Toifa muvaffaqqiyatli yaratildi", 2);
       })
       .catch(() => {

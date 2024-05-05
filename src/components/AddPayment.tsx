@@ -37,6 +37,7 @@ const AddPayment: React.FC<EditModalProps> = ({ data, setOpen }) => {
         setLoading(false);
         setPaymentTypeData(results.result);
         setOpen({ isOpen: false, id: "" });
+        location.reload();
         setLoadingCnx(false);
         messageApi.success("To'lov muvaffaqqiyatli yaratildi", 2);
       })

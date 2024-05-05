@@ -51,6 +51,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
           id: "",
           isOpen: false,
         });
+        location.reload();
         setLoadingCnx(false);
         messageApi.success("Bemor muvaffaqqiyatli biriktirildi", 2);
       })

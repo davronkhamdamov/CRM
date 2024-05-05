@@ -35,6 +35,7 @@ const EditServiceCategory: React.FC<EditModalProps> = ({ data, setOpen }) => {
       .then(() => {
         setLoadingCnx(false);
         setOpen({ id: "", isOpen: false });
+        location.reload();
         messageApi.success("Toifa muvaffaqqiyatli yaratildi", 2);
       })
       .catch(() => {
