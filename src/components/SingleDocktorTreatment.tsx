@@ -89,7 +89,6 @@ const SingleDocktorTreatment = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-alert(JSON.stringify(data))
         setServices(data.result);
       });
   }, [params.id, saved_payload,payload]);
@@ -1018,7 +1017,6 @@ alert(JSON.stringify(data))
                               {category.name}
                             </p>
                             {category.services.map((service) => {
-alert(service.name)
                               return (
                                 <Checkbox
                                   key={service.id}
