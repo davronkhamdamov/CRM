@@ -22,6 +22,7 @@ import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { LoadingProvider } from "../App";
 import EditService from "./EditService";
+import formatMoney from "../lib/money_format";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -71,32 +72,27 @@ const ServicesTable = () => {
       title: "Xizmat nomi",
       dataIndex: "name",
       width: "20%",
-      align: "center",
     },
     {
       title: "Toifasi",
       dataIndex: "category_name",
-      align: "center",
       width: "15%",
     },
     {
       title: "Narxi",
       dataIndex: "",
-      align: "center",
       width: "15%",
-      render: ({ price }) => `${price} so'm`,
+      render: ({ price }) => formatMoney(price),
     },
     {
       title: "Yaratilgan vaqti",
       dataIndex: "create_at",
-      align: "center",
       render: (record) => `${dayjs(record).format("DD-MM-YYYY")}`,
       width: "15%",
     },
     {
       title: "Xizmat holati",
       dataIndex: "status",
-      align: "center",
       render: (record) => {
         return record ? (
           <Tag
@@ -128,7 +124,6 @@ const ServicesTable = () => {
       title: "Bajariladigan ishlar",
       dataIndex: "operation",
       key: "operation",
-      align: "center",
       width: "10%",
       render: (_, record) => {
         return (

@@ -20,6 +20,7 @@ import EditAccound from "./EditAccound";
 import dayjs from "dayjs";
 import AddPayment from "./AddPayment";
 import AddDoctorTreatment from "./AddDoctorTreatment";
+import formatMoney from "../lib/money_format";
 
 const getuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -88,6 +89,7 @@ const TableComponent: FC = () => {
     {
       title: "Jinsi",
       dataIndex: "gender",
+      render: (gender) => (gender == "male" ? "Erkak" : "Ayol"),
       width: "10%",
     },
     {
@@ -106,10 +108,10 @@ const TableComponent: FC = () => {
       title: "Balans",
       dataIndex: "balance",
       render: (balance) => {
-        if (+balance.replaceAll(" ", "") < 0) {
-          return <Tag color="error">{balance} so'm</Tag>;
+        if (balance < 0) {
+          return <Tag color="error">{formatMoney(balance)}</Tag>;
         }
-        return <Tag color="default">{balance} so'm</Tag>;
+        return <Tag color="default">{formatMoney(balance)}</Tag>;
       },
       width: "15%",
     },

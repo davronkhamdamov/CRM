@@ -180,16 +180,16 @@ const teeth = [
     img: nine,
     style: {
       width: "60px",
-      transform: "translate(-160px, 0)",
+      transform: "translate(-25px, 0)",
     },
     text_style: {
-      transform: "translate(-120px, -25px)",
+      transform: "translate(15px, -25px)",
     },
     selected: false,
     div_style: {
-      left: "240px",
+      left: "110px",
       top: "70px",
-      width: "50px",
+      width: "40px",
       height: "50px",
     },
   },

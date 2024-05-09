@@ -41,7 +41,7 @@ const DocktorTreatment = () => {
 
   const columns: ColumnsType<CureDataType> = [
     {
-      title: "Ismi",
+      title: "Ismi2",
       sorter: true,
       render: (record) => {
         return record.user_name + " " + record.user_surname;
@@ -51,29 +51,15 @@ const DocktorTreatment = () => {
     {
       title: "Shifokor",
       dataIndex: "",
-      filters: [
-        {
-          text: "Birinchi doktor",
-          value: "first",
-        },
-        {
-          text: "Ikkinchi doktor",
-          value: "second",
-        },
-        {
-          text: "Uchinchi doktor",
-          value: "third",
-        },
-      ],
       render: (staff) => `${staff?.staff_name + " " + staff.staff_surname}`,
       width: "13%",
     },
     {
       title: "Davolash vaqti",
       render: (date) =>
-        `${dayjs(date?.start_time).format("HH:MM")} - ${dayjs(
+        `${dayjs(date?.start_time).format("HH:mm")} - ${dayjs(
           date?.end_time
-        ).format("HH:MM DD-MM-YYYY")}`,
+        ).format("HH:mm DD-MM-YYYY")}`,
       width: "15%",
     },
     {
@@ -261,17 +247,12 @@ const DocktorTreatment = () => {
   const getPanelValue = async (searchText: string) =>
     !searchText ? [] : await mockVal(searchText);
 
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
-
   return (
     <>
       <AutoComplete
         value={value}
         options={options}
         style={{ width: 300, marginBottom: 20 }}
-        onSelect={onSelect}
         onSearch={async (text) => setOptions(await getPanelValue(text))}
         onChange={onChange}
         placeholder="Davolashni qidirish"

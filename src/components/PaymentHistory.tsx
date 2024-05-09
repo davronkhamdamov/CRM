@@ -2,10 +2,12 @@ import React, { FC, useEffect, useState } from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
+import formatMoney from "../lib/money_format";
 
 const { Column } = Table;
 
 interface DataType {
+  id: string;
   key: React.Key;
   name: string;
   lastName: string;
@@ -48,17 +50,21 @@ const PaymentHistory: FC<{ patient_id: string | undefined }> = ({
       title: "Tolov miqdori",
       dataIndex: "amount",
       render: (balance) => {
-        if (+balance.replace(" ", "") < 0) {
-          return <Tag color="error">{balance} so'm</Tag>;
+        if (balance < 0) {
+          return <Tag color="error">{formatMoney(balance)}</Tag>;
         }
-        return <Tag color="default">{balance} so'm</Tag>;
+        return <Tag color="default">{formatMoney(balance)}</Tag>;
       },
       width: "15%",
     },
   ];
 
   return (
-    <Table columns={columns} dataSource={userData}>
+    <Table
+      columns={columns}
+      dataSource={userData}
+      rowKey={(record) => record.id}
+    >
       <Column title="To'lov miqdori" dataIndex="name" key="name" />
       <Column title="To'lov turi" dataIndex="lastName" key="lastName" />
       <Column title="Sana" dataIndex="age" key="age" />

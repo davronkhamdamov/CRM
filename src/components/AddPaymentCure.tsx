@@ -30,7 +30,6 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
     setOpen({ isOpen: false, id: "" });
   };
   const PayWithBalance: FormProps<CureFieldType>["onFinish"] = (e) => {
-    console.log(e.balance_amount);
     setLoadingCnx(true);
     fetch(`${import.meta.env.VITE_APP_URL}/cure/pay-balance/` + data.id, {
       method: "PUT",

@@ -16,6 +16,7 @@ import ServiceHistory from "../components/ServiceHistory ";
 import userImage from "../assets/image/Sample_User_Icon.png";
 import { TbCameraPlus } from "react-icons/tb";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import formatMoney from "../lib/money_format";
 
 const SingleBemor: React.FC = () => {
   const params = useParams();
@@ -206,13 +207,10 @@ const SingleBemor: React.FC = () => {
                 <span
                   style={{
                     fontSize: "30px",
-                    color:
-                      +(userData?.balance?.replace(" ", "") || 0) < 0
-                        ? "red"
-                        : "black",
+                    color: (userData?.balance || 0) < 0 ? "red" : "black",
                   }}
                 >
-                  {userData?.balance ? userData?.balance : "0"} so'm
+                  {formatMoney(userData?.balance || 0)}
                 </span>
               </Flex>
             </Flex>

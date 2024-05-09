@@ -29,6 +29,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
     });
   };
   const token = localStorage.getItem("auth");
+
   const onSubmit = (values: any) => {
     setLoadingCnx(true);
     fetch(import.meta.env.VITE_APP_URL + "/cure", {
@@ -37,8 +38,8 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
         staff_id: values.doctor_id,
         user_id: data.id,
         is_done: "Kutilmoqda",
-        start_time: dayjs(values.cure_time[0]).toISOString(),
-        end_time: dayjs(values.cure_time[1]).toISOString(),
+        start_time: dayjs(values.cure_time[0]).add(5, "hour").toISOString(),
+        end_time: dayjs(values.cure_time[1]).add(5, "hour").toISOString(),
       }),
       headers: {
         "Content-type": "application/json",
@@ -51,7 +52,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
           id: "",
           isOpen: false,
         });
-        location.reload();
+        // location.reload();
         setLoadingCnx(false);
         messageApi.success("Bemor muvaffaqqiyatli biriktirildi", 2);
       })

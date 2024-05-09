@@ -25,6 +25,7 @@ import confetti from "canvas-confetti";
 import teeth from "../lib/teeth";
 import { PiToothFill } from "react-icons/pi";
 import { GiTooth } from "react-icons/gi";
+import formatMoney from "../lib/money_format";
 
 const SingleDocktorTreatment = () => {
   const params = useParams();
@@ -48,7 +49,6 @@ const SingleDocktorTreatment = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.result);
         setCureData(data.result);
       });
     fetch(import.meta.env.VITE_APP_URL + "/service/by-category", {
@@ -135,10 +135,8 @@ const SingleDocktorTreatment = () => {
         }),
       })
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
           setIsSuccess(true);
-          console.log(data);
-
           const colors = ["#FFF000", "#00FF00", "#FF0000"];
           const duration = 2 * 1000;
           const end = Date.now() + duration;
@@ -364,7 +362,8 @@ const SingleDocktorTreatment = () => {
                                 {getName(e)?.name}
                               </p>
                               <Tag style={{ marginLeft: "10px" }}>
-                                Xizmat narxi: {getName(e)?.price} so'm
+                                Xizmat narxi:{" "}
+                                {formatMoney(Number(getName(e)?.price))}
                               </Tag>
                             </Flex>
                           );
@@ -476,7 +475,8 @@ const SingleDocktorTreatment = () => {
                                   >
                                     {service.name}
                                     <Tag style={{ marginLeft: "10px" }}>
-                                      Xizmat narxi: {service.price} so'm
+                                      Xizmat narxi:{" "}
+                                      {formatMoney(+service.price)} so'm
                                     </Tag>
                                   </Checkbox>
                                 );
@@ -520,7 +520,7 @@ const SingleDocktorTreatment = () => {
                               {getName(service)?.name}
                             </td>
                             <td className="table_item">
-                              {getName(service)?.price}
+                              {formatMoney(Number(getName(service)?.price))}
                             </td>
                           </tr>
                         );
@@ -529,7 +529,9 @@ const SingleDocktorTreatment = () => {
                     <tr className="table_wrapper">
                       <th className="table_item"></th>
                       <th className="table_item">Jami</th>
-                      <th className="table_item">{calculateSumOfPayload()}</th>
+                      <th className="table_item">
+                        {formatMoney(calculateSumOfPayload())}
+                      </th>
                     </tr>
                   </table>
                 ) : (

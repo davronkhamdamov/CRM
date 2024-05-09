@@ -70,7 +70,7 @@ const CreatePaymentType: React.FC<EditModalProps> = ({ data, setOpen }) => {
     <>
       {contextHolder}
       <Drawer
-        title="Yangi to'lov turini qo'shish"
+        title="To'lov turini yangilash"
         width={500}
         onClose={onClose}
         open={data.isOpen}

@@ -58,7 +58,7 @@ const EditServiceCategory: React.FC<EditModalProps> = ({ data, setOpen }) => {
   return (
     <>
       <Drawer
-        title="Yangi toifa qo'shish"
+        title="Toifani yangilash"
         width={400}
         onClose={onClose}
         open={data.isOpen}

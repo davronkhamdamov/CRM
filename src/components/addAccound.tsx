@@ -34,8 +34,6 @@ const CreateAccount: FC = () => {
   const token = localStorage.getItem("auth");
 
   const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
-    console.log(actionData);
-
     setLoadingCnx(true);
     messageApi.loading("Bemor yaratilmoqda");
     fetch(import.meta.env.VITE_APP_URL + "/user", {

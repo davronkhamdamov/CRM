@@ -10,6 +10,7 @@ import {
   MinusCircleOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
+import formatMoney from "../lib/money_format";
 
 const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
   patient_id,
@@ -50,13 +51,13 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {
-      title: "To'langan summa",
+      title: "To'langan summa1",
       dataIndex: "payed_price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {

@@ -31,7 +31,6 @@ const SingleDocktor: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         setUserData(data.result);
-        console.log(data);
       });
   }, [location, params.id, token]);
 

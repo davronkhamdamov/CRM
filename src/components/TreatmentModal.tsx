@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { TableProp, TreatmentType } from "../types/type";
 import { Modal } from "antd";
+import formatMoney from "../lib/money_format";
 
 const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
   const token = localStorage.getItem("auth");
@@ -45,7 +46,7 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
               <tr className="table_wrapper">
                 <td className="table_item">{e.tooth_id}</td>
                 <td className="table_item">{e.service_name}</td>
-                <td className="table_item">{e.price}</td>
+                <td className="table_item">{formatMoney(+e?.price)}</td>
               </tr>
             );
           })}
@@ -53,9 +54,11 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
             <th className="table_item"></th>
             <th className="table_item">Jami</th>
             <th className="table_item">
-              {treatments?.reduce((a, e) => {
-                return a + +e.price.replace(" ", "");
-              }, 0)}
+              {formatMoney(
+                treatments?.reduce((a, e) => {
+                  return a + +e.price;
+                }, 0)
+              )}
             </th>
           </tr>
         </table>

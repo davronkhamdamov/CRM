@@ -9,6 +9,7 @@ import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { HiOutlineCash } from "react-icons/hi";
 import { IoCardOutline } from "react-icons/io5";
+import formatMoney from "../lib/money_format";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -45,7 +46,7 @@ const PaymentsTable = () => {
       dataIndex: "amount",
       align: "center",
       width: "20%",
-      render: (amount) => `${amount} so'm`,
+      render: (amount) => formatMoney(amount),
     },
     {
       title: "Sana",

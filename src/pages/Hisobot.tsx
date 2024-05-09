@@ -1,4 +1,5 @@
 import { Flex, Layout, Typography, theme } from "antd";
+import StaffsTable from "../components/StaffsTable";
 const { Title } = Typography;
 const { Content } = Layout;
 
@@ -21,6 +22,7 @@ const Hisobot = () => {
           <Title style={{ margin: 0 }}>Hisobotlar</Title>
         </Flex>
       </div>
+      <StaffsTable />
     </Content>
   );
 };

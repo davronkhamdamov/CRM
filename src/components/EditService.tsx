@@ -107,7 +107,7 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
             onFinish={onSubmit}
             initialValues={{
               name: serviceData.name,
-              price: serviceData?.price?.replace(" ", ""),
+              price: serviceData?.price,
               status: serviceData.status,
               service_category_id: serviceData.service_category_id,
             }}

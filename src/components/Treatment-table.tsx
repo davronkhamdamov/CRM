@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { IoIosMore } from "react-icons/io";
 import AddPaymentCure from "./AddPaymentCure";
 import TreatmentModal from "./TreatmentModal";
+import formatMoney from "../lib/money_format";
 
 const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -50,6 +51,7 @@ const Treatment = () => {
   //     messageApi.success("Davolash muvaffaqqiyatli o'chirildi", 2);
   //   }, 2000);
   // };
+  console.log(data);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -71,21 +73,21 @@ const Treatment = () => {
     {
       title: "Davolash vaqti",
       render: (dob) =>
-        `${dayjs(dob?.start_time).format("HH:MM")} - ${dayjs(
+        `${dayjs(dob?.start_time).format("HH:mm DD-MM-YYYY")} - ${dayjs(
           dob?.end_time
-        ).format("HH:MM DD-MM-YYYY")}`,
+        ).format("HH:mm DD-MM-YYYY")}`,
       width: "15%",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {

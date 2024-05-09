@@ -130,6 +130,12 @@ const ServiceHistory: FC<{ patient_id: string | undefined }> = ({
       },
     },
   ];
-  return <Table columns={columns} dataSource={data} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={data}
+      rowKey={(record) => record.cure_id}
+    />
+  );
 };
 export default ServiceHistory;
