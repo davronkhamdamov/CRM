@@ -178,7 +178,7 @@ const StaffsTable = () => {
           }}
         />
         <Select
-          style={{ minWidth: "100px" }}
+          style={{ minWidth: "200px" }}
           placeholder="Xodimni tanlang"
           optionFilterProp="children"
           onChange={onChange}

@@ -1,4 +1,14 @@
-import { Space, Table, Tag, Tooltip } from "antd";
+import {
+  Button,
+  DatePicker,
+  Flex,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  message,
+} from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -11,14 +21,15 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { DataType, EditModal, TableParams } from "../types/type";
+import { DataType, EditModal, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { MdOutlinePayment } from "react-icons/md";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { IoIosMore } from "react-icons/io";
 import AddPaymentCure from "./AddPaymentCure";
 import TreatmentModal from "./TreatmentModal";
 import formatMoney from "../lib/money_format";
+const { RangePicker } = DatePicker;
 
 const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -26,32 +37,32 @@ const getUserParams = (params: TableParams) => ({
   ...params,
 });
 const Treatment = () => {
-  // const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
     id: "",
     isOpen: false,
   });
+  const currentDate = dayjs();
+  const lastMonthDate = currentDate.subtract(1, "month");
+  const lastWeekDate = currentDate.subtract(1, "week");
+  const [filterDate, setFilterDate] = useState<
+    [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
+  >([null, null]);
+  const [staffs, setStaffs] = useState<Staffs[]>([]);
+  const [staff, setStaff] = useState<string>("");
+
   const [view, setView] = useState({
     data: "",
     isOpen: false,
   });
-  // const [toLoading, setToLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 10,
     },
   });
-  // const cancel = () => {
-  //   setToLoading(true);
-  //   setTimeout(() => {
-  //     setToLoading(false);
-  //     messageApi.success("Davolash muvaffaqqiyatli o'chirildi", 2);
-  //   }, 2000);
-  // };
-  console.log(data);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -216,8 +227,22 @@ const Treatment = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
-
+  }, [JSON.stringify(tableParams), staff, filterDate]);
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/all", {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStaffs(data.result);
+      })
+      .catch(() => {
+        messageApi.error("Shifokorni yuklash xatolik yuz berdi", 2);
+      });
+  }, []);
   const handleTableChange: TableProps["onChange"] = (
     pagination,
     filters,
@@ -238,7 +263,11 @@ const Treatment = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure?${qs.stringify(getUserParams(tableParams))}`,
+        `/cure?${qs.stringify(getUserParams(tableParams))}&start-date=${
+          filterDate[0] ? filterDate[0]?.toISOString() : null
+        }&end-date=${
+          filterDate[0] ? filterDate[1]?.toISOString() : null
+        }&filter-staff=${staff}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -258,9 +287,87 @@ const Treatment = () => {
         });
       });
   };
-
+  const onChange = (value: string) => {
+    setStaff(value);
+  };
   return (
     <>
+      <br />
+      <br />
+      <Flex gap={20}>
+        <RangePicker
+          format="DD-MM-YYYY"
+          value={filterDate}
+          onChange={(date) => {
+            if (date) {
+              setFilterDate([date[0]?.add(5, "hour"), date[1]?.add(5, "hour")]);
+            } else {
+              setFilterDate([null, null]);
+            }
+          }}
+          renderExtraFooter={() => {
+            return (
+              <Flex justify="space-around" style={{ margin: "20px 0" }}>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      lastMonthDate.startOf("month"),
+                      lastMonthDate.endOf("month"),
+                    ]);
+                  }}
+                >
+                  O'tgan oy
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      currentDate.startOf("month"),
+                      currentDate.endOf("month"),
+                    ]);
+                  }}
+                >
+                  Shu oy
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      lastWeekDate.startOf("week"),
+                      lastWeekDate.endOf("week"),
+                    ]);
+                  }}
+                >
+                  O'tgan hafta
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([dayjs(new Date()), dayjs(new Date())]);
+                  }}
+                >
+                  Bugun
+                </Button>
+              </Flex>
+            );
+          }}
+        />
+        <Select
+          style={{ minWidth: "200px" }}
+          placeholder="Xodimni tanlang"
+          optionFilterProp="children"
+          onChange={onChange}
+          allowClear
+          options={staffs
+            .filter((e) => e.role === "doctor")
+            .map((e) => {
+              return {
+                value: e.id,
+                label: e.name,
+              };
+            })}
+        />
+      </Flex>
+      <br />
+      <br />
+      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}
@@ -284,7 +391,7 @@ const Treatment = () => {
       />
       <TreatmentModal setData={setView} data={view} />
       <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
-      {/* {contextHolder} */}
+      {contextHolder}
     </>
   );
 };
