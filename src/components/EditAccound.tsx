@@ -37,6 +37,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
     objective_check: "",
     placental_diseases: "",
     prikus: "",
+    balance: 0,
   });
   const token = localStorage.getItem("auth");
   useEffect(() => {
@@ -68,6 +69,7 @@ const EditAccound: React.FC<EditModalProps> = ({ data, setOpen }) => {
       objective_check: "",
       placental_diseases: "",
       prikus: "",
+      balance: 0,
     });
   };
 
