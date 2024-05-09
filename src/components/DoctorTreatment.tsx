@@ -1,4 +1,4 @@
-import { AutoComplete, Space, Table, Tag, Tooltip } from "antd";
+import { Button, DatePicker, Flex, Space, Table, Tag, Tooltip } from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -13,12 +13,13 @@ import {
 import type { TableProps } from "antd";
 import { CureDataType, DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { FaTooth } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import TreatmentModal from "./TreatmentModal";
+const { RangePicker } = DatePicker;
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -32,6 +33,12 @@ const DocktorTreatment = () => {
     data: "",
     isOpen: false,
   });
+  const currentDate = dayjs();
+  const lastMonthDate = currentDate.subtract(1, "month");
+  const lastWeekDate = currentDate.subtract(1, "week");
+  const [filterDate, setFilterDate] = useState<
+    [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
+  >([null, null]);
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -41,8 +48,7 @@ const DocktorTreatment = () => {
 
   const columns: ColumnsType<CureDataType> = [
     {
-      title: "Ismi2",
-      sorter: true,
+      title: "Ismi",
       render: (record) => {
         return record.user_name + " " + record.user_surname;
       },
@@ -188,7 +194,7 @@ const DocktorTreatment = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams)]);
+  }, [JSON.stringify(tableParams), filterDate]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -210,7 +216,11 @@ const DocktorTreatment = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure/for-staff/?${qs.stringify(getRandomuserParams(tableParams))}`,
+        `/cure/for-staff/?${qs.stringify(
+          getRandomuserParams(tableParams)
+        )}&start-date=${
+          filterDate[0] ? filterDate[0]?.toISOString() : null
+        }&end-date=${filterDate[0] ? filterDate[1]?.toISOString() : null}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -230,33 +240,71 @@ const DocktorTreatment = () => {
         });
       });
   };
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState<{ value: string }[]>([]);
-  const onChange = (data: string) => {
-    setValue(data);
-  };
-  const mockVal = async (str: string) => {
-    return await fetch(`https://randomuser.me/api?search=${str}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        return results?.map((e: { name: { first: string; last: string } }) => {
-          return { value: e.name.first + " " + e.name.last };
-        });
-      });
-  };
-  const getPanelValue = async (searchText: string) =>
-    !searchText ? [] : await mockVal(searchText);
 
   return (
     <>
-      <AutoComplete
-        value={value}
-        options={options}
-        style={{ width: 300, marginBottom: 20 }}
-        onSearch={async (text) => setOptions(await getPanelValue(text))}
-        onChange={onChange}
-        placeholder="Davolashni qidirish"
-      />
+      <br />
+      <br />
+      <Flex gap={20}>
+        <RangePicker
+          format="DD-MM-YYYY"
+          value={filterDate}
+          onChange={(date) => {
+            if (date) {
+              setFilterDate([date[0]?.add(5, "hour"), date[1]?.add(5, "hour")]);
+            } else {
+              setFilterDate([null, null]);
+            }
+          }}
+          renderExtraFooter={() => {
+            return (
+              <Flex justify="space-around" style={{ margin: "20px 0" }}>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      lastMonthDate.startOf("month"),
+                      lastMonthDate.endOf("month"),
+                    ]);
+                  }}
+                >
+                  O'tgan oy
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      currentDate.startOf("month"),
+                      currentDate.endOf("month"),
+                    ]);
+                  }}
+                >
+                  Shu oy
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([
+                      lastWeekDate.startOf("week"),
+                      lastWeekDate.endOf("week"),
+                    ]);
+                  }}
+                >
+                  O'tgan hafta
+                </Button>
+                <Button
+                  onClick={() => {
+                    setFilterDate([dayjs(new Date()), dayjs(new Date())]);
+                  }}
+                >
+                  Bugun
+                </Button>
+              </Flex>
+            );
+          }}
+        />
+      </Flex>
+      <br />
+      <br />
+      <br />
+
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}

@@ -46,6 +46,7 @@ const route = createBrowserRouter(
         <Route index path="statistic" element={<Statistic />} />
         <Route path="treatment" element={<DocktorTreatment />} />
         <Route path="treatment/:id" element={<SingleDocktorTreatment />} />
+        <Route path="hisobot" element={<Hisobot />} />
       </Route>
       <Route path="/reception" element={<Reception />}>
         <Route index path="statistic" element={<Statistic />} />

@@ -30,6 +30,7 @@ export interface DataType {
   cure_id: string;
   payed_price: number;
   price: number;
+  salary?: number;
 }
 export type themeMode = "light" | "dark" | "system";
 

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { DataType, Staffs, TableParams } from "../types/type";
 import qs from "qs";
 import formatMoney from "../lib/money_format";
+import CountUp from "react-countup";
+import { GiReceiveMoney } from "react-icons/gi";
 
 const { RangePicker } = DatePicker;
 const StaffsTable = () => {
@@ -16,9 +18,10 @@ const StaffsTable = () => {
   const [filterDate, setFilterDate] = useState<
     [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
   >([currentDate, currentDate]);
-  const [data, setData] = useState<DataType[]>();
+  const [data, setData] = useState<DataType[]>([]);
   const [staffs, setStaffs] = useState<Staffs[]>([]);
   const [staff, setStaff] = useState<string>("");
+  const [role, setRole] = useState<string>("");
 
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
@@ -102,6 +105,7 @@ const StaffsTable = () => {
         return res.json();
       })
       .then((results) => {
+        setRole(results.role);
         setData(results.result);
         setTableParams({
           ...tableParams,
@@ -120,6 +124,24 @@ const StaffsTable = () => {
   };
   const onChange = (value: string) => {
     setStaff(value);
+  };
+  const formatDate = () => {
+    if (
+      filterDate[0]?.unix() === dayjs().unix() &&
+      filterDate[1]?.unix() === dayjs().unix()
+    ) {
+      return "Bugungi hisobot";
+    } else if (
+      Number(filterDate[0]?.unix()) - dayjs().unix() == 37776 &&
+      Number(filterDate[1]?.unix()) - dayjs().unix() == 37776
+    ) {
+      return "Kechagi hisobot";
+    } else if (filterDate[0]?.unix() === filterDate[1]?.unix()) {
+      return `${filterDate[0]?.format("D MMMM YYYY")} kungi hisobot`;
+    } else if (filterDate) {
+      return `${filterDate[0]?.format("DD-MM-YYYY")} dan
+            ${filterDate[1]?.format("DD-MM-YYYY")} gacha bo'lgan hisobot`;
+    }
   };
 
   return (
@@ -177,33 +199,64 @@ const StaffsTable = () => {
             );
           }}
         />
-        <Select
-          style={{ minWidth: "200px" }}
-          placeholder="Xodimni tanlang"
-          optionFilterProp="children"
-          onChange={onChange}
-          allowClear
-          options={staffs
-            .filter((e) => e.role === "doctor")
-            .map((e) => {
-              return {
-                value: e.id,
-                label: e.name,
-              };
-            })}
-        />
+        {role == "admin" && (
+          <Select
+            style={{ minWidth: "200px" }}
+            placeholder="Xodimni tanlang"
+            optionFilterProp="children"
+            onChange={onChange}
+            allowClear
+            options={staffs
+              .filter((e) => e.role === "doctor")
+              .map((e) => {
+                return {
+                  value: e.id,
+                  label: e.name,
+                };
+              })}
+          />
+        )}
       </Flex>
       <br />
       <br />
       <br />
-      <Table
-        columns={columns}
-        rowKey={(record) => record.id}
-        dataSource={data}
-        pagination={tableParams.pagination}
-        scroll={{ y: 590 }}
-        onChange={handleTableChange}
-      />
+      {role == "admin" ? (
+        <Table
+          columns={columns}
+          rowKey={(record) => record.id}
+          dataSource={data}
+          pagination={tableParams.pagination}
+          scroll={{ y: 590 }}
+          onChange={handleTableChange}
+        />
+      ) : (
+        <Flex vertical gap={20} justify="center">
+          <Flex justify="center">
+            <Flex
+              gap={50}
+              vertical
+              align="center"
+              style={{
+                width: "100%",
+                maxWidth: "600px",
+                minWidth: "200px",
+                background: "#082f49",
+                padding: "100px 40px",
+                borderRadius: 15,
+                color: "#e5e5e5",
+                height: "500px",
+              }}
+            >
+              <GiReceiveMoney size={70} />
+              <div style={{ fontSize: "20px" }}>{formatDate()}</div>
+              <Flex gap={10} style={{ fontSize: "50px" }}>
+                <CountUp end={Number(data[0]?.salary)} separator=" " />{" "}
+                <p>so'm</p>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+      )}
       {contextHolder}
     </div>
   );
