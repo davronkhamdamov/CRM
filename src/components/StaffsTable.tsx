@@ -220,7 +220,7 @@ const StaffsTable = () => {
       <br />
       <br />
       <br />
-      {role == "admin" ? (
+      {role === "admin" ? (
         <Table
           columns={columns}
           rowKey={(record) => record.id}
@@ -229,7 +229,8 @@ const StaffsTable = () => {
           scroll={{ y: 590 }}
           onChange={handleTableChange}
         />
-      ) : (
+      ) : (ycharm
+      
         <Flex vertical gap={20} justify="center">
           <Flex justify="center">
             <Flex

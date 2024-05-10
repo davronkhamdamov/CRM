@@ -16,6 +16,7 @@ const ProfileAvatar: React.FC = () => {
     {
       label: <a>Mode</a>,
       key: "1",
+      style: { width: "100px" },
       theme: "light" === theme || "dark" === theme ? theme : "dark",
       onClick: (e) => {
         if (e.key === "light" || e.key === "dark" || e.key === "system") {
@@ -31,7 +32,7 @@ const ProfileAvatar: React.FC = () => {
         },
         {
           key: "dark",
-          label: "Tungi mavzu",
+          label: "Tungi mavzu (beta)",
           icon: <MdOutlineDarkMode />,
         },
         {

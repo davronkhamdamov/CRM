@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import route from "./router/route";
 import { createContext, useEffect, useState } from "react";
 import { themeMode } from "./types/type";
-import { Spin } from "antd";
+import { ConfigProvider, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export const ThemeProvider = createContext<{
@@ -42,17 +42,50 @@ const App = () => {
     }
   }, [theme]);
   return (
-    <ThemeProvider.Provider value={{ theme, setTheme }}>
-      <LoadingProvider.Provider value={{ isLoadingCnx, setLoadingCnx }}>
-        <RouterProvider router={route} />
-        <Spin
-          indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-          style={{ zIndex: 1000000 }}
-          spinning={isLoadingCnx}
-          fullscreen
-        />
-      </LoadingProvider.Provider>
-    </ThemeProvider.Provider>
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            colorBgBase: "red",
+          },
+          Table: {
+            borderColor: theme == "dark" ? "#444" : "#f2f2f2",
+            headerBg: theme == "dark" ? "#393E46" : "#fafafa",
+            headerColor: theme == "dark" ? "#f2f2f2" : "rgba(0, 0, 0, 0.88)",
+          },
+          Input: {
+            colorBgContainer: theme == "dark" ? "#333" : "#f9f9f9",
+          },
+          Select: {
+            optionSelectedBg: theme == "dark" ? "#333" : "#f9f9f9",
+          },
+          Tag: {
+            colorErrorBg: theme == "dark" ? "#ff00055" : "",
+            colorSuccessBg: theme == "dark" ? "#00ff0033" : "",
+            colorInfoBg: theme == "dark" ? "#00FFFF14" : "",
+            colorInfo: theme == "dark" ? "blue" : "#1668dc",
+          },
+        },
+        token: {
+          colorBgBase: theme == "dark" ? "#001529" : "#f5f5f5",
+          colorText: theme == "dark" ? "#fff" : "rgba(0, 0, 0, 0.88)",
+          colorBorder: theme == "dark" ? "#aaa" : "#d9d9d9",
+          colorTextPlaceholder: theme == "dark" ? "#f9f9f9" : "#d9d9d9",
+        },
+      }}
+    >
+      <ThemeProvider.Provider value={{ theme, setTheme }}>
+        <LoadingProvider.Provider value={{ isLoadingCnx, setLoadingCnx }}>
+          <RouterProvider router={route} />
+          <Spin
+            indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
+            style={{ zIndex: 1000000 }}
+            spinning={isLoadingCnx}
+            fullscreen
+          />
+        </LoadingProvider.Provider>
+      </ThemeProvider.Provider>
+    </ConfigProvider>
   );
 };
 export default App;
