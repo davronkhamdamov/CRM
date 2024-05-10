@@ -10,7 +10,7 @@ const ProfileAvatar: React.FC = () => {
 
   const items: MenuProps["items"] = [
     {
-      label: <a href="/profile">Profile</a>,
+      label: <a href="/settings">Profile</a>,
       key: "0",
     },
     {
