@@ -59,6 +59,11 @@ const App = () => {
           Select: {
             optionSelectedBg: theme == "dark" ? "#333" : "#f9f9f9",
           },
+          DatePicker: {
+            cellBgDisabled: theme == "dark" ? "#001511" : "rgba(0, 0, 0, 0.04)",
+            colorTextDisabled: theme == "dark" ? "#f2f2f2" : "#777",
+            colorText: theme == "dark" ? "#fff" : "rgba(0, 0, 0, 0.88)",
+          },
           Tag: {
             colorErrorBg: theme == "dark" ? "#ff00055" : "",
             colorSuccessBg: theme == "dark" ? "#00ff0033" : "",

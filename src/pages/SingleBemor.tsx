@@ -204,14 +204,14 @@ const SingleBemor: React.FC = () => {
                 align="center"
               >
                 <LuCircleDollarSign /> Balance :
-                <span
+                <Typography.Text
                   style={{
                     fontSize: "30px",
-                    color: (userData?.balance || 0) < 0 ? "red" : "black",
+                    color: (userData?.balance || 0) < 0 ? "red" : "",
                   }}
                 >
                   {formatMoney(userData?.balance || 0)}
-                </span>
+                </Typography.Text>
               </Flex>
             </Flex>
           </Flex>
