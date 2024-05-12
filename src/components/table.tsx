@@ -95,7 +95,7 @@ const TableComponent: FC = () => {
     {
       title: "Ro'yxatdan o'tgan sanasi",
       dataIndex: "created_at",
-      render: (registered) => `${dayjs(registered?.date).format("DD-MM-YYYY")}`,
+      render: (registered) => `${dayjs(registered).format("DD-MM-YYYY")}`,
       width: "15%",
     },
     {
