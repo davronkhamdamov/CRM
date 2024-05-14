@@ -7,7 +7,9 @@ import {
   DescriptionsProps,
   Flex,
   Modal,
+  Select,
   Tag,
+  Typography,
   message,
   theme,
 } from "antd";
@@ -26,6 +28,7 @@ import teeth from "../lib/teeth";
 import { PiToothFill } from "react-icons/pi";
 import { GiTooth } from "react-icons/gi";
 import formatMoney from "../lib/money_format";
+const { Option } = Select;
 
 const SingleDocktorTreatment = () => {
   const params = useParams();
@@ -117,6 +120,47 @@ const SingleDocktorTreatment = () => {
       children: cureData?.description
         ? cureData?.description
         : "Hech qanday malumot topilmadi",
+    },
+    {
+      key: "10",
+      label: "Prikus",
+      children: cureData?.prikus && (
+        <Select
+          defaultValue={cureData?.prikus}
+          placeholder="Prikus"
+          onChange={(e) => {
+            fetch(
+              import.meta.env.VITE_APP_URL +
+                "/user/prikus/" +
+                cureData?.user_id,
+              {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                  prikus: e,
+                }),
+              }
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.code === 200) message.success("Prikus yangilandi");
+              });
+          }}
+          style={{ width: "200px" }}
+        >
+          <Option value="ortognatik">Ortognatik</Option>
+          <Option value="progenik">Progenik</Option>
+          <Option value="biprognatik">Biprognatik</Option>
+          <Option value="distal">Distal</Option>
+          <Option value="mezial">Mezial</Option>
+          <Option value="chuqur">Chuqur</Option>
+          <Option value="ochiq">Ochiq</Option>
+          <Option value="kesuvchi">Kesuvchi</Option>
+        </Select>
+      ),
     },
   ];
 
@@ -268,9 +312,14 @@ const SingleDocktorTreatment = () => {
                         border: 0,
                       }}
                     >
-                      <p style={{ ...e.text_style, userSelect: "none" }}>
-                        {e.id}
-                      </p>
+                      <Typography.Paragraph
+                        style={{
+                          ...e.text_style,
+                          userSelect: "none",
+                        }}
+                      >
+                        <p style={{ width: "20px" }}>{e.id}</p>
+                      </Typography.Paragraph>
                       <img
                         src={e.img}
                         alt=""

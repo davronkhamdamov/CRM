@@ -2,6 +2,7 @@ import {
   Button,
   DatePicker,
   Flex,
+  Popconfirm,
   Select,
   Space,
   Table,
@@ -23,7 +24,7 @@ import {
 import type { TableProps } from "antd";
 import { DataType, EditModal, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { MdOutlinePayment } from "react-icons/md";
+import { MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
 import dayjs, { Dayjs } from "dayjs";
 import { IoIosMore } from "react-icons/io";
 import AddPaymentCure from "./AddPaymentCure";
@@ -64,6 +65,25 @@ const Treatment = () => {
     },
   });
 
+  const cancelTreatment = (id: string) => {
+    fetch(import.meta.env.VITE_APP_URL + "/cure/status/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: "Bekor qilingan",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          fetchData();
+          message.success("Davolash bekor qilindi");
+        }
+      });
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
@@ -105,19 +125,19 @@ const Treatment = () => {
       title: "To'lov holati",
       width: "6%",
       render: (record) => {
-        if (record.price === 0) {
+        if (record?.is_done == "Bekor qilingan") {
+          return (
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              Bekor qilingan
+            </Tag>
+          );
+        } else if (record.price === 0) {
           return (
             <Tag icon={<ClockCircleOutlined />} color="default">
               Kutilmoqda
             </Tag>
           );
         } else if (record.payed_price === record.price) {
-          return (
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              To'landi
-            </Tag>
-          );
-        } else if (record.payed_price == record.price) {
           return (
             <Tag icon={<CheckCircleOutlined />} color="success">
               To'landi
@@ -162,10 +182,10 @@ const Treatment = () => {
                 Kutilmoqda
               </Tag>
             );
-          case "To'xtatilgan":
+          case "Bekor qilingan":
             return (
-              <Tag icon={<MinusCircleOutlined />} color="default">
-                To'xtatilgan
+              <Tag icon={<MinusCircleOutlined />} color="error">
+                Bekor qilingnan
               </Tag>
             );
           default:
@@ -181,12 +201,11 @@ const Treatment = () => {
       title: "Bajariladigan ishlar",
       dataIndex: "operation",
       key: "operation",
-      align: "center",
       width: "15%",
       render: (_, record) => {
         return (
           <Space size="middle">
-            {record.payed_price !== record.price && (
+            {record.payed_price !== record.price ? (
               <Tooltip placement="bottom" title="To'lash">
                 <MdOutlinePayment
                   style={{ cursor: "pointer" }}
@@ -201,6 +220,8 @@ const Treatment = () => {
                   }}
                 />
               </Tooltip>
+            ) : (
+              <MdOutlinePayment color="#33333333" />
             )}
             <Tooltip placement="bottom" title="Ko'proq ma'lumot">
               <IoIosMore
@@ -211,14 +232,21 @@ const Treatment = () => {
                 }}
               />
             </Tooltip>
-            {/* <Popconfirm
-              title="O'chirishga ishonchingiz komilmi?"
-              onConfirm={cancel}
-            >
-              <Tooltip placement="bottom" title="O'chirish">
-                <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
-              </Tooltip>
-            </Popconfirm> */}
+            {record?.is_done !== "Bekor qilingan" &&
+            record.is_done !== "Yakunlandi" ? (
+              <Popconfirm
+                title="Bekor qilshga ishonchingiz komilmi?"
+                onConfirm={() => cancelTreatment(record.cure_id)}
+              >
+                <Tooltip placement="bottom" title="O'chirish">
+                  <MdOutlineCancel
+                    style={{ color: "red", cursor: "pointer" }}
+                  />
+                </Tooltip>
+              </Popconfirm>
+            ) : (
+              <MdOutlineCancel color="rgba(0, 0, 0, 0.1)" />
+            )}
           </Space>
         );
       },

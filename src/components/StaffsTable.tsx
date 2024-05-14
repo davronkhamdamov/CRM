@@ -153,7 +153,9 @@ const StaffsTable = () => {
           format="DD-MM-YYYY"
           value={filterDate}
           onChange={(date) => {
-            setFilterDate([date[0]?.add(5, "hour"), date[1]?.add(5, "hour")]);
+            if (date != null) {
+              setFilterDate([date[0]?.add(5, "hour"), date[1]?.add(5, "hour")]);
+            }
           }}
           renderExtraFooter={() => {
             return (

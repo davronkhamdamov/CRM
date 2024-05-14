@@ -36,16 +36,16 @@ const teeth = [
     img: one,
     style: {
       width: "60px",
-      transform: "translate(-180px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-190px, 20px)",
+      transform: "translate(0, 15px)",
     },
     selected: false,
     div_style: {
       width: "50px",
       height: "50px",
-      left: "37px",
+      left: "-150px",
       top: "400px",
     },
   },
@@ -54,14 +54,14 @@ const teeth = [
     img: two,
     style: {
       width: "60px",
-      transform: "translate(-170px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-180px, 20px)",
+      transform: "translate(-10px, 20px)",
     },
     selected: false,
     div_style: {
-      left: "40px",
+      left: "-140px",
       top: "335px",
       width: "60px",
       height: "60px",
@@ -72,14 +72,14 @@ const teeth = [
     img: three,
     style: {
       width: "60px",
-      transform: "translate(-170px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-180px, 15px)",
+      transform: "translate(0, 15px)",
     },
     selected: false,
     div_style: {
-      left: "50px",
+      left: "-130px",
       top: "271px",
       width: "65px",
       height: "63px",
@@ -90,15 +90,15 @@ const teeth = [
     img: four,
     style: {
       width: "60px",
-      transform: "translate(-170px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-180px, -0px)",
+      transform: "translate(0, -0px)",
     },
     selected: false,
     div_style: {
       top: "225px",
-      left: "70px",
+      left: "-110px",
       width: "55px",
       height: "45px",
     },
@@ -108,14 +108,14 @@ const teeth = [
     img: five,
     style: {
       width: "60px",
-      transform: "translate(-170px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-180px, -5px)",
+      transform: "translate(-10px, -5px)",
     },
     selected: false,
     div_style: {
-      left: "90px",
+      left: "-80px",
       top: "180px",
       width: "55px",
       height: "45px",
@@ -126,14 +126,14 @@ const teeth = [
     img: six,
     style: {
       width: "60px",
-      transform: "translate(-160px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-160px, -10px)",
+      transform: "translate(0, -10px)",
     },
     selected: false,
     div_style: {
-      left: "110px",
+      left: "-60px",
       top: "135px",
       width: "55px",
       height: "45px",
@@ -144,14 +144,14 @@ const teeth = [
     img: seven,
     style: {
       width: "60px",
-      transform: "translate(-160px, 10px)",
+      transform: "translate(0, 10px)",
     },
     text_style: {
-      transform: "translate(-140px, -10px)",
+      transform: "translate(20px, -10px)",
     },
     selected: false,
     div_style: {
-      left: "140px",
+      left: "-20px",
       top: "90px",
       width: "50px",
       height: "45px",
@@ -162,14 +162,14 @@ const teeth = [
     img: eight,
     style: {
       width: "60px",
-      transform: "translate(-160px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-130px, -25px)",
+      transform: "translate(30px, -25px)",
     },
     selected: false,
     div_style: {
-      left: "190px",
+      left: "30px",
       top: "70px",
       width: "50px",
       height: "50px",
@@ -180,14 +180,14 @@ const teeth = [
     img: nine,
     style: {
       width: "60px",
-      transform: "translate(-25px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(15px, -25px)",
+      transform: "translate(45px, -25px)",
     },
     selected: false,
     div_style: {
-      left: "110px",
+      left: "90px",
       top: "70px",
       width: "40px",
       height: "50px",
@@ -198,14 +198,14 @@ const teeth = [
     img: ten,
     style: {
       width: "60px",
-      transform: "translate(-160px, 0)",
+      transform: "translate(0, 0)",
     },
     text_style: {
-      transform: "translate(-100px, -20px)",
+      transform: "translate(60px, -20px)",
     },
     selected: false,
     div_style: {
-      left: "290px",
+      left: "140px",
       top: "90px",
       width: "45px",
       height: "45px",

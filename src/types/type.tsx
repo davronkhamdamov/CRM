@@ -14,6 +14,7 @@ export interface TableParams {
   filters?: Parameters<GetProp<TableProps, "onChange">>[1];
 }
 export interface DataType {
+  is_done: string;
   user_id: string;
   method: string;
   id: string;
