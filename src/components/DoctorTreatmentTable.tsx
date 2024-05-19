@@ -11,11 +11,13 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import formatMoney from "../lib/money_format";
+import { useLocation } from "react-router-dom";
 
 const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
   patient_id,
 }) => {
   const [data, setData] = useState();
+  const location = useLocation();
   const token = localStorage.getItem("auth");
   useEffect(() => {
     fetch(import.meta.env.VITE_APP_URL + `/cure/for-staff/` + patient_id, {
@@ -33,7 +35,11 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
       title: "Ismi",
       render: (record) => {
         return (
-          <a href={`patient/${record.user_id}`}>
+          <a
+            href={`/${location.pathname.split("/")[1]}/patient/${
+              record.user_id
+            }`}
+          >
             {record.user_name} {record.user_surname}
           </a>
         );

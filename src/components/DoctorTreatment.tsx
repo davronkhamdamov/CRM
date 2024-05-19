@@ -16,7 +16,6 @@ import { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
 import { FaTooth } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import TreatmentModal from "./TreatmentModal";
 const { RangePicker } = DatePicker;
@@ -175,14 +174,6 @@ const DocktorTreatment = () => {
                     color="#3b82f6"
                     style={{ cursor: "pointer" }}
                   />
-                </Tooltip>
-                <Tooltip placement="bottom" title="Batafsil ko'rish">
-                  <Link to={"info/" + record.cure_id}>
-                    <BsThreeDotsVertical
-                      color="#3b82f6"
-                      style={{ cursor: "pointer" }}
-                    />
-                  </Link>
                 </Tooltip>
               </Space>
             )}

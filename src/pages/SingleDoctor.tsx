@@ -134,6 +134,7 @@ const SingleDocktor: React.FC = () => {
             <Divider />
           </Flex>
         </Flex>
+        <br />
         <DocktorTreatmentTable patient_id={params.id} />
       </div>
     </Content>
