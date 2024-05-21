@@ -103,7 +103,7 @@ const ServicesTable = () => {
             }}
             color="success"
           >
-            Foal
+            Faol
           </Tag>
         ) : (
           <Tag
@@ -114,7 +114,7 @@ const ServicesTable = () => {
             }}
             color="error"
           >
-            Foal emas
+            Faol emas
           </Tag>
         );
       },
