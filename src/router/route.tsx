@@ -42,7 +42,7 @@ const route = createBrowserRouter(
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />
       </Route>
-      <Route path="doctor" element={<DockerLayout />}>
+      <Route path="/doctor" element={<DockerLayout />}>
         <Route index path="statistic" element={<Statistic />} />
         <Route path="treatment" element={<DocktorTreatment />} />
         <Route path="treatment/:id" element={<SingleDocktorTreatment />} />
