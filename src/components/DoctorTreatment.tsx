@@ -18,6 +18,8 @@ import { FaTooth } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import TreatmentModal from "./TreatmentModal";
+import { MdModeEditOutline } from "react-icons/md";
+import EditModal from "./EditModal";
 const { RangePicker } = DatePicker;
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -29,6 +31,10 @@ const DocktorTreatment = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState({
+    data: "",
+    isOpen: false,
+  });
+  const [editModal, setEditModal] = useState({
     data: "",
     isOpen: false,
   });
@@ -177,6 +183,17 @@ const DocktorTreatment = () => {
                 </Tooltip>
               </Space>
             )}
+            <Space size="large">
+              <Tooltip placement="bottom" title="Tahrirlash">
+                <MdModeEditOutline
+                  onClick={() => {
+                    setEditModal({ data: record.user_id, isOpen: true });
+                  }}
+                  color="#3b82f6"
+                  style={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+            </Space>
           </Space>
         );
       },
@@ -318,6 +335,7 @@ const DocktorTreatment = () => {
         onChange={handleTableChange}
       />
       <TreatmentModal setData={setView} data={view} />
+      <EditModal setData={setEditModal} data={editModal} />
     </>
   );
 };
