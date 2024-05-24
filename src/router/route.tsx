@@ -24,6 +24,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import DocktorTreatment from "../pages/DocktorTreatment";
 import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
 import ServiceCategory from "../pages/ServiceCategory";
+import Profile from "../pages/Profile";
 
 const route = createBrowserRouter(
   createRoutesFromElements(
@@ -41,12 +42,14 @@ const route = createBrowserRouter(
         <Route path="treatment" element={<Treatment />} />
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/doctor" element={<DockerLayout />}>
         <Route index path="statistic" element={<Statistic />} />
         <Route path="treatment" element={<DocktorTreatment />} />
         <Route path="treatment/:id" element={<SingleDocktorTreatment />} />
         <Route path="hisobot" element={<Hisobot />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/reception" element={<Reception />}>
         <Route index path="statistic" element={<Statistic />} />
@@ -54,6 +57,7 @@ const route = createBrowserRouter(
         <Route path="patient" element={<Bemorlar />} />
         <Route path="patient/:id" element={<SingleBemor />} />
         <Route path="treatment" element={<Treatment />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/auth">
         <Route index element={<Login />} />

@@ -33,6 +33,9 @@ const EditProfile = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
+    fetchData();
+  }, [location, token]);
+  const fetchData = () => {
     fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,7 +45,7 @@ const EditProfile = () => {
       .then((data) => {
         setUserData(data.result);
       });
-  }, [location, token]);
+  };
   const updateProfile: FormProps<Staffs>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
     fetch(import.meta.env.VITE_APP_URL + "/staffs/update-me", {
@@ -62,7 +65,7 @@ const EditProfile = () => {
     })
       .then((res) => res.json())
       .then(() => {
-        window.location.reload();
+        fetchData();
         setLoadingCnx(false);
         messageApi.success("Profile yangilandi", 2);
       })
@@ -94,13 +97,67 @@ const EditProfile = () => {
                 <img
                   src={userData?.img_url || userImage}
                   alt=""
-                  style={{ width: "200px", borderRadius: "50%" }}
+                  style={{
+                    width: "200px",
+                    borderRadius: "50%",
+                    height: "200px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="profile_hidden">
                   <TbCameraPlus size={30} color="white" />
                 </div>
               </label>
-              <input type="file" style={{ display: "none" }} id="profile" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="profile"
+                onChange={(e) => {
+                  if (e.target.files?.length) {
+                    messageApi.loading("Profile rasmi yangilanmoqda", 15);
+                    const formData = new FormData();
+                    formData.append("file", e.target.files[0]);
+                    formData.append("upload_preset", "youtube");
+                    fetch(
+                      "https://api.cloudinary.com/v1_1/didddubfm/image/upload",
+                      {
+                        method: "POST",
+                        body: formData,
+                      }
+                    )
+                      .then((res) => res.json())
+                      .then((data) => {
+                        fetch(
+                          import.meta.env.VITE_APP_URL +
+                            "/staffs/image/" +
+                            userData?.id,
+                          {
+                            method: "PUT",
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                              "Content-type": "application/json",
+                            },
+                            body: JSON.stringify({ image_url: data.url }),
+                          }
+                        )
+                          .then((res) => res.json())
+                          .then((data) => {
+                            if (data.message == "updated") {
+                              messageApi.destroy();
+                              messageApi.success("Profile rasmi yangilandi", 2);
+                              fetchData();
+                            } else {
+                              messageApi.destroy();
+                              messageApi.error(
+                                "Profile rasmi yangilashda xatolik yuzaga keldi",
+                                2
+                              );
+                            }
+                          });
+                      });
+                  }
+                }}
+              />
               <Title level={4} style={{ margin: 0 }}>
                 {userData?.name ? userData?.name : "Yuklanmoqda..."}{" "}
                 {userData?.surname}

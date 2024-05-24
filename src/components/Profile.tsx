@@ -1,34 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Divider, Flex, Layout, Typography, message, theme } from "antd";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { IoArrowBackSharp, IoHomeOutline } from "react-icons/io5";
+import {
+  Descriptions,
+  DescriptionsProps,
+  Flex,
+  Layout,
+  Typography,
+  message,
+  theme,
+} from "antd";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 const { Title } = Typography;
 const { Content } = Layout;
 import { UserData } from "../types/type";
-import { FaFemale, FaMale } from "react-icons/fa";
-import dayjs from "dayjs";
-import { BsCalendar2Date } from "react-icons/bs";
-import { GrPhone } from "react-icons/gr";
+import { ThemeProvider } from "../App";
+
 import userImage from "../assets/image/Sample_User_Icon.png";
 import { TbCameraPlus } from "react-icons/tb";
-import DocktorTreatmentTable from "../components/DoctorTreatmentTable";
+import dayjs from "dayjs";
 
-const SingleDocktor: React.FC = () => {
-  const params = useParams();
+const Profile = () => {
   const location = useLocation();
   const [userData, setUserData] = useState<UserData>();
   const [messageApi, contextHolder] = message.useMessage();
 
+  const ThemeProvide = useContext(ThemeProvider);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const token = localStorage.getItem("auth");
-
   useEffect(() => {
     fetchData();
-  }, [location, params.id, token]);
+  }, [location, token]);
   const fetchData = () => {
-    fetch(import.meta.env.VITE_APP_URL + "/staffs/" + params.id, {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -38,22 +42,41 @@ const SingleDocktor: React.FC = () => {
         setUserData(data.result);
       });
   };
+  const items: DescriptionsProps["items"] = [
+    {
+      key: "1",
+      label: "Ismi",
+      children: userData?.name,
+    },
+    {
+      key: "2",
+      label: "Familyasi",
+      children: userData?.surname,
+    },
+    {
+      key: "3",
+      label: "Yashash joyi",
+      children: userData?.address,
+    },
+    {
+      key: "4",
+      label: "Tug'ilgan sana",
+      children: dayjs(userData?.date_birth).format("DD-MM-YYYY"),
+    },
+    {
+      key: "5",
+      label: "Jinsi",
+      children: userData?.gender == "male" ? "Erkak" : "Ayol",
+    },
+  ];
   return (
-    <Content style={{ margin: "24px 16px 0" }}>
+    <Content style={{ margin: "24px 0 0" }}>
       <div
         style={{
           minHeight: "96vh",
         }}
       >
-        <Link to={location.pathname.split("/").splice(0, 3).join("/")}>
-          <Flex align="center" gap={5}>
-            <IoArrowBackSharp />
-            <p>Shifokorlar ro'yhatiga qaytish</p>
-          </Flex>
-        </Link>
-        <br />
         <Flex
-          align="center"
           gap={30}
           style={{
             padding: 24,
@@ -68,7 +91,12 @@ const SingleDocktor: React.FC = () => {
                 <img
                   src={userData?.img_url || userImage}
                   alt=""
-                  style={{ width: "200px", borderRadius: "50%" }}
+                  style={{
+                    width: "200px",
+                    borderRadius: "50%",
+                    height: "200px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="profile_hidden">
                   <TbCameraPlus size={30} color="white" />
@@ -96,7 +124,7 @@ const SingleDocktor: React.FC = () => {
                         fetch(
                           import.meta.env.VITE_APP_URL +
                             "/staffs/image/" +
-                            params.id,
+                            userData?.id,
                           {
                             method: "PUT",
                             headers: {
@@ -134,66 +162,21 @@ const SingleDocktor: React.FC = () => {
               </Title>
             </Flex>
           </Flex>
-          <Divider type="vertical" style={{ height: "350px" }} />
-          <Flex vertical style={{ width: "80%" }}>
-            <Flex
-              style={{ width: "100%", height: "60px" }}
-              gap={50}
-              align="center"
-            >
-              {userData?.gender ? (
-                <Flex style={{ width: "33.3%" }} align="center" gap={10}>
-                  {" "}
-                  Jinsi:{" "}
-                  {userData?.gender == "male" ? (
-                    <Flex>
-                      {" "}
-                      Erkak <FaMale />
-                    </Flex>
-                  ) : (
-                    <Flex>
-                      Ayol <FaFemale />
-                    </Flex>
-                  )}{" "}
-                </Flex>
-              ) : (
-                <Flex style={{ width: "33.3%" }}> Jinsi: Yuklanmoqda... </Flex>
-              )}
-              <Divider type="vertical" style={{ height: "100px" }} />
-              <Flex style={{ width: "33.3%" }} gap={10}>
-                <GrPhone /> Telefon raqam:{" "}
-                {userData?.phone_number
-                  ? userData?.phone_number
-                  : "Yuklanmoqda..."}
-              </Flex>
-            </Flex>
-            <Divider />
-            <Flex
-              style={{ width: "100%", height: "60px" }}
-              align="center"
-              gap={50}
-            >
-              <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                <IoHomeOutline /> Manzil:{" "}
-                {userData?.address ? userData?.address : "Yuklanmoqda.."}
-              </Flex>
-              <Divider type="vertical" style={{ height: "100px" }} />
-              <Flex align="center" gap={10} style={{ width: "33.3%" }}>
-                <BsCalendar2Date /> Ro'yatdan o'tgan sanasi :{" "}
-                {userData?.created_at
-                  ? dayjs(userData?.created_at).format("DD-MM-YYYY")
-                  : "Yuklanmoqda..."}
-              </Flex>
-            </Flex>
-            <Divider />
-          </Flex>
+          <br />
+          <br />
+          <Descriptions
+            layout="vertical"
+            items={items}
+            labelStyle={{
+              color: ThemeProvide.theme == "dark" ? "#eee" : "#333",
+              fontSize: "20px",
+            }}
+          />
         </Flex>
-        <br />
-        <DocktorTreatmentTable patient_id={params.id} />
       </div>
       {contextHolder}
     </Content>
   );
 };
 
-export default SingleDocktor;
+export default Profile;

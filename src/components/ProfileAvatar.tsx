@@ -4,13 +4,15 @@ import { Avatar, Dropdown, Space } from "antd";
 import { MdDevices, MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { ThemeProvider } from "../App";
+import { useLocation } from "react-router-dom";
 
 const ProfileAvatar: React.FC = () => {
   const { setTheme, theme } = useContext(ThemeProvider);
+  const { pathname } = useLocation();
 
   const items: MenuProps["items"] = [
     {
-      label: <a href="/settings">Profile</a>,
+      label: <a href={pathname + "/profile"}>Profile</a>,
       key: "0",
     },
     {

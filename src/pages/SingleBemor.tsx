@@ -1,4 +1,4 @@
-import { Divider, Flex, Layout, Tabs, Typography, theme } from "antd";
+import { Divider, Flex, Layout, Tabs, Typography, message, theme } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 const { Title } = Typography;
@@ -22,12 +22,17 @@ const SingleBemor: React.FC = () => {
   const params = useParams();
   const location = useLocation();
   const [userData, setUserData] = useState<UserData>();
+  const [messageApi, contextHolder] = message.useMessage();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const token = localStorage.getItem("auth");
 
   useEffect(() => {
+    fetchData();
+  }, [location, params.id, token]);
+  const fetchData = () => {
     fetch(import.meta.env.VITE_APP_URL + "/user/" + params.id, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,7 +42,8 @@ const SingleBemor: React.FC = () => {
       .then((data) => {
         setUserData(data.result);
       });
-  }, [location, params.id, token]);
+  };
+
   const tabItems = [
     {
       icon: MdOutlinePayments,
@@ -87,7 +93,57 @@ const SingleBemor: React.FC = () => {
                   <TbCameraPlus size={30} color="white" />
                 </div>
               </label>
-              <input type="file" style={{ display: "none" }} id="profile" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="profile"
+                onChange={(e) => {
+                  if (e.target.files?.length) {
+                    messageApi.loading("Profile rasmi yangilanmoqda", 15);
+                    const formData = new FormData();
+                    formData.append("file", e.target.files[0]);
+                    formData.append("upload_preset", "youtube");
+                    fetch(
+                      "https://api.cloudinary.com/v1_1/didddubfm/image/upload",
+                      {
+                        method: "POST",
+                        body: formData,
+                      }
+                    )
+                      .then((res) => res.json())
+                      .then((data) => {
+                        fetch(
+                          import.meta.env.VITE_APP_URL +
+                            "/user/image/" +
+                            userData?.id,
+                          {
+                            method: "PUT",
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                              "Content-type": "application/json",
+                            },
+
+                            body: JSON.stringify({ image_url: data.url }),
+                          }
+                        )
+                          .then((res) => res.json())
+                          .then((data) => {
+                            if (data.message == "updated") {
+                              messageApi.destroy();
+                              messageApi.success("Profile rasmi yangilandi", 2);
+                              fetchData();
+                            } else {
+                              messageApi.destroy();
+                              messageApi.error(
+                                "Profile rasmi yangilashda xatolik yuzaga keldi",
+                                2
+                              );
+                            }
+                          });
+                      });
+                  }
+                }}
+              />
               <Title level={4} style={{ margin: 0 }}>
                 {userData?.name ? userData?.name : "Yuklanmoqda..."}{" "}
                 {userData?.surname}
@@ -241,6 +297,7 @@ const SingleBemor: React.FC = () => {
           />
         </Flex>
       </div>
+      {contextHolder}
     </Content>
   );
 };
