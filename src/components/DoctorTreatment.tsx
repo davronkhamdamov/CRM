@@ -237,13 +237,15 @@ const DocktorTreatment = () => {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result.total);
+
         setData(result.result);
         setLoading(false);
         setTableParams({
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 1,
+            total: result.total,
           },
         });
       });
