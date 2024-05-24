@@ -12,7 +12,7 @@ const ProfileAvatar: React.FC = () => {
 
   const items: MenuProps["items"] = [
     {
-      label: <a href={pathname.split("/")[1] + "/profile"}>Profile</a>,
+      label: <a href={"/" + pathname.split("/")[1] + "/profile"}>Profile</a>,
       key: "0",
     },
     {
