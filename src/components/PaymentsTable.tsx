@@ -140,7 +140,6 @@ const PaymentsTable = () => {
           <Input placeholder="Bemorni qidirish" />
         </Form.Item>
       </Form>
-      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.id}
