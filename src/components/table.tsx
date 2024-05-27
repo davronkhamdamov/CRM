@@ -31,6 +31,7 @@ const TableComponent: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [doctorModal, setDoctorModal] = useState<EditModal>({
     id: "",
     isOpen: false,
@@ -212,6 +213,7 @@ const TableComponent: FC = () => {
       .then((results) => {
         setData(results.result);
         setLoading(false);
+        setTotalPage(results.total);
         setTableParams({
           ...tableParams,
           pagination: {
@@ -262,6 +264,9 @@ const TableComponent: FC = () => {
         }
         onChange={handleTableChange}
       />
+      <p style={{ textAlign: "right", marginRight: "20px" }}>
+        Barcha bemorlar soni - {totalPage}
+      </p>
       <Spin
         indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
         spinning={toLoading}
