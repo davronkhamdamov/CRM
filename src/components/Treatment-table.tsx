@@ -391,6 +391,7 @@ const Treatment = () => {
             })}
         />
       </Flex>
+      <br />
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}
