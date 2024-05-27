@@ -320,7 +320,6 @@ const Treatment = () => {
   };
   return (
     <>
-      <br />
       <Flex gap={20}>
         <RangePicker
           format="DD-MM-YYYY"
@@ -392,7 +391,6 @@ const Treatment = () => {
             })}
         />
       </Flex>
-      <br />
       <br />
       <Table
         columns={columns}
