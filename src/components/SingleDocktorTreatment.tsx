@@ -52,8 +52,6 @@ const SingleDocktorTreatment = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-
         setCureData(data.result);
       });
     fetch(import.meta.env.VITE_APP_URL + "/service/by-category", {
@@ -126,7 +124,7 @@ const SingleDocktorTreatment = () => {
     {
       key: "10",
       label: "Prikus",
-      children: cureData?.prikus && (
+      children: cureData?.created_at && (
         <Select
           defaultValue={cureData?.prikus}
           placeholder="Prikus"
