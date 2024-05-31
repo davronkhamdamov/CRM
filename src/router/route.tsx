@@ -19,7 +19,6 @@ import Services from "../pages/Services";
 import Settings from "../pages/Settings";
 import Hisobot from "../pages/Hisobot";
 import DockerLayout from "../layout/DoctorLayout";
-import ForgetPassword from "../pages/ForgetPassword";
 import NotFoundPage from "../pages/NotFoundPage";
 import DocktorTreatment from "../pages/DocktorTreatment";
 import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
