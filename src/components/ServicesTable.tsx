@@ -200,7 +200,7 @@ const ServicesTable = () => {
         onFinish={(a: { search: string }) => setSearch(a.search)}
       >
         <Form.Item name="search">
-          <Input placeholder="Bemorni qidirish" />
+          <Input placeholder="Xizmatlarni qidirish" />
         </Form.Item>
       </Form>
       <br />

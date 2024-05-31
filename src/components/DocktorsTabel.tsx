@@ -170,7 +170,7 @@ const DoctorsTable = () => {
         onFinish={(a: { search: string }) => setSearch(a.search)}
       >
         <Form.Item name="search">
-          <Input placeholder="Bemorni qidirish" />
+          <Input placeholder="Shifokorni qidirish" />
         </Form.Item>
       </Form>
       <Table

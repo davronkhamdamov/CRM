@@ -52,6 +52,8 @@ const SingleDocktorTreatment = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
+
         setCureData(data.result);
       });
     fetch(import.meta.env.VITE_APP_URL + "/service/by-category", {

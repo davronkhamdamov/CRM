@@ -6,7 +6,6 @@ import {
   LockOutlined,
 } from "@ant-design/icons";
 import { Alert, Button, Flex, Form, Input, Space } from "antd";
-import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
   const [error, setError] = useState("");
@@ -82,12 +81,6 @@ const App: React.FC = () => {
             }
           />
         </Form.Item>
-        <Form.Item>
-          <Link className="login-form-forgot" to="forget-password">
-            Parolni unutdingizimi?
-          </Link>
-        </Form.Item>
-
         <Form.Item>
           <Button
             type="primary"
