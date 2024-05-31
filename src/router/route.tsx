@@ -61,7 +61,9 @@ const route = createBrowserRouter(
       </Route>
       <Route path="/auth">
         <Route index element={<Login />} />
-        <Route path="forget-password" element={<ForgetPassword />} />
+      </Route>
+      <Route path="/">
+        <Route index element={<Login />} />
       </Route>
       <Route path="/book" element={<Book />} />
       <Route path="*" element={<NotFoundPage />} />
