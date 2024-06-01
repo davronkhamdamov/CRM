@@ -932,7 +932,7 @@ const teeth = [
     },
   },
   {
-    id: 76,
+    id: 75,
     img: seventeen,
     style: {
       width: "65px",
@@ -950,7 +950,7 @@ const teeth = [
     },
   },
   {
-    id: 75,
+    id: 74,
     img: eighteen,
     style: {
       width: "60px",
