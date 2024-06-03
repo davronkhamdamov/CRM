@@ -40,7 +40,7 @@ const StaffsTable = () => {
       title: "Ismi",
       render: (record) => {
         return (
-          <a href={`patient/${record.id}`}>
+          <a href={`staff/${record.id}`}>
             {record.name} {record.surname}
           </a>
         );
