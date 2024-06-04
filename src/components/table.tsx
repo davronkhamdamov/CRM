@@ -244,7 +244,7 @@ const TableComponent: FC = () => {
             maxWidth: 4500,
             display: "flex",
             alignItems: "center",
-            gap: "40px",
+            justifyContent: "space-between",
           }}
           onFinish={(a: { search: string }) => setSearch(a.search)}
         >
