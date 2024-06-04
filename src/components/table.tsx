@@ -242,6 +242,7 @@ const TableComponent: FC = () => {
         <Form
           style={{
             maxWidth: 4500,
+            width: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
