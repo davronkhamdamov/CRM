@@ -8,6 +8,7 @@ import {
   Tag,
   Form,
   Input,
+  Checkbox,
 } from "antd";
 import qs from "qs";
 import { FC, useEffect, useState } from "react";
@@ -31,6 +32,7 @@ const TableComponent: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const [debt, setDebt] = useState<boolean>(false);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [doctorModal, setDoctorModal] = useState<EditModal>({
     id: "",
@@ -200,7 +202,7 @@ const TableComponent: FC = () => {
     fetch(
       `${import.meta.env.VITE_APP_URL}/user/?${qs.stringify(
         getuserParams(tableParams)
-      )}&search=${search}`,
+      )}&search=${search}&debt=${debt}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -234,11 +236,20 @@ const TableComponent: FC = () => {
   return (
     <>
       <Form
-        style={{ maxWidth: 300 }}
+        style={{ maxWidth: 4500, display: "flex", gap: "40px" }}
         onFinish={(a: { search: string }) => setSearch(a.search)}
       >
-        <Form.Item name="search">
+        <Form.Item name="search" style={{ display: "flex" }}>
           <Input placeholder="Bemorni qidirish" />
+        </Form.Item>
+        <Form.Item>
+          <Checkbox
+            onChange={() => {
+              setDebt(!debt);
+            }}
+          >
+            Qarzdor bemorlar
+          </Checkbox>
         </Form.Item>
       </Form>
       <Table
