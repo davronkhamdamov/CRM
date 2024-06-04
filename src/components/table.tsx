@@ -246,6 +246,7 @@ const TableComponent: FC = () => {
           <Checkbox
             onChange={() => {
               setDebt(!debt);
+              fetchData();
             }}
           >
             Qarzdor bemorlar
