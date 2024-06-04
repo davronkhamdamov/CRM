@@ -9,6 +9,7 @@ import {
   Form,
   Input,
   Checkbox,
+  Flex,
 } from "antd";
 import qs from "qs";
 import { FC, useEffect, useState } from "react";
@@ -181,7 +182,7 @@ const TableComponent: FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams), search]);
+  }, [JSON.stringify(tableParams), search, debt]);
 
   const handleTableChange: TableProps["onChange"] = (
     pagination,
@@ -213,6 +214,8 @@ const TableComponent: FC = () => {
         return res.json();
       })
       .then((results) => {
+        console.log(results.result);
+
         setData(results.result);
         setLoading(false);
         setTotalPage(results.total);
@@ -235,24 +238,30 @@ const TableComponent: FC = () => {
 
   return (
     <>
-      <Form
-        style={{ maxWidth: 4500, display: "flex", gap: "40px" }}
-        onFinish={(a: { search: string }) => setSearch(a.search)}
-      >
-        <Form.Item name="search" style={{ display: "flex" }}>
-          <Input placeholder="Bemorni qidirish" />
-        </Form.Item>
-        <Form.Item>
+      <Flex>
+        <Form
+          style={{
+            maxWidth: 4500,
+            display: "flex",
+            alignItems: "center",
+            gap: "40px",
+          }}
+          onFinish={(a: { search: string }) => setSearch(a.search)}
+        >
+          <Form.Item name="search" style={{ display: "flex" }}>
+            <Input placeholder="Bemorni qidirish" />
+          </Form.Item>
+        </Form>
+        <div>
           <Checkbox
-            onChange={() => {
-              setDebt(!debt);
-              fetchData();
+            onChange={(e) => {
+              setDebt(e.target.checked);
             }}
           >
             Qarzdor bemorlar
           </Checkbox>
-        </Form.Item>
-      </Form>
+        </div>
+      </Flex>
       <Table
         columns={columns}
         rowKey={(record) => record.id}
