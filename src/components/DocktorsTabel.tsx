@@ -89,6 +89,7 @@ const DoctorsTable = () => {
       dataIndex: "color",
       render: (_, record) => (
         <ColorPicker
+          size="large"
           onChangeComplete={(e) => {
             fetch(import.meta.env.VITE_APP_URL + "/staffs/color/" + record.id, {
               method: "PUT",
