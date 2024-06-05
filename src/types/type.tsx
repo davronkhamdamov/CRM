@@ -32,6 +32,7 @@ export interface DataType {
   payed_price: number;
   price: number;
   salary?: number;
+  color: string;
 }
 export type themeMode = "light" | "dark" | "system";
 

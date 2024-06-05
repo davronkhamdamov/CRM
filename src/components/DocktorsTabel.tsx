@@ -1,4 +1,13 @@
-import { Form, Input, Popconfirm, Space, Table, Tooltip, message } from "antd";
+import {
+  ColorPicker,
+  Form,
+  Input,
+  Popconfirm,
+  Space,
+  Table,
+  Tooltip,
+  message,
+} from "antd";
 import qs from "qs";
 import { useEffect, useState } from "react";
 import {
@@ -76,6 +85,30 @@ const DoctorsTable = () => {
       width: "20%",
     },
     {
+      title: "Rangi",
+      dataIndex: "color",
+      render: (_, record) => (
+        <ColorPicker
+          onChangeComplete={(e) => {
+            fetch(import.meta.env.VITE_APP_URL + "/staffs/color/" + record.id, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify({
+                color: e.toHex(),
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => console.log(data));
+          }}
+          defaultValue={record.color}
+        />
+      ),
+      width: "20%",
+    },
+    {
       title: "Role",
       dataIndex: "role",
       width: "20%",
@@ -109,7 +142,7 @@ const DoctorsTable = () => {
       width: "20%",
     },
   ];
-
+  console.log(data);
   useEffect(() => {
     fetchData();
   }, [JSON.stringify(tableParams), search]);
