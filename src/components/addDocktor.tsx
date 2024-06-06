@@ -5,6 +5,7 @@ import {
   Col,
   Drawer,
   Form,
+  FormProps,
   Input,
   Row,
   Select,
@@ -12,13 +13,13 @@ import {
   message,
 } from "antd";
 import { LoadingProvider } from "../App";
+import { UserData } from "../types/type";
 
 const { Option } = Select;
 const CreateAccount = () => {
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [actionData, setActionData] = useState({});
   const showDrawer = () => {
     setOpen(true);
   };
@@ -26,7 +27,9 @@ const CreateAccount = () => {
     setOpen(false);
   };
   const token = localStorage.getItem("auth");
-  const onSubmit = () => {
+  const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
+    console.log(actionData);
+
     setLoadingCnx(true);
     fetch(import.meta.env.VITE_APP_URL + "/staffs", {
       method: "POST",
@@ -64,20 +67,12 @@ const CreateAccount = () => {
             paddingBottom: 80,
           },
         }}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Bekor qilish</Button>
-            <Button onClick={onSubmit} type="primary">
-              Yaratish
-            </Button>
-          </Space>
-        }
       >
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={onSubmit}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="first_name"
+                name="name"
                 label="Ism"
                 rules={[
                   {
@@ -86,19 +81,12 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos ism kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, name: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Iltimos ism kiriting" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="last_name"
+                name="surname"
                 label="Familya"
                 rules={[
                   {
@@ -107,21 +95,14 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Familya kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, surname: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Familya kiriting" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="adress"
+                name="address"
                 label="Yashash joyi"
                 rules={[
                   {
@@ -130,19 +111,12 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos yashash joyini kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, address: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Iltimos yashash joyini kiriting" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="phone"
+                name="phone_number"
                 label="Telefon"
                 rules={[
                   {
@@ -151,14 +125,7 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos telefon nomer kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, phone_number: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Iltimos telefon nomer kiriting" />
               </Form.Item>
             </Col>
           </Row>
@@ -174,14 +141,7 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Select
-                  placeholder="Iltimos jinsingizni tanlang"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, gender: e };
-                    });
-                  }}
-                >
+                <Select placeholder="Iltimos jinsingizni tanlang">
                   <Option value="male">Erkak</Option>
                   <Option value="female">Ayol</Option>
                 </Select>
@@ -198,14 +158,7 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Select
-                  placeholder="Role"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, role: e };
-                    });
-                  }}
-                >
+                <Select placeholder="Role">
                   <Option value="reception">Qabulxona mudiri</Option>
                   <Option value="doctor">Doktor</Option>
                 </Select>
@@ -215,7 +168,7 @@ const CreateAccount = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="logn"
+                name="login"
                 label="Login"
                 rules={[
                   {
@@ -224,14 +177,7 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos login kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, login: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Iltimos login kiriting" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -245,17 +191,38 @@ const CreateAccount = () => {
                   },
                 ]}
               >
-                <Input
-                  placeholder="Iltimos parol kiriting"
-                  onChange={(e) => {
-                    setActionData((prev) => {
-                      return { ...prev, password: e.target.value };
-                    });
-                  }}
-                />
+                <Input placeholder="Iltimos parol kiriting" />
               </Form.Item>
             </Col>
           </Row>
+          <Col span={12}>
+            <Form.Item
+              name="foiz"
+              label="Ish xaqqi foizi"
+              rules={[
+                {
+                  required: true,
+                  max: 100,
+                  min: 0,
+                  message: "Ish xaqqi foizini kiriting maximum 100 minimum 1",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Ish xaqqi foizi"
+                type="number"
+                maxLength={3}
+                max={100}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+          <Space>
+            <Button onClick={onClose}>Bekor qilish</Button>
+            <Button type="primary" htmlType="submit">
+              Yaratish
+            </Button>
+          </Space>
         </Form>
         {contextHolder}
       </Drawer>

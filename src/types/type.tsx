@@ -14,6 +14,7 @@ export interface TableParams {
   filters?: Parameters<GetProp<TableProps, "onChange">>[1];
 }
 export interface DataType {
+  foiz: number;
   is_done: string;
   user_id: string;
   method: string;
@@ -89,6 +90,7 @@ export interface ServiceFieldType {
   service_name: string;
 }
 export interface Staffs {
+  foiz: number;
   address: string;
   surname: string;
   phone_number: string;

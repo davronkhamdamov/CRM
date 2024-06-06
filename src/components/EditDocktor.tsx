@@ -28,6 +28,7 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
     login: "",
     phone_number: "",
     password: "",
+    foiz: 0,
   });
   useEffect(() => {
     if (data.id) {
@@ -55,13 +56,13 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
       login: "",
       phone_number: "",
       password: "",
+      foiz: 0,
     });
   };
 
   const token = localStorage.getItem("auth");
   const onSubmit: FormProps<Staffs>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-
     fetch(import.meta.env.VITE_APP_URL + "/staffs", {
       method: "PUT",
       headers: {
@@ -78,6 +79,7 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
         password: actionData.password,
         phone_number: actionData.phone_number,
         role: actionData.role,
+        foiz: actionData.foiz,
       }),
     })
       .then((res) => res.json())
@@ -118,6 +120,7 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
               phone_number: doctor.phone_number,
               login: doctor.login,
               gender: doctor.gender,
+              foiz: doctor.foiz,
             }}
           >
             <Row gutter={16}>
@@ -245,6 +248,28 @@ const EditDoctor: React.FC<EditModalProps> = ({ data, setOpen }) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Col span={12}>
+              <Form.Item
+                name="foiz"
+                label="Ish xaqqi foizi"
+                rules={[
+                  {
+                    required: true,
+                    max: 100,
+                    min: 0,
+                    message: "Ish xaqqi foizini kiriting maximum 100 minimum 1",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Ish xaqqi foizi"
+                  type="number"
+                  maxLength={3}
+                  max={100}
+                  min={0}
+                />
+              </Form.Item>
+            </Col>
             <Space>
               <Button type="primary" htmlType="submit">
                 Yangilash

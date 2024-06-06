@@ -35,6 +35,7 @@ const StaffsTable = () => {
     page: params.pagination?.current,
     ...params,
   });
+
   const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
@@ -46,6 +47,19 @@ const StaffsTable = () => {
         );
       },
       width: "20%",
+    },
+    {
+      title: "Shifoxona summasi",
+      dataIndex: "salary",
+      width: "15%",
+      render: (money, record) => formatMoney(money * (1 - record.foiz / 100)),
+    },
+    {
+      title: "Shifokor summasi",
+      dataIndex: "salary",
+      width: "15%",
+      render: (money, record) =>
+        formatMoney(money * (1 - (100 - record.foiz) / 100)),
     },
     {
       title: "Hisob",
@@ -201,28 +215,29 @@ const StaffsTable = () => {
             );
           }}
         />
-        {role == "admin" && (
-          <Select
-            style={{ minWidth: "200px" }}
-            placeholder="Xodimni tanlang"
-            optionFilterProp="children"
-            onChange={onChange}
-            allowClear
-            options={staffs
-              .filter((e) => e.role === "doctor")
-              .map((e) => {
-                return {
-                  value: e.id,
-                  label: e.name,
-                };
-              })}
-          />
-        )}
+        {role == "admin" ||
+          (role == "reception" && (
+            <Select
+              style={{ minWidth: "200px" }}
+              placeholder="Xodimni tanlang"
+              optionFilterProp="children"
+              onChange={onChange}
+              allowClear
+              options={staffs
+                .filter((e) => e.role === "doctor")
+                .map((e) => {
+                  return {
+                    value: e.id,
+                    label: e.name,
+                  };
+                })}
+            />
+          ))}
       </Flex>
       <br />
       <br />
       <br />
-      {role === "admin" ? (
+      {(role === "admin" || role == "reception") && (
         <Table
           columns={columns}
           rowKey={(record) => record.id}
@@ -231,7 +246,8 @@ const StaffsTable = () => {
           scroll={{ y: 590 }}
           onChange={handleTableChange}
         />
-      ) : (
+      )}
+      {role === "doctor" && (
         <Flex vertical gap={20} justify="center">
           <Flex justify="center">
             <Flex
@@ -252,7 +268,12 @@ const StaffsTable = () => {
               <GiReceiveMoney size={70} />
               <div style={{ fontSize: "20px" }}>{formatDate()}</div>
               <Flex gap={10} style={{ fontSize: "50px" }}>
-                <CountUp end={Number(data[0]?.salary)} separator=" " />{" "}
+                <CountUp
+                  end={
+                    Number(data[0].salary) * (1 - (100 - data[0]?.foiz) / 100)
+                  }
+                  separator=" "
+                />
                 <p>so'm</p>
               </Flex>
             </Flex>

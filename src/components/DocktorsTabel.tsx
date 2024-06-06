@@ -110,9 +110,15 @@ const DoctorsTable = () => {
       width: "20%",
     },
     {
+      title: "Ish xaqqi foizi",
+      dataIndex: "foiz",
+      width: "15%",
+      render: (foiz) => (foiz ? foiz : 0) + "%",
+    },
+    {
       title: "Role",
       dataIndex: "role",
-      width: "20%",
+      width: "15%",
     },
     {
       title: "Bajariladigan ishlar",
