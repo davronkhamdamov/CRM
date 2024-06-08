@@ -215,8 +215,7 @@ const StaffsTable = () => {
             );
           }}
         />
-        {role == "admin" ||
-          (role == "reception" && (
+        {(role == "admin" || role == "reception") && (
             <Select
               style={{ minWidth: "200px" }}
               placeholder="Xodimni tanlang"
@@ -232,7 +231,7 @@ const StaffsTable = () => {
                   };
                 })}
             />
-          ))}
+          )}
       </Flex>
       <br />
       <br />
