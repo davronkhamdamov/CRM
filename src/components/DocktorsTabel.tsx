@@ -82,7 +82,7 @@ const DoctorsTable = () => {
       title: "Jinsi",
       dataIndex: "gender",
       render: (record) => (record === "male" ? "Erkak" : "Ayol"),
-      width: "20%",
+      width: "10%",
     },
     {
       title: "Rangi",
@@ -107,7 +107,7 @@ const DoctorsTable = () => {
           defaultValue={record.color}
         />
       ),
-      width: "20%",
+      width: "10%",
     },
     {
       title: "Ish xaqqi foizi",
@@ -118,6 +118,11 @@ const DoctorsTable = () => {
     {
       title: "Role",
       dataIndex: "role",
+      width: "15%",
+    },
+    {
+      title: "Telefon raqami",
+      dataIndex: "phone_number",
       width: "15%",
     },
     {

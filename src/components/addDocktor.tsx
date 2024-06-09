@@ -28,8 +28,6 @@ const CreateAccount = () => {
   };
   const token = localStorage.getItem("auth");
   const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
-    console.log(actionData);
-
     setLoadingCnx(true);
     fetch(import.meta.env.VITE_APP_URL + "/staffs", {
       method: "POST",

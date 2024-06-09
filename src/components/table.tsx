@@ -88,25 +88,31 @@ const TableComponent: FC = () => {
           </a>
         );
       },
-      width: "20%",
+      width: "15%",
     },
     {
       title: "Jinsi",
       dataIndex: "gender",
       render: (gender) => (gender == "male" ? "Erkak" : "Ayol"),
-      width: "10%",
+      width: "5%",
     },
     {
       title: "Ro'yxatdan o'tgan sanasi",
       dataIndex: "created_at",
       render: (registered) => `${dayjs(registered).format("DD-MM-YYYY")}`,
-      width: "15%",
+      width: "14%",
     },
     {
       title: "Manzil",
       dataIndex: "address",
       render: (location) => `${location}`,
       width: "20%",
+    },
+    {
+      title: "Telefon raqami",
+      dataIndex: "phone_number",
+      render: (location) => `${location}`,
+      width: "10%",
     },
     {
       title: "Balans",
@@ -214,8 +220,6 @@ const TableComponent: FC = () => {
         return res.json();
       })
       .then((results) => {
-        console.log(results.result);
-
         setData(results.result);
         setLoading(false);
         setTotalPage(results.total);
@@ -240,28 +244,22 @@ const TableComponent: FC = () => {
     <>
       <Flex>
         <Form
-          style={{
-            maxWidth: 4500,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
           onFinish={(a: { search: string }) => setSearch(a.search)}
+          style={{ display: "flex", alignItems: "center", gap: 50 }}
         >
-          <Form.Item name="search" style={{ display: "flex" }}>
+          <Form.Item name="search">
             <Input placeholder="Bemorni qidirish" />
           </Form.Item>
+          <div style={{ height: "50px" }}>
+            <Checkbox
+              onChange={(e) => {
+                setDebt(e.target.checked);
+              }}
+            >
+              Qarzdor bemorlar
+            </Checkbox>
+          </div>
         </Form>
-        <div>
-          <Checkbox
-            onChange={(e) => {
-              setDebt(e.target.checked);
-            }}
-          >
-            Qarzdor bemorlar
-          </Checkbox>
-        </div>
       </Flex>
       <Table
         columns={columns}

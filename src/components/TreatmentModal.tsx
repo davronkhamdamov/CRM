@@ -41,9 +41,9 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
             <th className="table_item">Xizmat nomi</th>
             <th className="table_item">Xizmat narxi</th>
           </tr>
-          {treatments?.map((e) => {
+          {treatments?.map((e, i) => {
             return (
-              <tr className="table_wrapper">
+              <tr className="table_wrapper" key={i}>
                 <td className="table_item">{e.tooth_id}</td>
                 <td className="table_item">{e.service_name}</td>
                 <td className="table_item">{formatMoney(+e?.price)}</td>
