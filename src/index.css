@@ -84,3 +84,20 @@
     background: #555;
     border-radius: 20px;
 }
+
+.debt {
+    padding: 0 !important;
+}
+
+.qarz {
+    padding: 10px !important;
+    background: rgb(255, 90, 90);
+}
+
+.column {
+    padding: 10px;
+}
+
+.ant-table-thead .debt {
+    padding: 10px !important;
+}

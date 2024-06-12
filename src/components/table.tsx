@@ -81,11 +81,16 @@ const TableComponent: FC = () => {
     {
       title: "Ismi",
       sorter: true,
-      render: (record) => {
+      render: (record, data) => {
         return (
-          <a href={`patient/${record.id}`}>
-            {record.name} {record.surname}
-          </a>
+          <div className={data.balance < 0 ? "qarz" : "column"}>
+            <a
+              href={`patient/${record.id}`}
+              style={{ color: data.balance < 0 ? "white" : "" }}
+            >
+              {record.name} {record.surname}
+            </a>
+          </div>
         );
       },
       width: "15%",
@@ -94,39 +99,67 @@ const TableComponent: FC = () => {
     {
       title: "Jinsi",
       dataIndex: "gender",
-      render: (gender) => (gender == "male" ? "Erkak" : "Ayol"),
+      render: (gender, data) => (
+        <div className={data.balance < 0 ? "qarz" : "column"}>
+          <p style={{ color: data.balance < 0 ? "white" : "" }}>
+            {gender == "male" ? "Erkak" : "Ayol"}
+          </p>
+        </div>
+      ),
       width: "5%",
       className: "debt",
     },
     {
       title: "Ro'yxatdan o'tgan sanasi",
       dataIndex: "created_at",
-      render: (registered) => `${dayjs(registered).format("DD-MM-YYYY")}`,
+      render: (registered, data) => (
+        <div className={data.balance < 0 ? "qarz" : "column"}>
+          <p style={{ color: data.balance < 0 ? "white" : "" }}>
+            {dayjs(registered).format("DD-MM-YYYY")}
+          </p>
+        </div>
+      ),
       className: "debt",
       width: "14%",
     },
     {
       title: "Manzil",
       dataIndex: "address",
-      render: (location) => `${location}`,
+      render: (location, data) => (
+        <div className={data.balance < 0 ? "qarz" : "column"}>
+          <p style={{ color: data.balance < 0 ? "white" : "" }}>{location}</p>
+        </div>
+      ),
       className: "debt",
       width: "20%",
     },
     {
       title: "Telefon raqami",
       dataIndex: "phone_number",
-      render: (location) => `${location}`,
+      render: (location, data) => (
+        <div className={data.balance < 0 ? "qarz" : "column"}>
+          <p style={{ color: data.balance < 0 ? "white" : "" }}>{location}</p>
+        </div>
+      ),
       className: "debt",
       width: "10%",
     },
     {
       title: "Balans",
       dataIndex: "balance",
-      render: (balance) => {
+      render: (balance, data) => {
         if (balance < 0) {
-          return <Tag color="error">{formatMoney(balance)}</Tag>;
+          return (
+            <div className={data.balance < 0 ? "qarz" : "column"}>
+              <Tag color="error">{formatMoney(balance)}</Tag>
+            </div>
+          );
         }
-        return <Tag color="default">{formatMoney(balance)}</Tag>;
+        return (
+          <div className={data.balance < 0 ? "qarz" : "column"}>
+            <Tag color="green">{formatMoney(balance)}</Tag>
+          </div>
+        );
       },
       width: "15%",
       className: "debt",
@@ -135,59 +168,67 @@ const TableComponent: FC = () => {
       title: "Bajariladigan ishlar",
       dataIndex: "operation",
       className: "debt",
+      align: "center",
       key: "operation",
       render: (_, record) => {
         return (
-          <Space size="middle">
-            <Tooltip placement="bottom" title="Tahrirlash">
-              <MdEdit
-                style={{ cursor: "pointer" }}
-                color="dodgerblue"
-                onClick={() => {
-                  if (openEditModal.id !== record.id) {
-                    setOpenEditModal({
-                      id: record.id,
-                      isOpen: true,
-                    });
-                  }
-                }}
-              />
-            </Tooltip>
-            <Tooltip placement="bottom" title="To'lash">
-              <MdOutlinePayment
-                style={{ cursor: "pointer" }}
-                color="dodgerblue"
-                onClick={() => {
-                  if (openPaymentModal.id !== record.id) {
-                    setOpenPaymentModal({
-                      id: record.id,
-                      isOpen: true,
-                    });
-                  }
-                }}
-              />
-            </Tooltip>
-            <Tooltip placement="bottom" title="Davolash">
-              <FaUserDoctor
-                onClick={() => {
-                  setDoctorModal({
-                    id: record.id,
-                    isOpen: true,
-                  });
-                }}
-                color="#3b82f6"
-                style={{ cursor: "pointer" }}
-              />
-            </Tooltip>
-            <Popconfirm
-              title="O'chirishga ishonchingiz komilmi?"
-              onConfirm={() => deleteUser(record.id)}
-            >
-              <Tooltip placement="bottom" title="O'chirish">
-                <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+          <div className={record.balance < 0 ? "qarz" : "column"}>
+            <Space size="middle">
+              <Tooltip placement="bottom" title="Tahrirlash">
+                <MdEdit
+                  style={{ cursor: "pointer" }}
+                  color={record.balance < 0 ? "white" : "dodgerblue"}
+                  onClick={() => {
+                    if (openEditModal.id !== record.id) {
+                      setOpenEditModal({
+                        id: record.id,
+                        isOpen: true,
+                      });
+                    }
+                  }}
+                />
               </Tooltip>
-            </Popconfirm>
-          </Space>
+              <Tooltip placement="bottom" title="To'lash">
+                <MdOutlinePayment
+                  style={{ cursor: "pointer" }}
+                  color={record.balance < 0 ? "white" : "dodgerblue"}
+                  onClick={() => {
+                    if (openPaymentModal.id !== record.id) {
+                      setOpenPaymentModal({
+                        id: record.id,
+                        isOpen: true,
+                      });
+                    }
+                  }}
+                />
+              </Tooltip>
+              <Tooltip placement="bottom" title="Davolash">
+                <FaUserDoctor
+                  onClick={() => {
+                    setDoctorModal({
+                      id: record.id,
+                      isOpen: true,
+                    });
+                  }}
+                  color={record.balance < 0 ? "white" : "dodgerblue"}
+                  style={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+              <Popconfirm
+                title="O'chirishga ishonchingiz komilmi?"
+                onConfirm={() => deleteUser(record.id)}
+              >
+                <Tooltip placement="bottom" title="O'chirish">
+                  <DeleteOutlined
+                    style={{
+                      color: record.balance < 0 ? "blue" : "red",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Tooltip>
+              </Popconfirm>
+            </Space>
+          </div>
         );
       },
     },
