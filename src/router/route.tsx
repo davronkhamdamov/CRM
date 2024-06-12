@@ -14,6 +14,7 @@ import Book from "./../pages/Book";
 import SingleBemor from "../pages/SingleBemor";
 import SingleDocktor from "../pages/SingleDoctor";
 import Treatment from "../pages/Treatment";
+import DebtTreatment from "../pages/DebtTreatment.tsx";
 import PaymentTypes from "../pages/PaymentTypes";
 import Services from "../pages/Services";
 import Settings from "../pages/Settings";
@@ -24,6 +25,7 @@ import DocktorTreatment from "../pages/DocktorTreatment";
 import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
 import ServiceCategory from "../pages/ServiceCategory";
 import Profile from "../pages/Profile";
+import Calendar from "../pages/Calendar";
 
 const route = createBrowserRouter(
   createRoutesFromElements(
@@ -39,8 +41,10 @@ const route = createBrowserRouter(
         <Route path="services" element={<Services />} />
         <Route path="service-category" element={<ServiceCategory />} />
         <Route path="treatment" element={<Treatment />} />
+        <Route path="debt-treatment" element={<DebtTreatment />} />
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />
+        <Route path="schedule" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/doctor" element={<DockerLayout />}>
@@ -48,6 +52,7 @@ const route = createBrowserRouter(
         <Route path="treatment" element={<DocktorTreatment />} />
         <Route path="treatment/:id" element={<SingleDocktorTreatment />} />
         <Route path="hisobot" element={<Hisobot />} />
+        <Route path="schedule" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/reception" element={<Reception />}>

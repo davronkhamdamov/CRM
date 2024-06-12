@@ -115,9 +115,7 @@ const StaffsTable = () => {
         },
       }
     )
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((results) => {
         setRole(results.role);
         setData(results.result);
@@ -216,22 +214,22 @@ const StaffsTable = () => {
           }}
         />
         {(role == "admin" || role == "reception") && (
-            <Select
-              style={{ minWidth: "200px" }}
-              placeholder="Xodimni tanlang"
-              optionFilterProp="children"
-              onChange={onChange}
-              allowClear
-              options={staffs
-                .filter((e) => e.role === "doctor")
-                .map((e) => {
-                  return {
-                    value: e.id,
-                    label: e.name,
-                  };
-                })}
-            />
-          )}
+          <Select
+            style={{ minWidth: "200px" }}
+            placeholder="Xodimni tanlang"
+            optionFilterProp="children"
+            onChange={onChange}
+            allowClear
+            options={staffs
+              .filter((e) => e.role === "doctor")
+              .map((e) => {
+                return {
+                  value: e.id,
+                  label: e.name,
+                };
+              })}
+          />
+        )}
       </Flex>
       <br />
       <br />

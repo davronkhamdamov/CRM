@@ -12,7 +12,7 @@ import ProfileAvatar from "../components/ProfileAvatar";
 import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
 import { FaDollarSign, FaSuitcaseMedical, FaUserDoctor } from "react-icons/fa6";
-import { GrServices } from "react-icons/gr";
+import { GrSchedule, GrServices } from "react-icons/gr";
 import { CiBoxList } from "react-icons/ci";
 import { SlLogout } from "react-icons/sl";
 import { BiCategory } from "react-icons/bi";
@@ -45,7 +45,9 @@ const RootLayout = () => {
     getItem("To'lov turlari", "payment-type", <MdPayments />),
     getItem("Xizmatlar", "services", <GrServices />),
     getItem("Xizmatlar toifasi", "service-category", <BiCategory />),
+    getItem("Taqvim", "schedule", <GrSchedule />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
+    getItem("Qarzdor davolashlar", "debt-treatment", <FaSuitcaseMedical />),
     getItem("Sozlamalar", "settings", <SettingOutlined />),
     getItem("Xisobot", "hisobot", <CiBoxList />),
     getItem("Chiqish", "auth", <SlLogout />),

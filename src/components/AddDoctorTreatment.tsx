@@ -38,8 +38,8 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
         staff_id: values.doctor_id,
         user_id: data.id,
         is_done: "Kutilmoqda",
-        start_time: dayjs(values.cure_time[0]).add(5, "hour").toISOString(),
-        end_time: dayjs(values.cure_time[1]).add(5, "hour").toISOString(),
+        start_time: dayjs(values.cure_time[0]).format("YYYY-MM-DD HH-mm-ss"),
+        end_time: dayjs(values.cure_time[1]).format("YYYY-MM-DD HH-mm-ss"),
       }),
       headers: {
         "Content-type": "application/json",
@@ -52,7 +52,6 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
           id: "",
           isOpen: false,
         });
-        // location.reload();
         setLoadingCnx(false);
         messageApi.success("Bemor muvaffaqqiyatli biriktirildi", 2);
       })

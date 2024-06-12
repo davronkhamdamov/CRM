@@ -89,29 +89,34 @@ const TableComponent: FC = () => {
         );
       },
       width: "15%",
+      className: "debt",
     },
     {
       title: "Jinsi",
       dataIndex: "gender",
       render: (gender) => (gender == "male" ? "Erkak" : "Ayol"),
       width: "5%",
+      className: "debt",
     },
     {
       title: "Ro'yxatdan o'tgan sanasi",
       dataIndex: "created_at",
       render: (registered) => `${dayjs(registered).format("DD-MM-YYYY")}`,
+      className: "debt",
       width: "14%",
     },
     {
       title: "Manzil",
       dataIndex: "address",
       render: (location) => `${location}`,
+      className: "debt",
       width: "20%",
     },
     {
       title: "Telefon raqami",
       dataIndex: "phone_number",
       render: (location) => `${location}`,
+      className: "debt",
       width: "10%",
     },
     {
@@ -124,10 +129,12 @@ const TableComponent: FC = () => {
         return <Tag color="default">{formatMoney(balance)}</Tag>;
       },
       width: "15%",
+      className: "debt",
     },
     {
       title: "Bajariladigan ishlar",
       dataIndex: "operation",
+      className: "debt",
       key: "operation",
       render: (_, record) => {
         return (

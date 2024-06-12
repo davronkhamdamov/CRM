@@ -38,6 +38,8 @@ const getUserParams = (params: TableParams) => ({
   ...params,
 });
 const Treatment = () => {
+  const token = localStorage.getItem("auth");
+
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
@@ -286,7 +288,6 @@ const Treatment = () => {
       setData([]);
     }
   };
-  const token = localStorage.getItem("auth");
   const fetchData = () => {
     setLoading(true);
     fetch(

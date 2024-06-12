@@ -1,4 +1,15 @@
-import { Button, DatePicker, Flex, Space, Table, Tag, Tooltip } from "antd";
+import {
+  Button,
+  DatePicker,
+  Flex,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  message,
+} from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -6,36 +17,32 @@ import {
   LoadingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  ClockCircleOutlined,
-  MinusCircleOutlined,
   SyncOutlined,
+  MinusCircleOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { CureDataType, DataType, TableParams } from "../types/type";
+import { DataType, EditModal, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
+import { MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
 import dayjs, { Dayjs } from "dayjs";
-import { FaTooth } from "react-icons/fa6";
-import { Link } from "react-router-dom";
-import { AiOutlineFileSearch } from "react-icons/ai";
+import { IoIosMore } from "react-icons/io";
+import AddPaymentCure from "./AddPaymentCure";
 import TreatmentModal from "./TreatmentModal";
-import { MdModeEditOutline } from "react-icons/md";
-import EditModal from "./EditModal";
+import formatMoney from "../lib/money_format";
 const { RangePicker } = DatePicker;
 
-const getRandomuserParams = (params: TableParams) => ({
+const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
   page: params.pagination?.current,
   ...params,
 });
-const DocktorTreatment = () => {
+const Treatment = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
-  const [view, setView] = useState({
-    data: "",
-    isOpen: false,
-  });
-  const [editModal, setEditModal] = useState({
-    data: "",
+  const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
+    id: "",
     isOpen: false,
   });
   const currentDate = dayjs();
@@ -44,6 +51,13 @@ const DocktorTreatment = () => {
   const [filterDate, setFilterDate] = useState<
     [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
   >([null, null]);
+  const [staffs, setStaffs] = useState<Staffs[]>([]);
+  const [staff, setStaff] = useState<string>("");
+
+  const [view, setView] = useState({
+    data: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -51,46 +65,73 @@ const DocktorTreatment = () => {
     },
   });
 
-  const columns: ColumnsType<CureDataType> = [
+  const cancelTreatment = (id: string) => {
+    fetch(import.meta.env.VITE_APP_URL + "/cure/status/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: "Bekor qilingan",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          fetchData();
+          message.success("Davolash bekor qilindi");
+        }
+      });
+  };
+  const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
       render: (record) => {
-        return record.user_name + " " + record.user_surname;
+        return (
+          <a href={`patient/${record.user_id}`}>
+            {record.user_name} {record.user_surname}
+          </a>
+        );
       },
-      width: "13%",
+      width: "10%",
     },
     {
       title: "Shifokor",
-      dataIndex: "",
-      render: (staff) => `${staff?.staff_name + " " + staff.staff_surname}`,
-      width: "13%",
+      render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
+      width: "10%",
     },
     {
       title: "Davolash vaqti",
-      render: (date) =>
-        `${dayjs(date?.start_time).format("HH:mm")} - ${dayjs(
-          date?.end_time
+      render: (dob) =>
+        `${dayjs(dob?.start_time).format("HH:mm DD-MM-YYYY")} - ${dayjs(
+          dob?.end_time
         ).format("HH:mm DD-MM-YYYY")}`,
       width: "15%",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price) => formatMoney(price),
       width: "10%",
     },
     {
       title: "To'lov holati",
-      dataIndex: "",
-      width: "7%",
+      width: "6%",
       render: (record) => {
-        if (record.price === 0) {
+        if (record?.is_done == "Bekor qilingan") {
+          return (
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              Bekor qilingan
+            </Tag>
+          );
+        } else if (record.price === 0) {
           return (
             <Tag icon={<ClockCircleOutlined />} color="default">
               Kutilmoqda
@@ -120,7 +161,7 @@ const DocktorTreatment = () => {
     {
       title: "Holati",
       dataIndex: "is_done",
-      width: "7%",
+      width: "6%",
       render: (is_done) => {
         switch (is_done) {
           case "Yakunlandi":
@@ -141,10 +182,10 @@ const DocktorTreatment = () => {
                 Kutilmoqda
               </Tag>
             );
-          case "To'xtatilgan":
+          case "Bekor qilingan":
             return (
-              <Tag icon={<MinusCircleOutlined />} color="default">
-                To'xtatilgan
+              <Tag icon={<MinusCircleOutlined />} color="error">
+                Bekor qilingnan
               </Tag>
             );
           default:
@@ -158,42 +199,54 @@ const DocktorTreatment = () => {
     },
     {
       title: "Bajariladigan ishlar",
+      dataIndex: "operation",
       key: "operation",
-      align: "center",
       width: "15%",
       render: (_, record) => {
         return (
           <Space size="middle">
-            {record.is_done !== "Yakunlandi" ? (
-              <Tooltip placement="bottom" title="Davolash">
-                <Link to={record.cure_id}>
-                  <FaTooth color="#3b82f6" style={{ cursor: "pointer" }} />
-                </Link>
-              </Tooltip>
-            ) : (
-              <Space size="large">
-                <Tooltip placement="bottom" title="Ko'rish">
-                  <AiOutlineFileSearch
-                    onClick={() => {
-                      setView({ data: record.cure_id, isOpen: true });
-                    }}
-                    color="#3b82f6"
-                    style={{ cursor: "pointer" }}
-                  />
-                </Tooltip>
-              </Space>
-            )}
-            <Space size="large">
-              <Tooltip placement="bottom" title="Tahrirlash">
-                <MdModeEditOutline
-                  onClick={() => {
-                    setEditModal({ data: record.user_id, isOpen: true });
-                  }}
-                  color="#3b82f6"
+            {record.payed_price !== record.price ? (
+              <Tooltip placement="bottom" title="To'lash">
+                <MdOutlinePayment
                   style={{ cursor: "pointer" }}
+                  color="dodgerblue"
+                  onClick={() => {
+                    if (openPaymentModal.id !== record.cure_id) {
+                      setOpenPaymentModal({
+                        id: record.cure_id,
+                        isOpen: true,
+                      });
+                    }
+                  }}
                 />
               </Tooltip>
-            </Space>
+            ) : (
+              <MdOutlinePayment color="#33333333" />
+            )}
+            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
+              <IoIosMore
+                color="#3b82f6"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setView({ data: record.cure_id, isOpen: true });
+                }}
+              />
+            </Tooltip>
+            {record?.is_done !== "Bekor qilingan" &&
+            record.is_done !== "Yakunlandi" ? (
+              <Popconfirm
+                title="Bekor qilshga ishonchingiz komilmi?"
+                onConfirm={() => cancelTreatment(record.cure_id)}
+              >
+                <Tooltip placement="bottom" title="O'chirish">
+                  <MdOutlineCancel
+                    style={{ color: "red", cursor: "pointer" }}
+                  />
+                </Tooltip>
+              </Popconfirm>
+            ) : (
+              <MdOutlineCancel color="rgba(0, 0, 0, 0.1)" />
+            )}
           </Space>
         );
       },
@@ -202,8 +255,22 @@ const DocktorTreatment = () => {
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(tableParams), filterDate]);
-
+  }, [JSON.stringify(tableParams), staff, filterDate]);
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/all", {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStaffs(data.result);
+      })
+      .catch(() => {
+        messageApi.error("Shifokorni yuklash xatolik yuz berdi", 2);
+      });
+  }, []);
   const handleTableChange: TableProps["onChange"] = (
     pagination,
     filters,
@@ -219,19 +286,16 @@ const DocktorTreatment = () => {
       setData([]);
     }
   };
-
   const token = localStorage.getItem("auth");
   const fetchData = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure/for-staff/?${qs.stringify(
-          getRandomuserParams(tableParams)
-        )}&start-date=${
-          filterDate[0] ? filterDate[0].format("YYYY-MM-DD") : null
+        `/cure/debt?${qs.stringify(getUserParams(tableParams))}&start-date=${
+          filterDate[0] ? filterDate[0]?.toISOString() : null
         }&end-date=${
-          filterDate[0] ? filterDate[1]?.format("YYYY-MM-DD") : null
-        }`,
+          filterDate[0] ? filterDate[1]?.toISOString() : null
+        }&filter-staff=${staff}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -251,11 +315,11 @@ const DocktorTreatment = () => {
         });
       });
   };
-
+  const onChange = (value: string) => {
+    setStaff(value);
+  };
   return (
     <>
-      <br />
-      <br />
       <Flex gap={20}>
         <RangePicker
           format="DD-MM-YYYY"
@@ -311,11 +375,23 @@ const DocktorTreatment = () => {
             );
           }}
         />
+        <Select
+          style={{ minWidth: "200px" }}
+          placeholder="Xodimni tanlang"
+          optionFilterProp="children"
+          onChange={onChange}
+          allowClear
+          options={staffs
+            .filter((e) => e.role === "doctor")
+            .map((e) => {
+              return {
+                value: e.id,
+                label: e.name,
+              };
+            })}
+        />
       </Flex>
       <br />
-      <br />
-      <br />
-
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}
@@ -338,9 +414,10 @@ const DocktorTreatment = () => {
         onChange={handleTableChange}
       />
       <TreatmentModal setData={setView} data={view} />
-      <EditModal setData={setEditModal} data={editModal} />
+      <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
+      {contextHolder}
     </>
   );
 };
 
-export default DocktorTreatment;
+export default Treatment;

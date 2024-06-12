@@ -8,6 +8,7 @@ import ProfileAvatar from "../components/ProfileAvatar";
 import { ThemeProvider } from "../App";
 import { FaSuitcaseMedical } from "react-icons/fa6";
 import { CiBoxList } from "react-icons/ci";
+import { GrSchedule } from "react-icons/gr";
 
 const { Sider } = Layout;
 
@@ -28,6 +29,7 @@ const DockerLayout = () => {
   const items = [
     getItem("Statistika", "statistic", <PieChartOutlined />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
+    getItem("Taqvim", "schedule", <GrSchedule />),
     getItem("Xisobot", "hisobot", <CiBoxList />),
     getItem("Chiqish", "auth", <LogoutOutlined />),
   ];
