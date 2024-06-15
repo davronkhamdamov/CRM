@@ -59,6 +59,9 @@ const Calendar = () => {
         minute: "2-digit",
         meridiem: "short",
       }}
+      eventMouseEnter={(e) => {
+        console.log(e);
+      }}
     />
   );
 };

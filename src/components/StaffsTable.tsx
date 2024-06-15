@@ -103,12 +103,19 @@ const StaffsTable = () => {
   }, []);
 
   const fetchData = () => {
+    console.log(
+      `start-date=${dayjs(filterDate[0]).format("YYYY-MM-DD")}&end-date=${dayjs(
+        filterDate[1]
+      ).format("YYYY-MM-DD")}`
+    );
     fetch(
       `${import.meta.env.VITE_APP_URL}/staffs/salary?${qs.stringify(
         getuserParams(tableParams)
-      )}&start-date=${dayjs(filterDate[0]).toISOString()}&end-date=${dayjs(
-        filterDate[1]
-      ).toISOString()}&filter-staff=${staff}`,
+      )}&start-date=${dayjs(filterDate[0]).format(
+        "YYYY-MM-DD"
+      )}&end-date=${dayjs(filterDate[1]).format(
+        "YYYY-MM-DD"
+      )}&filter-staff=${staff}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

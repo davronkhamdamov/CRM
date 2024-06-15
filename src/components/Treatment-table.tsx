@@ -86,76 +86,121 @@ const Treatment = () => {
         }
       });
   };
+  const classNameFormat = (data: DataType): string => {
+    console.log(data);
+
+    if (data.price - data.payed_price == 0 && data.is_done == "Yakunlandi") {
+      return "success";
+    } else if (data.payed_price === 0) {
+      return "qarz";
+    }
+    return "proccess";
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
-      render: (record) => {
+      render: (record, data) => {
         return (
-          <a href={`patient/${record.user_id}`}>
-            {record.user_name} {record.user_surname}
-          </a>
+          <div className={classNameFormat(data)}>
+            <a href={`patient/${record.user_id}`}>
+              {record.user_name} {record.user_surname}
+            </a>
+          </div>
         );
       },
       width: "10%",
+      className: "debt",
     },
     {
       title: "Shifokor",
-      render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
+      render: (name, data) => (
+        <div className={classNameFormat(data)}>
+          <p>{name?.staff_name + " " + name?.staff_surname}</p>
+        </div>
+      ),
       width: "10%",
+      className: "debt",
     },
     {
       title: "Davolash vaqti",
-      render: (dob) =>
-        `${dayjs(dob?.start_time).format("HH:mm DD-MM-YYYY")} - ${dayjs(
-          dob?.end_time
-        ).format("HH:mm DD-MM-YYYY")}`,
+      render: (dob, data) => (
+        <div className={classNameFormat(data)}>
+          <p>
+            {dayjs(dob?.start_time).format("HH:mm DD-MM-YYYY")}{" "}
+            {dayjs(dob?.end_time).format("HH:mm DD-MM-YYYY")}
+          </p>
+        </div>
+      ),
       width: "15%",
+      className: "debt",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price) => formatMoney(price),
+      render: (price, data) => (
+        <div className={classNameFormat(data)}>
+          <p>{formatMoney(price)}</p>
+        </div>
+      ),
+
       width: "10%",
+      className: "debt",
     },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",
-      render: (price) => formatMoney(price),
+      render: (price, data) => (
+        <div className={classNameFormat(data)}>
+          <p>{formatMoney(price)}</p>
+        </div>
+      ),
       width: "10%",
+      className: "debt",
     },
     {
       title: "To'lov holati",
+      className: "debt",
       width: "6%",
       render: (record) => {
         if (record?.is_done == "Bekor qilingan") {
           return (
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              Bekor qilingan
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                Bekor qilingan
+              </Tag>
+            </div>
           );
         } else if (record.price === 0) {
           return (
-            <Tag icon={<ClockCircleOutlined />} color="default">
-              Kutilmoqda
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<ClockCircleOutlined color="black" />} color="blue">
+                Kutilmoqda
+              </Tag>
+            </div>
           );
         } else if (record.payed_price === record.price) {
           return (
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              To'landi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CheckCircleOutlined />} color="success">
+                To'landi
+              </Tag>
+            </div>
           );
         } else if (record.payed_price == 0) {
           return (
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              To'lanmadi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                To'lanmadi
+              </Tag>
+            </div>
           );
         } else {
           return (
-            <Tag icon={<SyncOutlined />} color="processing">
-              To'liq to'lanmadi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<SyncOutlined />} color="processing">
+                To'liq to'lanmadi
+              </Tag>
+            </div>
           );
         }
       },
@@ -164,37 +209,48 @@ const Treatment = () => {
       title: "Holati",
       dataIndex: "is_done",
       width: "6%",
-      render: (is_done) => {
+      className: "debt",
+      render: (is_done, data) => {
         switch (is_done) {
           case "Yakunlandi":
             return (
-              <Tag icon={<CheckCircleOutlined />} color="success">
-                Yakunlandi
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<CheckCircleOutlined />} color="success">
+                  Yakunlandi
+                </Tag>
+              </div>
             );
           case "Jarayonda":
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
-                Jarayonda
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<SyncOutlined spin />} color="processing">
+                  Jarayonda
+                </Tag>
+              </div>
             );
           case "Kutilmoqda":
             return (
-              <Tag icon={<ClockCircleOutlined />} color="default">
-                Kutilmoqda
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<ClockCircleOutlined />} color="default">
+                  Kutilmoqda
+                </Tag>
+              </div>
             );
           case "Bekor qilingan":
             return (
-              <Tag icon={<MinusCircleOutlined />} color="error">
-                Bekor qilingnan
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<MinusCircleOutlined />} color="error">
+                  Bekor qilingnan
+                </Tag>
+              </div>
             );
           default:
             return (
-              <Tag icon={<CloseCircleOutlined />} color="error">
-                Xatolik
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<CloseCircleOutlined />} color="error">
+                  Xatolik
+                </Tag>
+              </div>
             );
         }
       },
@@ -203,53 +259,56 @@ const Treatment = () => {
       title: "Bajariladigan ishlar",
       dataIndex: "operation",
       key: "operation",
+      className: "debt",
       width: "15%",
       render: (_, record) => {
         return (
-          <Space size="middle">
-            {record.payed_price !== record.price ? (
-              <Tooltip placement="bottom" title="To'lash">
-                <MdOutlinePayment
+          <div className={classNameFormat(record)}>
+            <Space size="middle">
+              {record.payed_price !== record.price ? (
+                <Tooltip placement="bottom" title="To'lash">
+                  <MdOutlinePayment
+                    style={{ cursor: "pointer" }}
+                    color="white"
+                    onClick={() => {
+                      if (openPaymentModal.id !== record.cure_id) {
+                        setOpenPaymentModal({
+                          id: record.cure_id,
+                          isOpen: true,
+                        });
+                      }
+                    }}
+                  />
+                </Tooltip>
+              ) : (
+                <MdOutlinePayment color="#33333333" />
+              )}
+              <Tooltip placement="bottom" title="Ko'proq ma'lumot">
+                <IoIosMore
+                  color="white"
                   style={{ cursor: "pointer" }}
-                  color="dodgerblue"
                   onClick={() => {
-                    if (openPaymentModal.id !== record.cure_id) {
-                      setOpenPaymentModal({
-                        id: record.cure_id,
-                        isOpen: true,
-                      });
-                    }
+                    setView({ data: record.cure_id, isOpen: true });
                   }}
                 />
               </Tooltip>
-            ) : (
-              <MdOutlinePayment color="#33333333" />
-            )}
-            <Tooltip placement="bottom" title="Ko'proq ma'lumot">
-              <IoIosMore
-                color="#3b82f6"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setView({ data: record.cure_id, isOpen: true });
-                }}
-              />
-            </Tooltip>
-            {record?.is_done !== "Bekor qilingan" &&
-            record.is_done !== "Yakunlandi" ? (
-              <Popconfirm
-                title="Bekor qilshga ishonchingiz komilmi?"
-                onConfirm={() => cancelTreatment(record.cure_id)}
-              >
-                <Tooltip placement="bottom" title="O'chirish">
-                  <MdOutlineCancel
-                    style={{ color: "red", cursor: "pointer" }}
-                  />
-                </Tooltip>
-              </Popconfirm>
-            ) : (
-              <MdOutlineCancel color="rgba(0, 0, 0, 0.1)" />
-            )}
-          </Space>
+              {record?.is_done !== "Bekor qilingan" &&
+              record.is_done !== "Yakunlandi" ? (
+                <Popconfirm
+                  title="Bekor qilshga ishonchingiz komilmi?"
+                  onConfirm={() => cancelTreatment(record.cure_id)}
+                >
+                  <Tooltip placement="bottom" title="O'chirish">
+                    <MdOutlineCancel
+                      style={{ color: "red", cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                </Popconfirm>
+              ) : (
+                <MdOutlineCancel color="rgba(0, 0, 0, 0.1)" />
+              )}
+            </Space>
+          </div>
         );
       },
     },
