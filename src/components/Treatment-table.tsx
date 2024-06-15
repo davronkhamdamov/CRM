@@ -108,7 +108,7 @@ const Treatment = () => {
           </div>
         );
       },
-      width: "10%",
+      width: "15%",
       className: "debt",
     },
     {
@@ -260,7 +260,7 @@ const Treatment = () => {
       dataIndex: "operation",
       key: "operation",
       className: "debt",
-      width: "15%",
+      width: "10%",
       render: (_, record) => {
         return (
           <div className={classNameFormat(record)}>

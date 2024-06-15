@@ -46,7 +46,7 @@ const StaffsTable = () => {
           </a>
         );
       },
-      width: "25%",
+      width: "20%",
     },
     {
       title: "Shifoxona summasi",
