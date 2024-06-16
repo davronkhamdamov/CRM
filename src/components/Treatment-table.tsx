@@ -87,14 +87,14 @@ const Treatment = () => {
       });
   };
   const classNameFormat = (data: DataType): string => {
-    console.log(data);
-
     if (data.price - data.payed_price == 0 && data.is_done == "Yakunlandi") {
       return "success";
-    } else if (data.payed_price === 0) {
+    } else if (data.payed_price === 0 && data.is_done == "Yakunlandi") {
       return "qarz";
+    } else if (data.payed_price < data.price && data.is_done == "Yakunlandi") {
+      return "proccess";
     }
-    return "proccess";
+    return "base";
   };
   const columns: ColumnsType<DataType> = [
     {
@@ -142,7 +142,6 @@ const Treatment = () => {
           <p>{formatMoney(price)}</p>
         </div>
       ),
-
       width: "10%",
       className: "debt",
     },
@@ -161,6 +160,24 @@ const Treatment = () => {
       title: "To'lov holati",
       className: "debt",
       width: "6%",
+      filters: [
+        {
+          text: "To'langan",
+          value: "payed",
+        },
+        {
+          text: "To'liq to'lanmadi",
+          value: "not_fully_payed",
+        },
+        {
+          text: "To'lanmadi",
+          value: "not_payed",
+        },
+        {
+          text: "Kutilmoqda",
+          value: "waiting",
+        },
+      ],
       render: (record) => {
         if (record?.is_done == "Bekor qilingan") {
           return (
@@ -210,6 +227,20 @@ const Treatment = () => {
       dataIndex: "is_done",
       width: "6%",
       className: "debt",
+      filters: [
+        {
+          text: "Yakunlandi",
+          value: "Yakunlandi",
+        },
+        {
+          text: "Kutilmoqda",
+          value: "Kutilmoqda",
+        },
+        {
+          text: "Bekor qilingan",
+          value: "Bekor qilingan",
+        },
+      ],
       render: (is_done, data) => {
         switch (is_done) {
           case "Yakunlandi":
@@ -260,7 +291,7 @@ const Treatment = () => {
       dataIndex: "operation",
       key: "operation",
       className: "debt",
-      width: "10%",
+      width: "9%",
       render: (_, record) => {
         return (
           <div className={classNameFormat(record)}>
@@ -351,11 +382,13 @@ const Treatment = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure?${qs.stringify(getUserParams(tableParams))}&start-date=${
-          filterDate[0] ? filterDate[0]?.toISOString() : null
-        }&end-date=${
-          filterDate[0] ? filterDate[1]?.toISOString() : null
-        }&filter-staff=${staff}`,
+        `/cure?${qs.stringify(
+          getUserParams(tableParams)
+        )}&start-date=${filterDate[0]?.format(
+          "YYYY-MM-DD"
+        )}&end-date=${filterDate[1]?.format(
+          "YYYY-MM-DD"
+        )}&filter-staff=${staff}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
