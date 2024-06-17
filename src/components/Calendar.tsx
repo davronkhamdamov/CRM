@@ -8,13 +8,14 @@ import { CureDataType, Staffs } from "../types/type";
 import { Button, Divider, Flex, Modal, Radio } from "antd";
 import dayjs from "dayjs";
 import formatMoney from "../lib/money_format";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isValidUUID } from "../lib/validUuid";
 const Calendar = () => {
   const token = localStorage.getItem("auth");
   const [data, setData] = useState<CureDataType[]>();
   const params = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const [staffId, setStaffId] = useState<string>();
   const [current_staff, setCurrentStaff] = useState<{
@@ -89,7 +90,9 @@ const Calendar = () => {
               defaultValue={isValidUUID(params.id) ? params.id : ""}
               onChange={(e) => {
                 setStaffId(e.target.value);
-                navigate("/admin/schedule/" + e.target.value);
+                navigate(
+                  `/${pathname?.split("/")[2]}/schedule/` + e.target.value
+                );
               }}
             >
               <Radio.Button value="">Hammasi</Radio.Button>
