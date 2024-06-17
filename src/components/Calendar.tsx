@@ -91,7 +91,7 @@ const Calendar = () => {
               onChange={(e) => {
                 setStaffId(e.target.value);
                 navigate(
-                  `/${pathname?.split("/")[2]}/schedule/` + e.target.value
+                  `/${pathname?.split("/")[1]}/schedule/` + e.target.value
                 );
               }}
             >
