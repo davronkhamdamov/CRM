@@ -68,7 +68,7 @@ const DocktorTreatment = () => {
     {
       title: "Davolash vaqti",
       render: (date) =>
-        `${dayjs(date?.start_time).format("HH:mm")} - ${dayjs(
+        `${dayjs(date?.start_time).format("HH:MM DD-MM-YYYY")} - ${dayjs(
           date?.end_time
         ).format("HH:mm DD-MM-YYYY")}`,
       width: "15%",
@@ -88,6 +88,24 @@ const DocktorTreatment = () => {
     {
       title: "To'lov holati",
       dataIndex: "",
+      filters: [
+        {
+          text: "To'langan",
+          value: "payed",
+        },
+        {
+          text: "To'liq to'lanmadi",
+          value: "not_fully_payed",
+        },
+        {
+          text: "To'lanmadi",
+          value: "not_payed",
+        },
+        {
+          text: "Kutilmoqda",
+          value: "waiting",
+        },
+      ],
       width: "7%",
       render: (record) => {
         if (record.price === 0) {
@@ -121,6 +139,20 @@ const DocktorTreatment = () => {
       title: "Holati",
       dataIndex: "is_done",
       width: "7%",
+      filters: [
+        {
+          text: "Yakunlandi",
+          value: "Yakunlandi",
+        },
+        {
+          text: "Kutilmoqda",
+          value: "Kutilmoqda",
+        },
+        {
+          text: "Bekor qilingan",
+          value: "Bekor qilingan",
+        },
+      ],
       render: (is_done) => {
         switch (is_done) {
           case "Yakunlandi":

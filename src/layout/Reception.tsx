@@ -13,6 +13,7 @@ import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
 import { FaSuitcaseMedical } from "react-icons/fa6";
 import { CiBoxList } from "react-icons/ci";
+import { GrSchedule } from "react-icons/gr";
 
 const { Sider } = Layout;
 
@@ -39,6 +40,7 @@ const RootLayout = () => {
     ),
     getItem("Bemorlar", "patient", <UserOutlined />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
+    getItem("Taqvim", "schedule", <GrSchedule />),
     getItem("Xisobot", "hisobot", <CiBoxList />),
     getItem("Chiqish", "auth", <LogoutOutlined />),
   ];

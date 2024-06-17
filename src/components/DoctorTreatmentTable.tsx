@@ -49,7 +49,7 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
     {
       title: "Davolash vaqti",
       render: (dob) =>
-        `${dayjs(dob?.start_time).format("HH:MM")} - ${dayjs(
+        `${dayjs(dob?.start_time).format("HH:MM DD-MM-YYYY")} - ${dayjs(
           dob?.end_time
         ).format("HH:MM DD-MM-YYYY")}`,
       width: "15%",
