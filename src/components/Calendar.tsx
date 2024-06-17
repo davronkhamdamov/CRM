@@ -8,10 +8,14 @@ import { CureDataType, Staffs } from "../types/type";
 import { Button, Divider, Flex, Modal, Radio } from "antd";
 import dayjs from "dayjs";
 import formatMoney from "../lib/money_format";
+import { useNavigate, useParams } from "react-router-dom";
+import { isValidUUID } from "../lib/validUuid";
 const Calendar = () => {
   const token = localStorage.getItem("auth");
-
   const [data, setData] = useState<CureDataType[]>();
+  const params = useParams();
+  const navigate = useNavigate();
+
   const [staffId, setStaffId] = useState<string>();
   const [current_staff, setCurrentStaff] = useState<{
     role: string;
@@ -23,8 +27,14 @@ const Calendar = () => {
 
   const fetchData = () => {
     let url = import.meta.env.VITE_APP_URL;
+    let paramId;
+    if (params.id && isValidUUID(params.id)) {
+      paramId = params.id;
+    } else {
+      paramId = staffId;
+    }
     if (["admin", "reception"].some((e) => e == current_staff?.role)) {
-      url += `/cure/for-schedule?filter-staff=${staffId}`;
+      url += `/cure/for-schedule?filter-staff=${paramId}`;
     } else {
       url += `/cure/for-schedule?filter-staff=${current_staff?.id}`;
     }
@@ -76,8 +86,10 @@ const Calendar = () => {
           ["admin", "reception"].some((e) => e == current_staff?.role) && (
             <Radio.Group
               buttonStyle="solid"
+              defaultValue={isValidUUID(params.id) ? params.id : ""}
               onChange={(e) => {
                 setStaffId(e.target.value);
+                navigate("/admin/schedule/" + e.target.value);
               }}
             >
               <Radio.Button value="">Hammasi</Radio.Button>

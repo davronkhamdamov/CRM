@@ -45,6 +45,7 @@ const route = createBrowserRouter(
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />
         <Route path="schedule" element={<Calendar />} />
+        <Route path="schedule/:id" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/doctor" element={<DockerLayout />}>
@@ -62,6 +63,7 @@ const route = createBrowserRouter(
         <Route path="patient/:id" element={<SingleBemor />} />
         <Route path="treatment" element={<Treatment />} />
         <Route path="schedule" element={<Calendar />} />
+        <Route path="schedule/:id" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
         <Route path="hisobot" element={<Hisobot />} />
       </Route>

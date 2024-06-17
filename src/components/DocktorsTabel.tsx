@@ -21,6 +21,7 @@ import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import EditDoctor from "./EditDocktor";
+import { GrSchedule } from "react-icons/gr";
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -139,6 +140,11 @@ const DoctorsTable = () => {
                   setDoctorModal({ id: record.id, isOpen: true });
                 }}
               />
+            </Tooltip>
+            <Tooltip placement="bottom" title="Taqvim">
+              <Link to={"/admin/schedule/" + record.id}>
+                <GrSchedule style={{ cursor: "pointer" }} />
+              </Link>
             </Tooltip>
             <Popconfirm
               title="O'chirishga ishonchingiz komilmi?"
