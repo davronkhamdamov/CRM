@@ -6,7 +6,7 @@ import {
   LockOutlined,
 } from "@ant-design/icons";
 import { Alert, Button, Flex, Form, Input, Space } from "antd";
-const backgroundImage = "/src/assets/image/Loginpage.gif";
+const backgroundImage = "https://res.cloudinary.com/didddubfm/image/upload/v1718691993/Loginpage-ezgif.com-video-to-gif-converter_jh3fmn.gif";
 const App: React.FC = () => {
   const [error, setError] = useState("");
   const onFinish = (values: any) => {
