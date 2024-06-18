@@ -11,7 +11,7 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { CureDataType, DataType, TableParams } from "../types/type";
+import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
 import { FaTooth } from "react-icons/fa6";
@@ -50,44 +50,77 @@ const DocktorTreatment = () => {
       pageSize: 10,
     },
   });
-
-  const columns: ColumnsType<CureDataType> = [
+  const classNameFormat = (data: DataType): string => {
+    if (data.price - data.payed_price == 0 && data.is_done == "Yakunlandi") {
+      return "success";
+    } else if (data.payed_price === 0 && data.is_done == "Yakunlandi") {
+      return "qarz";
+    } else if (data.payed_price < data.price && data.is_done == "Yakunlandi") {
+      return "proccess";
+    }
+    return "base";
+  };
+  const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
-      render: (record) => {
-        return record.user_name + " " + record.user_surname;
+      className: "debt",
+      render: (record, data) => {
+        return (
+          <div className={classNameFormat(data)}>
+            {record.user_name} {record.user_surname}
+          </div>
+        );
       },
       width: "13%",
     },
     {
       title: "Shifokor",
       dataIndex: "",
-      render: (staff) => `${staff?.staff_name + " " + staff.staff_surname}`,
+      render: (staff, data) => (
+        <div className={classNameFormat(data)}>
+          {staff?.staff_name + " " + staff.staff_surname}
+        </div>
+      ),
       width: "13%",
+      className: "debt",
     },
     {
       title: "Davolash vaqti",
-      render: (date) =>
-        `${dayjs(date?.start_time).format("HH:MM DD-MM-YYYY")} - ${dayjs(
-          date?.end_time
-        ).format("HH:mm DD-MM-YYYY")}`,
+      render: (date, data) => (
+        <div className={classNameFormat(data)}>
+          {dayjs(date?.start_time).format("HH:MM DD-MM-YYYY")}{" "}
+          {dayjs(date?.end_time).format("HH:mm DD-MM-YYYY")}
+        </div>
+      ),
       width: "15%",
+      className: "debt",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price, data) => (
+        <div className={classNameFormat(data)}>
+          {price ? price + " so'm" : "0 so'm"}
+        </div>
+      ),
       width: "10%",
+      className: "debt",
     },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",
-      render: (price) => (price ? price + " so'm" : "0 so'm"),
+      render: (price, data) => (
+        <div className={classNameFormat(data)}>
+          {price ? price + " so'm" : "0 so'm"}
+        </div>
+      ),
       width: "10%",
+      className: "debt",
     },
     {
       title: "To'lov holati",
       dataIndex: "",
+      className: "debt",
       filters: [
         {
           text: "To'langan",
@@ -108,35 +141,52 @@ const DocktorTreatment = () => {
       ],
       width: "7%",
       render: (record) => {
-        if (record.price === 0) {
+        if (record?.is_done == "Bekor qilingan") {
           return (
-            <Tag icon={<ClockCircleOutlined />} color="default">
-              Kutilmoqda
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                Bekor qilingan
+              </Tag>
+            </div>
+          );
+        } else if (record.price === 0) {
+          return (
+            <div className={classNameFormat(record)}>
+              <Tag icon={<ClockCircleOutlined color="black" />} color="blue">
+                Kutilmoqda
+              </Tag>
+            </div>
           );
         } else if (record.payed_price === record.price) {
           return (
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              To'landi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CheckCircleOutlined />} color="success">
+                To'landi
+              </Tag>
+            </div>
           );
         } else if (record.payed_price == 0) {
           return (
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              To'lanmadi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                To'lanmadi
+              </Tag>
+            </div>
           );
         } else {
           return (
-            <Tag icon={<SyncOutlined />} color="processing">
-              To'liq to'lanmadi
-            </Tag>
+            <div className={classNameFormat(record)}>
+              <Tag icon={<SyncOutlined />} color="processing">
+                To'liq to'lanmadi
+              </Tag>
+            </div>
           );
         }
       },
     },
     {
       title: "Holati",
+      className: "debt",
       dataIndex: "is_done",
       width: "7%",
       filters: [
@@ -153,37 +203,47 @@ const DocktorTreatment = () => {
           value: "Bekor qilingan",
         },
       ],
-      render: (is_done) => {
+      render: (is_done, data) => {
         switch (is_done) {
           case "Yakunlandi":
             return (
-              <Tag icon={<CheckCircleOutlined />} color="success">
-                Yakunlandi
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<CheckCircleOutlined />} color="success">
+                  Yakunlandi
+                </Tag>
+              </div>
             );
           case "Jarayonda":
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
-                Jarayonda
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<SyncOutlined spin />} color="processing">
+                  Jarayonda
+                </Tag>
+              </div>
             );
           case "Kutilmoqda":
             return (
-              <Tag icon={<ClockCircleOutlined />} color="default">
-                Kutilmoqda
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<ClockCircleOutlined />} color="default">
+                  Kutilmoqda
+                </Tag>
+              </div>
             );
-          case "To'xtatilgan":
+          case "Bekor qilingan":
             return (
-              <Tag icon={<MinusCircleOutlined />} color="default">
-                To'xtatilgan
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<MinusCircleOutlined />} color="error">
+                  Bekor qilingnan
+                </Tag>
+              </div>
             );
           default:
             return (
-              <Tag icon={<CloseCircleOutlined />} color="error">
-                Xatolik
-              </Tag>
+              <div className={classNameFormat(data)}>
+                <Tag icon={<CloseCircleOutlined />} color="error">
+                  Xatolik
+                </Tag>
+              </div>
             );
         }
       },
@@ -191,42 +251,45 @@ const DocktorTreatment = () => {
     {
       title: "Bajariladigan ishlar",
       key: "operation",
+      className: "debt",
       align: "center",
       width: "15%",
       render: (_, record) => {
         return (
-          <Space size="middle">
-            {record.is_done !== "Yakunlandi" ? (
-              <Tooltip placement="bottom" title="Davolash">
-                <Link to={record.cure_id}>
-                  <FaTooth color="#3b82f6" style={{ cursor: "pointer" }} />
-                </Link>
-              </Tooltip>
-            ) : (
+          <div className={classNameFormat(record)}>
+            <Space size="middle">
+              {record.is_done !== "Yakunlandi" ? (
+                <Tooltip placement="bottom" title="Davolash">
+                  <Link to={record.cure_id}>
+                    <FaTooth color="#3b82f6" style={{ cursor: "pointer" }} />
+                  </Link>
+                </Tooltip>
+              ) : (
+                <Space size="large">
+                  <Tooltip placement="bottom" title="Ko'rish">
+                    <AiOutlineFileSearch
+                      onClick={() => {
+                        setView({ data: record.cure_id, isOpen: true });
+                      }}
+                      color="#3b82f6"
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                </Space>
+              )}
               <Space size="large">
-                <Tooltip placement="bottom" title="Ko'rish">
-                  <AiOutlineFileSearch
+                <Tooltip placement="bottom" title="Tahrirlash">
+                  <MdModeEditOutline
                     onClick={() => {
-                      setView({ data: record.cure_id, isOpen: true });
+                      setEditModal({ data: record.user_id, isOpen: true });
                     }}
                     color="#3b82f6"
                     style={{ cursor: "pointer" }}
                   />
                 </Tooltip>
               </Space>
-            )}
-            <Space size="large">
-              <Tooltip placement="bottom" title="Tahrirlash">
-                <MdModeEditOutline
-                  onClick={() => {
-                    setEditModal({ data: record.user_id, isOpen: true });
-                  }}
-                  color="#3b82f6"
-                  style={{ cursor: "pointer" }}
-                />
-              </Tooltip>
             </Space>
-          </Space>
+          </div>
         );
       },
     },
