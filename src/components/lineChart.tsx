@@ -9,7 +9,10 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  TooltipProps,
+  LabelProps,
 } from "recharts";
+import formatMoney from "../lib/money_format";
 
 const LineChartFC: React.FC<{ month: Dayjs }> = ({ month }) => {
   const token = localStorage.getItem("auth");
@@ -37,6 +40,30 @@ const LineChartFC: React.FC<{ month: Dayjs }> = ({ month }) => {
         setData([]);
       });
   }, [month]);
+  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
+    active,
+    payload,
+    label,
+  }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label} : ${formatMoney(
+            payload[0].value as number
+          )}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+  const CustomizedLabel: React.FC<LabelProps> = ({ x, y, stroke, value }) => {
+    return (
+      <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">
+        {formatMoney(value as number)}
+      </text>
+    );
+  };
 
   return (
     <>
@@ -55,8 +82,13 @@ const LineChartFC: React.FC<{ month: Dayjs }> = ({ month }) => {
           <CartesianGrid strokeDasharray="9 9" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="Maosh" stroke="#8884d8" />
+          <Tooltip content={<CustomTooltip />} />
+          <Line
+            type="monotone"
+            dataKey="Maosh"
+            stroke="#8884d8"
+            label={<CustomizedLabel x={0} y={0} stroke={""} value={""} />}
+          />
         </LineChart>
       </ResponsiveContainer>
     </>

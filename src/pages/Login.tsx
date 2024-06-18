@@ -6,7 +6,7 @@ import {
   LockOutlined,
 } from "@ant-design/icons";
 import { Alert, Button, Flex, Form, Input, Space } from "antd";
-
+const backgroundImage = "/src/assets/image/Loginpage.gif";
 const App: React.FC = () => {
   const [error, setError] = useState("");
   const onFinish = (values: any) => {
@@ -36,7 +36,17 @@ const App: React.FC = () => {
   };
 
   return (
-    <Flex align="center" justify="center" style={{ height: "100vh" }}>
+    <Flex
+      align="center"
+      justify="center"
+      style={{
+        height: "100vh",
+        width: "100%",
+        backgroundImage: `url("${backgroundImage}")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
       <Form
         name="normal_login"
         className="login-form"
