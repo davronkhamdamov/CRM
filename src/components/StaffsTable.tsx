@@ -103,11 +103,6 @@ const StaffsTable = () => {
   }, []);
 
   const fetchData = () => {
-    console.log(
-      `start-date=${dayjs(filterDate[0]).format("YYYY-MM-DD")}&end-date=${dayjs(
-        filterDate[1]
-      ).format("YYYY-MM-DD")}`
-    );
     fetch(
       `${import.meta.env.VITE_APP_URL}/staffs/salary?${qs.stringify(
         getuserParams(tableParams)
