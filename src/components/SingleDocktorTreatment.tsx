@@ -210,6 +210,9 @@ const SingleDocktorTreatment = () => {
               requestAnimationFrame(frame);
             }
           })();
+        })
+        .catch(() => {
+          messageApi.warning("Nimadir xato ketdi!");
         });
     } else {
       messageApi.warning("Tish yoki xizmat tanladingiz!");
