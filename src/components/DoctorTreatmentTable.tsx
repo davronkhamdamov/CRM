@@ -49,7 +49,6 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
     },
     {
       title: "Davolash vaqti",
-      className: "debt",
       render: (dob) =>
         `${dayjs(dob?.start_time).format("HH:MM DD-MM-YYYY")} - ${dayjs(
           dob?.end_time
@@ -61,19 +60,16 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
       dataIndex: "price",
       render: (price) => formatMoney(price),
       width: "10%",
-      className: "debt",
     },
     {
       title: "To'langan summa1",
       dataIndex: "payed_price",
       render: (price) => formatMoney(price),
-      className: "debt",
       width: "10%",
     },
     {
       title: "To'lov holati",
       width: "6%",
-      className: "debt",
       render: (record) => {
         if (record.price === 0) {
           return (
@@ -111,7 +107,6 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
     {
       title: "Holati",
       dataIndex: "is_done",
-      className: "debt",
       width: "6%",
       render: (is_done) => {
         switch (is_done) {
