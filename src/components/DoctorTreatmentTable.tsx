@@ -45,7 +45,6 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
         );
       },
       width: "10%",
-      className: "debt",
     },
     {
       title: "Davolash vaqti",
@@ -62,7 +61,7 @@ const DocktorTreatmentTable: FC<{ patient_id: string | undefined }> = ({
       width: "10%",
     },
     {
-      title: "To'langan summa1",
+      title: "To'langan summa",
       dataIndex: "payed_price",
       render: (price) => formatMoney(price),
       width: "10%",

@@ -122,8 +122,12 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
     {
       key: "1",
       label: "Hisobdan to'lash",
-      children: (
-        <Form layout="vertical" onFinish={PayWithBalance}>
+      children: cure && (
+        <Form
+          layout="vertical"
+          onFinish={PayWithBalance}
+          initialValues={{ balance_amount: cure.price - cure.payed_price }}
+        >
           <Form.Item
             name="balance_amount"
             label="To'lov miqdori"
@@ -155,8 +159,12 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
     {
       key: "2",
       label: "To'lov qilish",
-      children: (
-        <Form layout="vertical" onFinish={PayWithCash}>
+      children: cure && (
+        <Form
+          layout="vertical"
+          onFinish={PayWithCash}
+          initialValues={{ cash_amount: cure.price - cure.payed_price }}
+        >
           <Form.Item
             name="payment_type"
             label="To'lov turini tanlang"
@@ -215,7 +223,9 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
           },
         }}
       >
-        <Tabs defaultActiveKey="1" items={items} />
+        {(cure.payed_price || cure.price) && (
+          <Tabs defaultActiveKey="1" items={items} />
+        )}
       </Drawer>
       {contextHolder}
     </>
