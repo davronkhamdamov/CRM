@@ -85,6 +85,10 @@ const AddPaymentCure: React.FC<EditModalProps> = ({ data, setOpen }) => {
       });
   };
   const fetchData = () => {
+    setCure({
+      price: 0,
+      payed_price: 0,
+    });
     fetch(`${import.meta.env.VITE_APP_URL}/payment-type`, {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -24,7 +24,7 @@ import {
 import type { TableProps } from "antd";
 import { DataType, EditModal, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
-import { MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
+import { MdDelete, MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
 import dayjs, { Dayjs } from "dayjs";
 import { IoIosMore } from "react-icons/io";
 import AddPaymentCure from "./AddPaymentCure";
@@ -83,6 +83,22 @@ const Treatment = () => {
         if (data.code == 200) {
           fetchData();
           message.success("Davolash bekor qilindi");
+        }
+      });
+  };
+  const deleteTreatment = (id: string) => {
+    fetch(import.meta.env.VITE_APP_URL + "/cure/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          fetchData();
+          message.success("Davolash o'chirildi");
         }
       });
   };
@@ -338,6 +354,14 @@ const Treatment = () => {
               ) : (
                 <MdOutlineCancel color="rgba(0, 0, 0, 0.1)" />
               )}
+              <Popconfirm
+                title="O'chirishga ishonchingiz komilmi?"
+                onConfirm={() => deleteTreatment(record.cure_id)}
+              >
+                <Tooltip placement="bottom" title="O'chirish">
+                  <MdDelete color="red" style={{ cursor: "pointer" }} />
+                </Tooltip>
+              </Popconfirm>
             </Space>
           </div>
         );
