@@ -125,6 +125,18 @@ const AddService = () => {
           >
             <Input type="number" min={1} placeholder="Narx kiriting!" />
           </Form.Item>
+          <Form.Item
+            name="raw_material_price"
+            label="Texnik"
+            rules={[
+              {
+                required: true,
+                message: "Iltimos texnik narxini kiriting!",
+              },
+            ]}
+          >
+            <Input type="number" min={1} placeholder="Narx kiriting!" />
+          </Form.Item>
           <Form.Item name="status" label="Xizmat xolati">
             <Switch defaultChecked />
           </Form.Item>

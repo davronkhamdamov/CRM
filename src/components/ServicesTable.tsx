@@ -85,6 +85,12 @@ const ServicesTable = () => {
       render: ({ price }) => formatMoney(price),
     },
     {
+      title: "Texnik",
+      dataIndex: "",
+      width: "15%",
+      render: ({ raw_material_price }) => formatMoney(raw_material_price),
+    },
+    {
       title: "Yaratilgan vaqti",
       dataIndex: "create_at",
       render: (record) => `${dayjs(record).format("DD-MM-YYYY")}`,

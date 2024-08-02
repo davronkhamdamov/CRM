@@ -20,6 +20,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import TreatmentModal from "./TreatmentModal";
 import { MdModeEditOutline } from "react-icons/md";
 import EditModal from "./EditModal";
+import formatMoney from "../lib/money_format";
 const { RangePicker } = DatePicker;
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -81,7 +82,7 @@ const DocktorTreatment = () => {
           {staff?.staff_name + " " + staff.staff_surname}
         </div>
       ),
-      width: "13%",
+      width: "10%",
       className: "debt",
     },
     {
@@ -99,8 +100,17 @@ const DocktorTreatment = () => {
       title: "To'lov summasi",
       dataIndex: "price",
       render: (price, data) => (
+        <div className={classNameFormat(data)}>{formatMoney(price)}</div>
+      ),
+      width: "10%",
+      className: "debt",
+    },
+    {
+      title: "Texnik summasi",
+      dataIndex: "raw_material_price",
+      render: (raw_material_price, data) => (
         <div className={classNameFormat(data)}>
-          {price ? price + " so'm" : "0 so'm"}
+          <p>{formatMoney(raw_material_price)}</p>
         </div>
       ),
       width: "10%",
@@ -110,9 +120,7 @@ const DocktorTreatment = () => {
       title: "To'langan summa",
       dataIndex: "payed_price",
       render: (price, data) => (
-        <div className={classNameFormat(data)}>
-          {price ? price + " so'm" : "0 so'm"}
-        </div>
+        <div className={classNameFormat(data)}>{formatMoney(price)}</div>
       ),
       width: "10%",
       className: "debt",

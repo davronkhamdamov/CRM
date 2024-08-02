@@ -26,6 +26,7 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
     price: "",
     status: true,
     service_category_id: "",
+    raw_material_price: 0,
   });
   const [serviceCategory, setServiceCategory] = useState<ServiceCategoryType[]>(
     []
@@ -41,6 +42,7 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
       price: "0",
       status: true,
       service_category_id: "",
+      raw_material_price: 0,
     });
   };
   useEffect(() => {
@@ -110,6 +112,7 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
               price: serviceData?.price,
               status: serviceData.status,
               service_category_id: serviceData.service_category_id,
+              raw_material_price: serviceData.raw_material_price,
             }}
           >
             <Form.Item
@@ -151,6 +154,22 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
               ]}
             >
               <Input type="number" min={1} placeholder="Narx kiriting!" />
+            </Form.Item>
+            <Form.Item
+              name="raw_material_price"
+              label="Texnik narxi"
+              rules={[
+                {
+                  required: true,
+                  message: "Iltimos texnik narxini kiriting!",
+                },
+              ]}
+            >
+              <Input
+                type="number"
+                min={1}
+                placeholder="Texnik narxini kiriting!"
+              />
             </Form.Item>
             <Form.Item name="status" label="Xizmat xolati">
               <Switch />

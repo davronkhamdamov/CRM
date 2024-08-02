@@ -39,13 +39,17 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
           <tr className="table_wrapper">
             <th className="table_item">Tish id</th>
             <th className="table_item">Xizmat nomi</th>
-            <th className="table_item">Xizmat narxi</th>
+            <th className="table_item">Texnik puli</th>
+            <th className="table_item">To'lov miqdori</th>
           </tr>
           {treatments?.map((e, i) => {
             return (
               <tr className="table_wrapper" key={i}>
                 <td className="table_item">{e.tooth_id}</td>
                 <td className="table_item">{e.service_name}</td>
+                <td className="table_item">
+                  {formatMoney(+e?.raw_material_price)}
+                </td>
                 <td className="table_item">{formatMoney(+e?.price)}</td>
               </tr>
             );
@@ -56,7 +60,14 @@ const TreatmentModal: FC<TableProp> = ({ data, setData }) => {
             <th className="table_item">
               {formatMoney(
                 treatments?.reduce((a, e) => {
-                  return a + +e.price;
+                  return a + +e.raw_material_price;
+                }, 0)
+              )}
+            </th>
+            <th className="table_item">
+              {formatMoney(
+                treatments?.reduce((a, e) => {
+                  return a + (+e.price + +e?.raw_material_price);
                 }, 0)
               )}
             </th>

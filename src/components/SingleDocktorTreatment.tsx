@@ -238,7 +238,18 @@ const SingleDocktorTreatment = () => {
     const _services: any[] = [];
     saved_payload?.forEach((e) => {
       e?.services?.forEach((e) => {
-        _services.push(getName(e)?.price);
+        _services.push(
+          +(getName(e)?.price || 0) + +(getName(e)?.raw_material_price || 0)
+        );
+      });
+    });
+    return _services.reduce((a, e) => a + e, 0);
+  };
+  const calculateSumOfPayload_raw = () => {
+    const _services: any[] = [];
+    saved_payload?.forEach((e) => {
+      e?.services?.forEach((e) => {
+        _services.push(getName(e)?.raw_material_price);
       });
     });
     return _services.reduce((a, e) => a + e, 0);
@@ -530,6 +541,11 @@ const SingleDocktorTreatment = () => {
                                       Xizmat narxi:{" "}
                                       {formatMoney(+service.price)} so'm
                                     </Tag>
+                                    <Tag style={{ marginLeft: "10px" }}>
+                                      Texnik narxi:{" "}
+                                      {formatMoney(+service.raw_material_price)}{" "}
+                                      so'm
+                                    </Tag>
                                   </Checkbox>
                                 );
                               })}
@@ -561,7 +577,8 @@ const SingleDocktorTreatment = () => {
                     <tr className="table_wrapper">
                       <th className="table_item">Tish id</th>
                       <th className="table_item">Xizmat nomi</th>
-                      <th className="table_item">Xizmat narxi</th>
+                      <th className="table_item">Texnik nomi</th>
+                      <th className="table_item">Umumiy narxi</th>
                     </tr>
                     {saved_payload?.map((tooth) => {
                       return tooth.services?.map((service: string) => {
@@ -570,6 +587,11 @@ const SingleDocktorTreatment = () => {
                             <td className="table_item">{tooth.id}</td>
                             <td className="table_item">
                               {getName(service)?.name}
+                            </td>
+                            <td className="table_item">
+                              {formatMoney(
+                                Number(getName(service)?.raw_material_price)
+                              )}
                             </td>
                             <td className="table_item">
                               {formatMoney(Number(getName(service)?.price))}
@@ -581,6 +603,9 @@ const SingleDocktorTreatment = () => {
                     <tr className="table_wrapper">
                       <th className="table_item"></th>
                       <th className="table_item">Jami</th>
+                      <th className="table_item">
+                        {formatMoney(calculateSumOfPayload_raw())}
+                      </th>
                       <th className="table_item">
                         {formatMoney(calculateSumOfPayload())}
                       </th>

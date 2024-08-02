@@ -131,12 +131,14 @@ export interface ServiceType {
   id: string;
   status: boolean;
   service_category_id: string;
+  raw_material_price: number;
 }
 
 export interface TreatmentType {
   tooth_id: string;
   service_name: string;
   price: string;
+  raw_material_price: number;
 }
 
 export interface ServiceCategoryType {

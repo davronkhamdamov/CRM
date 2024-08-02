@@ -124,7 +124,7 @@ const Treatment = () => {
           </div>
         );
       },
-      width: "15%",
+      width: "12%",
       className: "debt",
     },
     {
@@ -134,7 +134,7 @@ const Treatment = () => {
           <p>{name?.staff_name + " " + name?.staff_surname}</p>
         </div>
       ),
-      width: "10%",
+      width: "8%",
       className: "debt",
     },
     {
@@ -156,6 +156,17 @@ const Treatment = () => {
       render: (price, data) => (
         <div className={classNameFormat(data)}>
           <p>{formatMoney(price)}</p>
+        </div>
+      ),
+      width: "10%",
+      className: "debt",
+    },
+    {
+      title: "Texnik summasi",
+      dataIndex: "raw_material_price",
+      render: (raw_material_price, data) => (
+        <div className={classNameFormat(data)}>
+          <p>{formatMoney(raw_material_price)}</p>
         </div>
       ),
       width: "10%",

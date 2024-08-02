@@ -55,6 +55,12 @@ const StaffsTable = () => {
       render: (money, record) => formatMoney(money * (1 - record.foiz / 100)),
     },
     {
+      title: "Texnik summasi",
+      dataIndex: "raw_material_price",
+      width: "15%",
+      render: (money) => formatMoney(money),
+    },
+    {
       title: "Shifokor summasi",
       dataIndex: "salary",
       width: "15%",
