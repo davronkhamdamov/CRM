@@ -30,7 +30,7 @@ import { GiTooth } from "react-icons/gi";
 import formatMoney from "../lib/money_format";
 const { Option } = Select;
 
-const SingleDocktorTreatment = () => {
+const SingleDocktorTreatmentOrta = () => {
   const params = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [cureData, setCureData] = useState<CureDataType>();
@@ -45,7 +45,7 @@ const SingleDocktorTreatment = () => {
   const token = localStorage.getItem("auth");
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/cure/" + params.id, {
+    fetch(import.meta.env.VITE_APP_URL + "/orto-cure/" + params.id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -166,7 +166,7 @@ const SingleDocktorTreatment = () => {
 
   const finish = (is_done: string) => {
     if (saved_payload.length != 0) {
-      fetch(import.meta.env.VITE_APP_URL + "/cure/update/" + params.id, {
+      fetch(import.meta.env.VITE_APP_URL + "/orto-cure/update/" + params.id, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -245,6 +245,15 @@ const SingleDocktorTreatment = () => {
     });
     return _services.reduce((a, e) => a + e, 0);
   };
+  const calculateSumOfPayloadOrta = () => {
+    const _services: any[] = [];
+    saved_payload?.forEach((e) => {
+      e?.services?.forEach((e) => {
+        _services.push(+(getName(e)?.raw_material_price || 0));
+      });
+    });
+    return _services.reduce((a, e) => a + e, 0);
+  };
   return (
     <Content>
       <div>
@@ -258,7 +267,7 @@ const SingleDocktorTreatment = () => {
           }}
         >
           <Descriptions
-            title="Davolash haqida umumiy ma'lumotlar"
+            title="Ortapedik davolash haqida umumiy ma'lumotlar"
             layout="vertical"
             items={items}
             column={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
@@ -419,6 +428,12 @@ const SingleDocktorTreatment = () => {
                                 Xizmat narxi:{" "}
                                 {formatMoney(Number(getName(e)?.price))}
                               </Tag>
+                              <Tag style={{ marginLeft: "10px" }}>
+                                Xizmat narxi:{" "}
+                                {formatMoney(
+                                  Number(getName(e)?.raw_material_price)
+                                )}
+                              </Tag>
                             </Flex>
                           );
                         })
@@ -532,6 +547,11 @@ const SingleDocktorTreatment = () => {
                                       Xizmat narxi:{" "}
                                       {formatMoney(+service.price)} so'm
                                     </Tag>
+                                    <Tag style={{ marginLeft: "10px" }}>
+                                      Texnik narxi:{" "}
+                                      {formatMoney(+service.raw_material_price)}{" "}
+                                      so'm
+                                    </Tag>
                                   </Checkbox>
                                 );
                               })}
@@ -563,6 +583,7 @@ const SingleDocktorTreatment = () => {
                     <tr className="table_wrapper">
                       <th className="table_item">Tish id</th>
                       <th className="table_item">Xizmat nomi</th>
+                      <th className="table_item">Texnik puli</th>
                       <th className="table_item">Umumiy narxi</th>
                     </tr>
                     {saved_payload?.map((tooth) => {
@@ -574,6 +595,11 @@ const SingleDocktorTreatment = () => {
                               {getName(service)?.name}
                             </td>
                             <td className="table_item">
+                              {formatMoney(
+                                Number(getName(service)?.raw_material_price)
+                              )}
+                            </td>
+                            <td className="table_item">
                               {formatMoney(Number(getName(service)?.price))}
                             </td>
                           </tr>
@@ -583,6 +609,9 @@ const SingleDocktorTreatment = () => {
                     <tr className="table_wrapper">
                       <th className="table_item"></th>
                       <th className="table_item">Jami</th>
+                      <th className="table_item">
+                        {formatMoney(calculateSumOfPayloadOrta())}
+                      </th>
                       <th className="table_item">
                         {formatMoney(calculateSumOfPayload())}
                       </th>
@@ -611,11 +640,11 @@ const SingleDocktorTreatment = () => {
         <Successfully
           title="Davolashni muvaffaqiyatli tugatganingiz bilan tabriklayman!"
           modalStatus="success"
-          link="/doctor/treatment"
+          link="/doctor/orta-treatment"
         />
       )}
       {contextHolder}
     </Content>
   );
 };
-export default SingleDocktorTreatment;
+export default SingleDocktorTreatmentOrta;

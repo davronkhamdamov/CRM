@@ -14,6 +14,7 @@ export interface TableParams {
   filters?: Parameters<GetProp<TableProps, "onChange">>[1];
 }
 export interface DataType {
+  raw_material_price: number;
   foiz: number;
   is_done: string;
   user_id: string;
@@ -41,11 +42,13 @@ export interface EditModal {
   id: string;
   isOpen: boolean;
   setOpenEditModal?: (arg: boolean) => void;
+  type?: string;
 }
 
 export interface EditModalProps {
   data: EditModal;
   setOpen: (arg: EditModal) => void;
+  type?: String;
 }
 export interface UserData {
   login: string;

@@ -29,6 +29,7 @@ const DockerLayout = () => {
   const items = [
     getItem("Statistika", "statistic", <PieChartOutlined />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
+    getItem("Ortopedik davolashlar", "orta-treatment", <FaSuitcaseMedical />),
     getItem("Taqvim", "schedule", <GrSchedule />),
     getItem("Xisobot", "hisobot", <CiBoxList />),
     getItem("Chiqish", "auth", <LogoutOutlined />),

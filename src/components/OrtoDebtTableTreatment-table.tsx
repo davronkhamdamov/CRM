@@ -53,6 +53,7 @@ const Treatment = () => {
   >([null, null]);
   const [staffs, setStaffs] = useState<Staffs[]>([]);
   const [staff, setStaff] = useState<string>("");
+  const [tech, setTech] = useState<string>("");
 
   const [view, setView] = useState({
     data: "",
@@ -66,7 +67,7 @@ const Treatment = () => {
   });
 
   const cancelTreatment = (id: string) => {
-    fetch(import.meta.env.VITE_APP_URL + "/cure/status/" + id, {
+    fetch(import.meta.env.VITE_APP_URL + "/orto-cure/status/" + id, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -116,6 +117,18 @@ const Treatment = () => {
       width: "10%",
     },
     {
+      title: "Texnik ismi",
+      dataIndex: "technic_name",
+      render: (name) => name || "Ismi belgilanmagan",
+      width: "10%",
+    },
+    {
+      title: "Texnik summasi",
+      dataIndex: "raw_material_price",
+      render: (price) => formatMoney(price),
+      width: "10%",
+    },
+    {
       title: "To'langan summa",
       dataIndex: "payed_price",
       render: (price) => formatMoney(price),
@@ -123,7 +136,7 @@ const Treatment = () => {
     },
     {
       title: "To'lov holati",
-      width: "6%",
+      width: "5%",
       render: (record) => {
         if (record?.is_done == "Bekor qilingan") {
           return (
@@ -291,11 +304,11 @@ const Treatment = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure/debt?${qs.stringify(getUserParams(tableParams))}&start-date=${
+        `/orto-cure?${qs.stringify(getUserParams(tableParams))}&start-date=${
           filterDate[0] ? filterDate[0]?.toISOString() : null
         }&end-date=${
           filterDate[0] ? filterDate[1]?.toISOString() : null
-        }&filter-staff=${staff}`,
+        }&filter-staff=${staff}&tech=${tech}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -317,6 +330,9 @@ const Treatment = () => {
   };
   const onChange = (value: string) => {
     setStaff(value);
+  };
+  const onChangeTech = (value: string) => {
+    setTech(value);
   };
   return (
     <>
@@ -380,6 +396,21 @@ const Treatment = () => {
           placeholder="Xodimni tanlang"
           optionFilterProp="children"
           onChange={onChange}
+          allowClear
+          options={staffs
+            .filter((e) => e.role === "doctor")
+            .map((e) => {
+              return {
+                value: e.id,
+                label: e.name,
+              };
+            })}
+        />
+        <Select
+          style={{ minWidth: "200px" }}
+          placeholder="Texnikni tanlang"
+          optionFilterProp="children"
+          onChange={onChangeTech}
           allowClear
           options={staffs
             .filter((e) => e.role === "doctor")

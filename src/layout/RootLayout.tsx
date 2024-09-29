@@ -13,7 +13,7 @@ import { MdPayments } from "react-icons/md";
 import { ThemeProvider } from "../App";
 import { FaDollarSign, FaSuitcaseMedical, FaUserDoctor } from "react-icons/fa6";
 import { GrSchedule, GrServices } from "react-icons/gr";
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList, CiMedicalCross } from "react-icons/ci";
 import { SlLogout } from "react-icons/sl";
 import { BiCategory } from "react-icons/bi";
 
@@ -48,6 +48,7 @@ const RootLayout = () => {
     getItem("Taqvim", "schedule", <GrSchedule />),
     getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
     getItem("Qarzdor davolashlar", "debt-treatment", <FaSuitcaseMedical />),
+    getItem("Ortopediya davolashlar", "orto-treatment", <CiMedicalCross />),
     getItem("Sozlamalar", "settings", <SettingOutlined />),
     getItem("Xisobot", "hisobot", <CiBoxList />),
     getItem("Chiqish", "auth", <SlLogout />),

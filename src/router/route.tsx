@@ -14,7 +14,9 @@ import Book from "./../pages/Book";
 import SingleBemor from "../pages/SingleBemor";
 import SingleDocktor from "../pages/SingleDoctor";
 import Treatment from "../pages/Treatment";
-import DebtTreatment from "../pages/DebtTreatment.tsx";
+import DebtTreatment from "../pages/DebtTreatment";
+import OrtoTreatment from "../pages/OrtoTreatment";
+import OrtoDoctorTreatment from "../pages/OrtoDoctorTreatment.tsx";
 import PaymentTypes from "../pages/PaymentTypes";
 import Services from "../pages/Services";
 import Settings from "../pages/Settings";
@@ -26,6 +28,7 @@ import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
 import ServiceCategory from "../pages/ServiceCategory";
 import Profile from "../pages/Profile";
 import Calendar from "../pages/Calendar";
+import SingleDocktorTreatmentOrta from "../pages/SingleDocktorTreatmentOrta";
 
 const route = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +45,7 @@ const route = createBrowserRouter(
         <Route path="service-category" element={<ServiceCategory />} />
         <Route path="treatment" element={<Treatment />} />
         <Route path="debt-treatment" element={<DebtTreatment />} />
+        <Route path="orto-treatment" element={<OrtoTreatment />} />
         <Route path="settings" element={<Settings />} />
         <Route path="hisobot" element={<Hisobot />} />
         <Route path="schedule" element={<Calendar />} />
@@ -55,6 +59,11 @@ const route = createBrowserRouter(
         <Route path="hisobot" element={<Hisobot />} />
         <Route path="schedule" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="orta-treatment" element={<OrtoDoctorTreatment />} />
+        <Route
+          path="orta-treatment/:id"
+          element={<SingleDocktorTreatmentOrta />}
+        />
       </Route>
       <Route path="/reception" element={<Reception />}>
         <Route index path="statistic" element={<Statistic />} />

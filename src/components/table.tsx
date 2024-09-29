@@ -38,6 +38,7 @@ const TableComponent: FC = () => {
   const [doctorModal, setDoctorModal] = useState<EditModal>({
     id: "",
     isOpen: false,
+    type: "",
   });
   const [data, setData] = useState<DataType[]>();
   const [openPaymentModal, setOpenPaymentModal] = useState<EditModal>({
@@ -208,6 +209,20 @@ const TableComponent: FC = () => {
                     setDoctorModal({
                       id: record.id,
                       isOpen: true,
+                      type: "simple",
+                    });
+                  }}
+                  color={record.balance < 0 ? "white" : "dodgerblue"}
+                  style={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+              <Tooltip placement="bottom" title="Ortapedik davolash">
+                <FaUserDoctor
+                  onClick={() => {
+                    setDoctorModal({
+                      id: record.id,
+                      isOpen: true,
+                      type: "orta",
                     });
                   }}
                   color={record.balance < 0 ? "white" : "dodgerblue"}
@@ -341,7 +356,11 @@ const TableComponent: FC = () => {
       />
       <AddPayment data={openPaymentModal} setOpen={setOpenPaymentModal} />
       <EditAccound setOpen={setOpenEditModal} data={openEditModal} />
-      <AddDoctorTreatment setOpen={setDoctorModal} data={doctorModal} />
+      <AddDoctorTreatment
+        setOpen={setDoctorModal}
+        data={doctorModal}
+        type={doctorModal.type}
+      />
       {contextHolder}
     </>
   );

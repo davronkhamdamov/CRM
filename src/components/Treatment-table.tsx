@@ -161,17 +161,17 @@ const Treatment = () => {
       width: "10%",
       className: "debt",
     },
-    {
-      title: "Texnik summasi",
-      dataIndex: "raw_material_price",
-      render: (raw_material_price, data) => (
-        <div className={classNameFormat(data)}>
-          <p>{formatMoney(raw_material_price)}</p>
-        </div>
-      ),
-      width: "10%",
-      className: "debt",
-    },
+    // {
+    //   title: "Texnik summasi",
+    //   dataIndex: "raw_material_price",
+    //   render: (raw_material_price, data) => (
+    //     <div className={classNameFormat(data)}>
+    //       <p>{formatMoney(raw_material_price)}</p>
+    //     </div>
+    //   ),
+    //   width: "10%",
+    //   className: "debt",
+    // },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",

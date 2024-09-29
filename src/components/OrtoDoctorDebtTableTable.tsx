@@ -1,4 +1,14 @@
-import { Button, DatePicker, Flex, Space, Table, Tag, Tooltip } from "antd";
+import {
+  Button,
+  DatePicker,
+  Flex,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  message,
+} from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -6,35 +16,32 @@ import {
   LoadingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  ClockCircleOutlined,
-  MinusCircleOutlined,
   SyncOutlined,
+  MinusCircleOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { DataType, TableParams } from "../types/type";
+import { DataType, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
-import { FaTooth } from "react-icons/fa6";
-import { Link } from "react-router-dom";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import TreatmentModal from "./TreatmentModal";
-import { MdModeEditOutline } from "react-icons/md";
-import EditModal from "./EditModal";
 import formatMoney from "../lib/money_format";
+import { Link } from "react-router-dom";
+import { FaTooth } from "react-icons/fa6";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import { MdModeEditOutline } from "react-icons/md";
 const { RangePicker } = DatePicker;
+import EditModal from "./EditModal";
 
-const getRandomuserParams = (params: TableParams) => ({
+const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
   page: params.pagination?.current,
   ...params,
 });
-const DocktorTreatment = () => {
+const Treatment = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
-  const [view, setView] = useState({
-    data: "",
-    isOpen: false,
-  });
   const [editModal, setEditModal] = useState({
     data: "",
     isOpen: false,
@@ -45,226 +52,154 @@ const DocktorTreatment = () => {
   const [filterDate, setFilterDate] = useState<
     [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
   >([null, null]);
+  const [staffs, setStaffs] = useState<Staffs[]>([]);
+  const [tech, setTech] = useState<string>("");
+
+  const [view, setView] = useState({
+    data: "",
+    isOpen: false,
+  });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 10,
     },
   });
-  const classNameFormat = (data: DataType): string => {
-    if (data.price - data.payed_price == 0 && data.is_done == "Yakunlandi") {
-      return "success";
-    } else if (data.payed_price === 0 && data.is_done == "Yakunlandi") {
-      return "qarz";
-    } else if (data.payed_price < data.price && data.is_done == "Yakunlandi") {
-      return "proccess";
-    }
-    return "base";
-  };
+
   const columns: ColumnsType<DataType> = [
     {
       title: "Ismi",
-      className: "debt",
-      render: (record, data) => {
+      render: (record) => {
         return (
-          <div className={classNameFormat(data)}>
+          <a href={`patient/${record.user_id}`}>
             {record.user_name} {record.user_surname}
-          </div>
+          </a>
         );
       },
-      width: "13%",
+      width: "5%",
     },
     {
       title: "Shifokor",
-      dataIndex: "",
-      render: (staff, data) => (
-        <div className={classNameFormat(data)}>
-          {staff?.staff_name + " " + staff.staff_surname}
-        </div>
-      ),
-      width: "10%",
-      className: "debt",
+      render: (name) => `${name?.staff_name + " " + name?.staff_surname}`,
+      width: "5%",
     },
     {
       title: "Davolash vaqti",
-      render: (date, data) => (
-        <div className={classNameFormat(data)}>
-          {dayjs(date?.start_time).format("HH:MM DD-MM-YYYY")}{" "}
-          {dayjs(date?.end_time).format("HH:mm DD-MM-YYYY")}
-        </div>
-      ),
-      width: "15%",
-      className: "debt",
+      render: (dob) =>
+        `${dayjs(dob?.start_time).format("HH:mm DD-MM-YYYY")} - ${dayjs(
+          dob?.end_time
+        ).format("HH:mm DD-MM-YYYY")}`,
+      width: "10%",
+    },
+    {
+      title: "Texnik ismi",
+      dataIndex: "technic_name",
+      render: (name) => name || "Ismi belgilanmagan",
+      width: "5%",
     },
     {
       title: "To'lov summasi",
       dataIndex: "price",
-      render: (price, data) => (
-        <div className={classNameFormat(data)}>{formatMoney(price)}</div>
-      ),
-      width: "10%",
-      className: "debt",
+      render: (price) => formatMoney(price),
+      width: "5%",
     },
-    // {
-    //   title: "Texnik summasi",
-    //   dataIndex: "raw_material_price",
-    //   render: (raw_material_price, data) => (
-    //     <div className={classNameFormat(data)}>
-    //       <p>{formatMoney(raw_material_price)}</p>
-    //     </div>
-    //   ),
-    //   width: "10%",
-    //   className: "debt",
-    // },
+    {
+      title: "Texnik summasi",
+      dataIndex: "raw_material_price",
+      render: (price) => formatMoney(price),
+      width: "5%",
+    },
     {
       title: "To'langan summa",
       dataIndex: "payed_price",
-      render: (price, data) => (
-        <div className={classNameFormat(data)}>{formatMoney(price)}</div>
-      ),
-      width: "10%",
-      className: "debt",
+      render: (price) => formatMoney(price),
+      width: "5%",
     },
     {
       title: "To'lov holati",
-      dataIndex: "",
-      className: "debt",
-      filters: [
-        {
-          text: "To'langan",
-          value: "payed",
-        },
-        {
-          text: "To'liq to'lanmadi",
-          value: "not_fully_payed",
-        },
-        {
-          text: "To'lanmadi",
-          value: "not_payed",
-        },
-        {
-          text: "Kutilmoqda",
-          value: "waiting",
-        },
-      ],
-      width: "7%",
+      width: "5%",
       render: (record) => {
         if (record?.is_done == "Bekor qilingan") {
           return (
-            <div className={classNameFormat(record)}>
-              <Tag icon={<CloseCircleOutlined />} color="error">
-                Bekor qilingan
-              </Tag>
-            </div>
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              Bekor qilingan
+            </Tag>
           );
         } else if (record.price === 0) {
           return (
-            <div className={classNameFormat(record)}>
-              <Tag icon={<ClockCircleOutlined color="black" />} color="blue">
-                Kutilmoqda
-              </Tag>
-            </div>
+            <Tag icon={<ClockCircleOutlined />} color="default">
+              Kutilmoqda
+            </Tag>
           );
         } else if (record.payed_price === record.price) {
           return (
-            <div className={classNameFormat(record)}>
-              <Tag icon={<CheckCircleOutlined />} color="success">
-                To'landi
-              </Tag>
-            </div>
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              To'landi
+            </Tag>
           );
         } else if (record.payed_price == 0) {
           return (
-            <div className={classNameFormat(record)}>
-              <Tag icon={<CloseCircleOutlined />} color="error">
-                To'lanmadi
-              </Tag>
-            </div>
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              To'lanmadi
+            </Tag>
           );
         } else {
           return (
-            <div className={classNameFormat(record)}>
-              <Tag icon={<SyncOutlined />} color="processing">
-                To'liq to'lanmadi
-              </Tag>
-            </div>
+            <Tag icon={<SyncOutlined />} color="processing">
+              To'liq to'lanmadi
+            </Tag>
           );
         }
       },
     },
     {
       title: "Holati",
-      className: "debt",
       dataIndex: "is_done",
-      width: "7%",
-      filters: [
-        {
-          text: "Yakunlandi",
-          value: "Yakunlandi",
-        },
-        {
-          text: "Kutilmoqda",
-          value: "Kutilmoqda",
-        },
-        {
-          text: "Bekor qilingan",
-          value: "Bekor qilingan",
-        },
-      ],
-      render: (is_done, data) => {
+      className: "debt",
+      width: "5%",
+      render: (is_done) => {
         switch (is_done) {
           case "Yakunlandi":
             return (
-              <div className={classNameFormat(data)}>
-                <Tag icon={<CheckCircleOutlined />} color="success">
-                  Yakunlandi
-                </Tag>
-              </div>
+              <Tag icon={<CheckCircleOutlined />} color="success">
+                Yakunlandi
+              </Tag>
             );
           case "Jarayonda":
             return (
-              <div className={classNameFormat(data)}>
-                <Tag icon={<SyncOutlined spin />} color="processing">
-                  Jarayonda
-                </Tag>
-              </div>
+              <Tag icon={<SyncOutlined spin />} color="processing">
+                Jarayonda
+              </Tag>
             );
           case "Kutilmoqda":
             return (
-              <div className={classNameFormat(data)}>
-                <Tag icon={<ClockCircleOutlined />} color="default">
-                  Kutilmoqda
-                </Tag>
-              </div>
+              <Tag icon={<ClockCircleOutlined />} color="default">
+                Kutilmoqda
+              </Tag>
             );
           case "Bekor qilingan":
             return (
-              <div className={classNameFormat(data)}>
-                <Tag icon={<MinusCircleOutlined />} color="error">
-                  Bekor qilingnan
-                </Tag>
-              </div>
+              <Tag icon={<MinusCircleOutlined />} color="error">
+                Bekor qilingnan
+              </Tag>
             );
           default:
             return (
-              <div className={classNameFormat(data)}>
-                <Tag icon={<CloseCircleOutlined />} color="error">
-                  Xatolik
-                </Tag>
-              </div>
+              <Tag icon={<CloseCircleOutlined />} color="error">
+                Xatolik
+              </Tag>
             );
         }
       },
     },
     {
       title: "Bajariladigan ishlar",
+      dataIndex: "operation",
       key: "operation",
-      className: "debt",
-      align: "center",
-      width: "15%",
+      width: "10%",
       render: (_, record) => {
         return (
-          <div className={classNameFormat(record)}>
+          <div>
             <Space size="middle">
               {record.is_done !== "Yakunlandi" ? (
                 <Tooltip placement="bottom" title="Davolash">
@@ -306,7 +241,21 @@ const DocktorTreatment = () => {
   useEffect(() => {
     fetchData();
   }, [JSON.stringify(tableParams), filterDate]);
-
+  useEffect(() => {
+    fetch(import.meta.env.VITE_APP_URL + "/staffs/all", {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStaffs(data.result);
+      })
+      .catch(() => {
+        messageApi.error("Shifokorni yuklash xatolik yuz berdi", 2);
+      });
+  }, []);
   const handleTableChange: TableProps["onChange"] = (
     pagination,
     filters,
@@ -322,19 +271,18 @@ const DocktorTreatment = () => {
       setData([]);
     }
   };
-
   const token = localStorage.getItem("auth");
   const fetchData = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        `/cure/for-staff/?${qs.stringify(
-          getRandomuserParams(tableParams)
+        `/orto-cure/for-staff?${qs.stringify(
+          getUserParams(tableParams)
         )}&start-date=${
-          filterDate[0] ? filterDate[0].format("YYYY-MM-DD") : null
+          filterDate[0] ? filterDate[0]?.toISOString() : null
         }&end-date=${
-          filterDate[0] ? filterDate[1]?.format("YYYY-MM-DD") : null
-        }`,
+          filterDate[0] ? filterDate[1]?.toISOString() : null
+        }&tech=${tech}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -354,11 +302,11 @@ const DocktorTreatment = () => {
         });
       });
   };
-
+  const onChangeTech = (value: string) => {
+    setTech(value);
+  };
   return (
     <>
-      <br />
-      <br />
       <Flex gap={20}>
         <RangePicker
           format="DD-MM-YYYY"
@@ -414,11 +362,23 @@ const DocktorTreatment = () => {
             );
           }}
         />
+        <Select
+          style={{ minWidth: "200px" }}
+          placeholder="Texnikni tanlang"
+          optionFilterProp="children"
+          onChange={onChangeTech}
+          allowClear
+          options={staffs
+            .filter((e) => e.role === "doctor")
+            .map((e) => {
+              return {
+                value: e.id,
+                label: e.name,
+              };
+            })}
+        />
       </Flex>
       <br />
-      <br />
-      <br />
-
       <Table
         columns={columns}
         rowKey={(record) => record.cure_id}
@@ -440,10 +400,20 @@ const DocktorTreatment = () => {
         }
         onChange={handleTableChange}
       />
+      <br />
+      <Flex justify="end">
+        <p>
+          Texnik umumiy summasi:{" "}
+          {formatMoney(
+            data?.reduce((a, e) => a + +e.raw_material_price, 0) || 0
+          )}
+        </p>
+      </Flex>
       <TreatmentModal setData={setView} data={view} />
       <EditModal setData={setEditModal} data={editModal} />
+      {contextHolder}
     </>
   );
 };
 
-export default DocktorTreatment;
+export default Treatment;

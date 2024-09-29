@@ -8,6 +8,7 @@ import {
   Space,
   Select,
   message,
+  Input,
 } from "antd";
 
 const { RangePicker } = DatePicker;
@@ -17,7 +18,9 @@ import { LoadingProvider } from "../App";
 import { EditModalProps, Staffs } from "../types/type";
 import { RangePickerProps } from "antd/es/date-picker";
 
-const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
+const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen, type }) => {
+  console.log(type);
+
   const [staffs, setStaffs] = useState<Staffs[]>([]);
   const { setLoadingCnx } = useContext(LoadingProvider);
   const [messageApi, contextHolder] = message.useMessage();
@@ -32,20 +35,24 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
 
   const onSubmit = (values: any) => {
     setLoadingCnx(true);
-    fetch(import.meta.env.VITE_APP_URL + "/cure", {
-      method: "POST",
-      body: JSON.stringify({
-        staff_id: values.doctor_id,
-        user_id: data.id,
-        is_done: "Kutilmoqda",
-        start_time: dayjs(values.cure_time[0]).format("YYYY-MM-DD HH-mm-ss"),
-        end_time: dayjs(values.cure_time[1]).format("YYYY-MM-DD HH-mm-ss"),
-      }),
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      import.meta.env.VITE_APP_URL +
+        (type == "simple" ? "/cure" : "/orto-cure"),
+      {
+        method: "POST",
+        body: JSON.stringify({
+          staff_id: values.doctor_id,
+          user_id: data.id,
+          is_done: "Kutilmoqda",
+          start_time: dayjs(values.cure_time[0]).format("YYYY-MM-DD HH-mm-ss"),
+          end_time: dayjs(values.cure_time[1]).format("YYYY-MM-DD HH-mm-ss"),
+        }),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then(() => {
         setOpen({
@@ -139,6 +146,21 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen }) => {
               />
             </Form.Item>
           </Col>
+          {type == "orta" && (
+            <Col>
+              <Form.Item
+                name="technic_name"
+                label="Texnikni kiriting"
+                rules={[
+                  {
+                    message: "Iltimos texnikni kiriting",
+                  },
+                ]}
+              >
+                <Input placeholder="Texnikni ismini kiriting" />
+              </Form.Item>
+            </Col>
+          )}
           <Col>
             <Form.Item
               name="cure_time"
