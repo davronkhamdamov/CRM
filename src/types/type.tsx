@@ -35,6 +35,7 @@ export interface DataType {
   price: number;
   salary?: number;
   color: string;
+  payed_raw_material_price: number;
 }
 export type themeMode = "light" | "dark" | "system";
 
@@ -141,7 +142,7 @@ export interface TreatmentType {
   tooth_id: string;
   service_name: string;
   price: string;
-  raw_material_price: number;
+  technic_price: number;
 }
 
 export interface ServiceCategoryType {

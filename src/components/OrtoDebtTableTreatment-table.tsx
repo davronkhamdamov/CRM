@@ -27,8 +27,9 @@ import { ColumnsType } from "antd/es/table";
 import { MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
 import dayjs, { Dayjs } from "dayjs";
 import { IoIosMore } from "react-icons/io";
-import AddPaymentCure from "./AddPaymentCure";
-import TreatmentModal from "./TreatmentModal";
+import AddPaymentCureOrta from "./AddPaymentCureOrta";
+import AddTechnicPaymentCureOrta from "./AddTechnicPaymentCureOrta";
+import OrtaTreatmentModal from "./OrtaTreatmentModal";
 import formatMoney from "../lib/money_format";
 const { RangePicker } = DatePicker;
 
@@ -45,6 +46,11 @@ const Treatment = () => {
     id: "",
     isOpen: false,
   });
+  const [openTechnicPaymentModal, setOpenTechnicPaymentModal] =
+    useState<EditModal>({
+      id: "",
+      isOpen: false,
+    });
   const currentDate = dayjs();
   const lastMonthDate = currentDate.subtract(1, "month");
   const lastWeekDate = currentDate.subtract(1, "week");
@@ -53,7 +59,6 @@ const Treatment = () => {
   >([null, null]);
   const [staffs, setStaffs] = useState<Staffs[]>([]);
   const [staff, setStaff] = useState<string>("");
-  const [tech, setTech] = useState<string>("");
 
   const [view, setView] = useState({
     data: "",
@@ -124,8 +129,14 @@ const Treatment = () => {
     },
     {
       title: "Texnik summasi",
-      dataIndex: "raw_material_price",
-      render: (price) => formatMoney(price),
+      dataIndex: "",
+      render: (cure) => formatMoney(cure.raw_material_price),
+      width: "10%",
+    },
+    {
+      title: "Texnikga berilgan summasi",
+      dataIndex: "",
+      render: (cure) => formatMoney(cure.payed_raw_material_price),
       width: "10%",
     },
     {
@@ -236,6 +247,24 @@ const Treatment = () => {
             ) : (
               <MdOutlinePayment color="#33333333" />
             )}
+            {record.raw_material_price !== record.payed_raw_material_price ? (
+              <Tooltip placement="bottom" title="Texnikka to'lash">
+                <MdOutlinePayment
+                  style={{ cursor: "pointer" }}
+                  color="dodgerblue"
+                  onClick={() => {
+                    if (openTechnicPaymentModal.id !== record.cure_id) {
+                      setOpenTechnicPaymentModal({
+                        id: record.cure_id,
+                        isOpen: true,
+                      });
+                    }
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <MdOutlinePayment color="#33333333" />
+            )}
             <Tooltip placement="bottom" title="Ko'proq ma'lumot">
               <IoIosMore
                 color="#3b82f6"
@@ -308,7 +337,7 @@ const Treatment = () => {
           filterDate[0] ? filterDate[0]?.toISOString() : null
         }&end-date=${
           filterDate[0] ? filterDate[1]?.toISOString() : null
-        }&filter-staff=${staff}&tech=${tech}`,
+        }&filter-staff=${staff}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -330,9 +359,6 @@ const Treatment = () => {
   };
   const onChange = (value: string) => {
     setStaff(value);
-  };
-  const onChangeTech = (value: string) => {
-    setTech(value);
   };
   return (
     <>
@@ -406,7 +432,7 @@ const Treatment = () => {
               };
             })}
         />
-        <Select
+        {/* <Select
           style={{ minWidth: "200px" }}
           placeholder="Texnikni tanlang"
           optionFilterProp="children"
@@ -420,7 +446,7 @@ const Treatment = () => {
                 label: e.name,
               };
             })}
-        />
+        /> */}
       </Flex>
       <br />
       <Table
@@ -444,8 +470,15 @@ const Treatment = () => {
         }
         onChange={handleTableChange}
       />
-      <TreatmentModal setData={setView} data={view} />
-      <AddPaymentCure data={openPaymentModal} setOpen={setOpenPaymentModal} />
+      <OrtaTreatmentModal setData={setView} data={view} />
+      <AddPaymentCureOrta
+        data={openPaymentModal}
+        setOpen={setOpenPaymentModal}
+      />
+      <AddTechnicPaymentCureOrta
+        data={openTechnicPaymentModal}
+        setOpen={setOpenTechnicPaymentModal}
+      />
       {contextHolder}
     </>
   );

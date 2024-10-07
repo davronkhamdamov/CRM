@@ -42,6 +42,7 @@ const AddDoctorTreatment: FC<EditModalProps> = ({ data, setOpen, type }) => {
         method: "POST",
         body: JSON.stringify({
           staff_id: values.doctor_id,
+          technic_name: values.technic_name,
           user_id: data.id,
           is_done: "Kutilmoqda",
           start_time: dayjs(values.cure_time[0]).format("YYYY-MM-DD HH-mm-ss"),

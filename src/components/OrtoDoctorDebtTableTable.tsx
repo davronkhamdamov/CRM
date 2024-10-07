@@ -1,14 +1,4 @@
-import {
-  Button,
-  DatePicker,
-  Flex,
-  Select,
-  Space,
-  Table,
-  Tag,
-  Tooltip,
-  message,
-} from "antd";
+import { Button, DatePicker, Flex, Space, Table, Tag, Tooltip } from "antd";
 import qs from "qs";
 
 import { useEffect, useState } from "react";
@@ -21,17 +11,22 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { DataType, Staffs, TableParams } from "../types/type";
+import {
+  DataType,
+  EditModal as EditModalType,
+  TableParams,
+} from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
-import TreatmentModal from "./TreatmentModal";
+import TreatmentModal from "./OrtaTreatmentModal";
 import formatMoney from "../lib/money_format";
 import { Link } from "react-router-dom";
 import { FaTooth } from "react-icons/fa6";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline, MdOutlinePayment } from "react-icons/md";
 const { RangePicker } = DatePicker;
 import EditModal from "./EditModal";
+import AddTechnicPaymentCureOrta from "./AddTechnicPaymentCureOrta";
 
 const getUserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
@@ -39,7 +34,6 @@ const getUserParams = (params: TableParams) => ({
   ...params,
 });
 const Treatment = () => {
-  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [editModal, setEditModal] = useState({
@@ -52,13 +46,16 @@ const Treatment = () => {
   const [filterDate, setFilterDate] = useState<
     [start: Dayjs | null | undefined, end: Dayjs | null | undefined]
   >([null, null]);
-  const [staffs, setStaffs] = useState<Staffs[]>([]);
-  const [tech, setTech] = useState<string>("");
 
   const [view, setView] = useState({
     data: "",
     isOpen: false,
   });
+  const [openTechnicPaymentModal, setOpenTechnicPaymentModal] =
+    useState<EditModalType>({
+      id: "",
+      isOpen: false,
+    });
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -106,6 +103,12 @@ const Treatment = () => {
     {
       title: "Texnik summasi",
       dataIndex: "raw_material_price",
+      render: (price) => formatMoney(price),
+      width: "5%",
+    },
+    {
+      title: "Texnikka berilgan summasi",
+      dataIndex: "payed_raw_material_price",
       render: (price) => formatMoney(price),
       width: "5%",
     },
@@ -220,6 +223,25 @@ const Treatment = () => {
                   </Tooltip>
                 </Space>
               )}
+              {record.raw_material_price !== record.payed_raw_material_price ? (
+                <Tooltip placement="bottom" title="Texnikka to'lash">
+                  <MdOutlinePayment
+                    style={{ cursor: "pointer" }}
+                    color="dodgerblue"
+                    onClick={() => {
+                      if (openTechnicPaymentModal.id !== record.cure_id) {
+                        setOpenTechnicPaymentModal({
+                          id: record.cure_id,
+                          isOpen: true,
+                        });
+                      }
+                    }}
+                  />
+                </Tooltip>
+              ) : (
+                <MdOutlinePayment color="#33333333" />
+              )}
+
               <Space size="large">
                 <Tooltip placement="bottom" title="Tahrirlash">
                   <MdModeEditOutline
@@ -241,21 +263,7 @@ const Treatment = () => {
   useEffect(() => {
     fetchData();
   }, [JSON.stringify(tableParams), filterDate]);
-  useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/staffs/all", {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setStaffs(data.result);
-      })
-      .catch(() => {
-        messageApi.error("Shifokorni yuklash xatolik yuz berdi", 2);
-      });
-  }, []);
+
   const handleTableChange: TableProps["onChange"] = (
     pagination,
     filters,
@@ -280,9 +288,7 @@ const Treatment = () => {
           getUserParams(tableParams)
         )}&start-date=${
           filterDate[0] ? filterDate[0]?.toISOString() : null
-        }&end-date=${
-          filterDate[0] ? filterDate[1]?.toISOString() : null
-        }&tech=${tech}`,
+        }&end-date=${filterDate[0] ? filterDate[1]?.toISOString() : null}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -302,9 +308,7 @@ const Treatment = () => {
         });
       });
   };
-  const onChangeTech = (value: string) => {
-    setTech(value);
-  };
+
   return (
     <>
       <Flex gap={20}>
@@ -362,21 +366,6 @@ const Treatment = () => {
             );
           }}
         />
-        <Select
-          style={{ minWidth: "200px" }}
-          placeholder="Texnikni tanlang"
-          optionFilterProp="children"
-          onChange={onChangeTech}
-          allowClear
-          options={staffs
-            .filter((e) => e.role === "doctor")
-            .map((e) => {
-              return {
-                value: e.id,
-                label: e.name,
-              };
-            })}
-        />
       </Flex>
       <br />
       <Table
@@ -401,17 +390,36 @@ const Treatment = () => {
         onChange={handleTableChange}
       />
       <br />
-      <Flex justify="end">
+      <Flex align="end" vertical>
         <p>
           Texnik umumiy summasi:{" "}
           {formatMoney(
             data?.reduce((a, e) => a + +e.raw_material_price, 0) || 0
           )}
         </p>
+        <p>
+          Texnikga berilishi kerak bo'lgan summasi:{" "}
+          {formatMoney(
+            data?.reduce(
+              (a, e) =>
+                a + (+e.raw_material_price - +e.payed_raw_material_price),
+              0
+            ) || 0
+          )}
+        </p>
+        <p>
+          Texnikga berligan kerak bo'lgan summasi:{" "}
+          {formatMoney(
+            data?.reduce((a, e) => a + +e.payed_raw_material_price, 0) || 0
+          )}
+        </p>
       </Flex>
       <TreatmentModal setData={setView} data={view} />
       <EditModal setData={setEditModal} data={editModal} />
-      {contextHolder}
+      <AddTechnicPaymentCureOrta
+        data={openTechnicPaymentModal}
+        setOpen={setOpenTechnicPaymentModal}
+      />
     </>
   );
 };
