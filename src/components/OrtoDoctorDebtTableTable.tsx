@@ -408,7 +408,7 @@ const Treatment = () => {
           )}
         </p>
         <p>
-          Texnikga berligan kerak bo'lgan summasi:{" "}
+          Texnikga berligan summa:{" "}
           {formatMoney(
             data?.reduce((a, e) => a + +e.payed_raw_material_price, 0) || 0
           )}
