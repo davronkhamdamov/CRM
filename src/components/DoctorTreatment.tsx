@@ -11,6 +11,7 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
 import { DataType, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
@@ -32,11 +33,11 @@ const DocktorTreatment = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState({
-    data: "",
+    id: "",
     isOpen: false,
   });
   const [editModal, setEditModal] = useState({
-    data: "",
+    id: "",
     isOpen: false,
   });
   const currentDate = dayjs();
@@ -277,7 +278,7 @@ const DocktorTreatment = () => {
                   <Tooltip placement="bottom" title="Ko'rish">
                     <AiOutlineFileSearch
                       onClick={() => {
-                        setView({ data: record.cure_id, isOpen: true });
+                        setView({ id: record.cure_id, isOpen: true });
                       }}
                       color="#3b82f6"
                       style={{ cursor: "pointer" }}
@@ -289,7 +290,7 @@ const DocktorTreatment = () => {
                 <Tooltip placement="bottom" title="Tahrirlash">
                   <MdModeEditOutline
                     onClick={() => {
-                      setEditModal({ data: record.user_id, isOpen: true });
+                      setEditModal({ id: record.user_id, isOpen: true });
                     }}
                     color="#3b82f6"
                     style={{ cursor: "pointer" }}
@@ -307,11 +308,7 @@ const DocktorTreatment = () => {
     fetchData();
   }, [JSON.stringify(tableParams), filterDate]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

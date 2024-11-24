@@ -8,6 +8,8 @@ import {
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
+
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { LoadingProvider } from "../App";
@@ -98,11 +100,7 @@ const ServicesCategoryTable = () => {
     fetchData();
   }, [JSON.stringify(tableParams)]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

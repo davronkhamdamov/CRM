@@ -10,9 +10,13 @@ import {
   Brush,
   Bar,
 } from "recharts";
+interface Statistic {
+  [key: string]: number; // `key` as string and `value` as number
+}
 
 const PieChartFC = () => {
-  const [statistic, setStatistic] = useState<any>();
+  const [statistic, setStatistic] = useState<Statistic>({});
+
   const token = localStorage.getItem("auth");
   useEffect(() => {
     fetch(import.meta.env.VITE_APP_URL + "/user/statistic_by_address", {
@@ -20,18 +24,27 @@ const PieChartFC = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => setStatistic(data.result));
-  }, []);
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setStatistic(data.result);
+      });
+  }, [token]);
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       {statistic && (
         <BarChart
           width={500}
           height={300}
-          data={Object.keys(statistic)?.map((e) => {
-            return { name: e, value: statistic[e] };
-          })}
+          data={Object.keys(statistic).map((e) => ({
+            name: e,
+            value: statistic[e],
+          }))}
           margin={{
             top: 5,
             right: 30,

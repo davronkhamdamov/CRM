@@ -16,6 +16,8 @@ import { FC, useEffect, useState } from "react";
 import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType, TableProps } from "antd/es/table";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
+
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdEdit, MdOutlinePayment } from "react-icons/md";
 import EditAccound from "./EditAccound";
@@ -253,11 +255,7 @@ const TableComponent: FC = () => {
     fetchData();
   }, [JSON.stringify(tableParams), search, debt]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

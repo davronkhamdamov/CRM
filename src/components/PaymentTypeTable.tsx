@@ -16,6 +16,7 @@ import {
 
 import { EditModal, PaymentDataType, TableParams } from "../types/type";
 import { ColumnsType, TableProps } from "antd/es/table";
+type OnChange = NonNullable<TableProps<PaymentDataType>["onChange"]>;
 
 import { HiOutlineCash } from "react-icons/hi";
 import { IoCardOutline } from "react-icons/io5";
@@ -143,17 +144,12 @@ const PaymentTypeTable = () => {
     fetchData();
   }, [JSON.stringify(tableParams)]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,
       ...sorter,
     });
-
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
       setData([]);
     }

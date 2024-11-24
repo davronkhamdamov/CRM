@@ -17,6 +17,7 @@ import {
 } from "@ant-design/icons";
 
 import type { TableProps } from "antd";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
 import { DataType, EditModal, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
@@ -165,11 +166,7 @@ const DoctorsTable = () => {
     fetchData();
   }, [JSON.stringify(tableParams), search]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

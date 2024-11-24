@@ -7,9 +7,9 @@ const OrtaTreatmentModal: FC<TableProp> = ({ data, setData }) => {
   const token = localStorage.getItem("auth");
   const [treatments, setTreatments] = useState<TreatmentType[]>([]);
   useEffect(() => {
-    if (data.data) {
+    if (data.id) {
       fetch(
-        import.meta.env.VITE_APP_URL + "/orto-cure/cure-service/" + data.data,
+        import.meta.env.VITE_APP_URL + "/orto-cure/cure-service/" + data.id,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -21,7 +21,7 @@ const OrtaTreatmentModal: FC<TableProp> = ({ data, setData }) => {
           setTreatments(result);
         });
     }
-  }, [data.data, token]);
+  }, [data.id, token]);
 
   return (
     <>
@@ -30,7 +30,7 @@ const OrtaTreatmentModal: FC<TableProp> = ({ data, setData }) => {
         title="Foydalanilgan xizmatlar bo'yicha ma'lumot"
         centered
         open={data.isOpen}
-        onCancel={() => setData({ data: "", isOpen: false })}
+        onCancel={() => setData({ id: "", isOpen: false })}
         footer
         className="treatment_modal"
         style={{

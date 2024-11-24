@@ -1,5 +1,6 @@
 import { Button, DatePicker, Flex, Select, Table, message } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { DataType, Staffs, TableParams } from "../types/type";
@@ -78,11 +79,7 @@ const StaffsTable = () => {
     fetchData();
   }, [JSON.stringify(tableParams), filterDate, staff]);
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

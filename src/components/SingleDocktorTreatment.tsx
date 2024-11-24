@@ -235,7 +235,7 @@ const SingleDocktorTreatment = () => {
     return service.find((el) => el.id == e);
   };
   const calculateSumOfPayload = () => {
-    const _services: any[] = [];
+    const _services: number[] = [];
     saved_payload?.forEach((e) => {
       e?.services?.forEach((e) => {
         _services.push(

@@ -41,8 +41,8 @@ const EditModalAccound: React.FC<TableProp> = ({ data, setData }) => {
   });
   const token = localStorage.getItem("auth");
   useEffect(() => {
-    if (data.data) {
-      fetch(import.meta.env.VITE_APP_URL + "/user/" + data.data, {
+    if (data.id) {
+      fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,7 +50,7 @@ const EditModalAccound: React.FC<TableProp> = ({ data, setData }) => {
         .then((res) => res.json())
         .then((res) => setDatas(res.result));
     }
-  }, [data.data]);
+  }, [data.id]);
 
   const onClose = () => {
     setData({ id: "", isOpen: false });
@@ -75,7 +75,7 @@ const EditModalAccound: React.FC<TableProp> = ({ data, setData }) => {
 
   const onSubmit: FormProps<UserData>["onFinish"] = (actionData) => {
     setLoadingCnx(true);
-    fetch(import.meta.env.VITE_APP_URL + "/user/" + data.data, {
+    fetch(import.meta.env.VITE_APP_URL + "/user/" + data.id, {
       method: "PUT",
       body: JSON.stringify(actionData),
       headers: {

@@ -22,6 +22,7 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import type { TableProps } from "antd";
+type OnChange = NonNullable<TableProps<DataType>["onChange"]>;
 import { DataType, EditModal, Staffs, TableParams } from "../types/type";
 import { ColumnsType } from "antd/es/table";
 import { MdDelete, MdOutlineCancel, MdOutlinePayment } from "react-icons/md";
@@ -57,7 +58,7 @@ const Treatment = () => {
   const [staff, setStaff] = useState<string>("");
 
   const [view, setView] = useState({
-    data: "",
+    id: "",
     isOpen: false,
   });
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -346,7 +347,7 @@ const Treatment = () => {
                   color="white"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    setView({ data: record.cure_id, isOpen: true });
+                    setView({ id: record.cure_id, isOpen: true });
                   }}
                 />
               </Tooltip>
@@ -398,11 +399,7 @@ const Treatment = () => {
         messageApi.error("Shifokorni yuklash xatolik yuz berdi", 2);
       });
   }, []);
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,

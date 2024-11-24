@@ -49,7 +49,7 @@ export interface EditModal {
 export interface EditModalProps {
   data: EditModal;
   setOpen: (arg: EditModal) => void;
-  type?: String;
+  type?: string;
 }
 export interface UserData {
   login: string;
@@ -80,8 +80,11 @@ export interface PaymentDataType {
 }
 
 export interface TableProp {
-  data: any;
-  setData: (a: any) => void;
+  data: {
+    isOpen: boolean;
+    id: string;
+  };
+  setData: (a: { id: string; isOpen: boolean }) => void;
 }
 export interface SuccessProps {
   modalStatus: "403" | "404" | "500" | "error" | "info" | "success" | "warning";

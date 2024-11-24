@@ -235,7 +235,7 @@ const SingleDocktorTreatmentOrta = () => {
     return service.find((el) => el.id == e);
   };
   const calculateSumOfPayload = () => {
-    const _services: any[] = [];
+    const _services: number[] = [];
     saved_payload?.forEach((e) => {
       e?.services?.forEach((e) => {
         _services.push(
@@ -246,7 +246,7 @@ const SingleDocktorTreatmentOrta = () => {
     return _services.reduce((a, e) => a + e, 0);
   };
   const calculateSumOfPayloadOrta = () => {
-    const _services: any[] = [];
+    const _services: number[] = [];
     saved_payload?.forEach((e) => {
       e?.services?.forEach((e) => {
         _services.push(+(getName(e)?.raw_material_price || 0));

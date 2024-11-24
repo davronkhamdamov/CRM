@@ -1,4 +1,4 @@
-FROM node:lts as builder
+FROM node:lts AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine as production-build
+FROM nginx:alpine AS production
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
