@@ -10,6 +10,7 @@ import Statistic from "../pages/Statistic";
 import Reception from "../layout/Reception";
 import Doctors from "../pages/Doctors";
 import Login from "../pages/Login";
+import Register from "../pages/Register.tsx";
 import Book from "./../pages/Book";
 import SingleBemor from "../pages/SingleBemor";
 import SingleDocktor from "../pages/SingleDoctor";
@@ -78,6 +79,7 @@ const route = createBrowserRouter(
       </Route>
       <Route path="/auth">
         <Route index element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>
       <Route path="/">
         <Route index element={<Login />} />
