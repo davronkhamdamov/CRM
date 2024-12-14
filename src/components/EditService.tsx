@@ -155,22 +155,25 @@ const EditService: FC<EditModalProps> = ({ data, setOpen }) => {
             >
               <Input type="number" min={1} placeholder="Narx kiriting!" />
             </Form.Item>
-            <Form.Item
-              name="raw_material_price"
-              label="Texnik narxi"
-              rules={[
-                {
-                  required: true,
-                  message: "Iltimos texnik narxini kiriting!",
-                },
-              ]}
-            >
-              <Input
-                type="number"
-                min={1}
-                placeholder="Texnik narxini kiriting!"
-              />
-            </Form.Item>
+            {serviceData?.service_category_id ==
+              "f57eb7a3-26b6-4dcc-8a75-15ac5896de65" && (
+              <Form.Item
+                name="raw_material_price"
+                label="Texnik narxi"
+                rules={[
+                  {
+                    required: true,
+                    message: "Iltimos texnik narxini kiriting!",
+                  },
+                ]}
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Texnik narxini kiriting!"
+                />
+              </Form.Item>
+            )}
             <Form.Item name="status" label="Xizmat xolati">
               <Switch />
             </Form.Item>
