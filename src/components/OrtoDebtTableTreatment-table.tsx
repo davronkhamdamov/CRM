@@ -147,6 +147,12 @@ const Treatment = () => {
       width: "10%",
     },
     {
+      title: "Shifokor summasi",
+      dataIndex: "",
+      render: (record) => formatMoney(record.price - record.raw_material_price),
+      width: "10%",
+    },
+    {
       title: "To'lov holati",
       width: "5%",
       render: (record) => {
