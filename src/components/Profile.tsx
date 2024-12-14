@@ -131,7 +131,6 @@ const Profile = () => {
                               Authorization: `Bearer ${token}`,
                               "Content-type": "application/json",
                             },
-
                             body: JSON.stringify({ image_url: data.url }),
                           }
                         )

@@ -11,18 +11,15 @@ const Register = () => {
   const [phone, setPhone] = useState<string>("+998");
   const [registered, setRegistered] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const generateOtp = () => {
     setLoading(true);
-    fetch(
-      import.meta.env.VITE_APP_URL +
-        "/auth/generate-otp?email=davronx036@gmail.com",
-      {
-        method: "POST",
-      }
-    )
+    fetch(import.meta.env.VITE_APP_URL + "/auth/generate-otp?phone=" + phone, {
+      method: "POST",
+    })
       .then((res) => res.json())
       .then(() => {
-        setLoading(true);
+        setLoading(false);
         setRegistered(false);
       });
   };
@@ -31,20 +28,32 @@ const Register = () => {
     setLoading(true);
     fetch(
       import.meta.env.VITE_APP_URL +
-        "/auth/verify-otp?email=davronx036@gmail.com&otp=" +
-        text,
+        `/auth/verify-otp?phone=${phone}&otp=${text}`,
       {
         method: "POST",
       }
     )
       .then((res) => res.json())
-      .then(() => {
-        setLoading(true);
+      .then((data) => {
+        if (data?.detail) {
+          setError(true);
+        }
+        if (data?.status == "ok") {
+          localStorage.setItem("auth", data.result.access_token);
+          location = data.result.role;
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
-
+  const onInput: OTPProps["onInput"] = () => {
+    setError(false);
+  };
   const sharedProps: OTPProps = {
     onChange,
+    onInput,
   };
   return (
     <Flex
@@ -96,15 +105,17 @@ const Register = () => {
           </Flex>
         </Flex>
       ) : (
-        <Flex vertical gap={10} style={{ width: "250px" }}>
+        <Flex vertical gap={20} style={{ width: "250px", textAlign: "center" }}>
           <Title level={5}>Sizga jo'natilgan kodni kiriting</Title>
           <Input.OTP
-            disabled={!loading}
+            disabled={loading}
             formatter={(str) => str.toUpperCase()}
             {...sharedProps}
             size="large"
             type="tel"
+            status={error ? "error" : ""}
           />
+          <Typography>00:00 dan so'ng qayta jo'natishingiz mumkin</Typography>
         </Flex>
       )}
     </Flex>

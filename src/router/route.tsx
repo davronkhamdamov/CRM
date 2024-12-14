@@ -6,6 +6,7 @@ import {
 import RootLayout from "../layout/RootLayout";
 import Bemorlar from "../pages/Bemorlar";
 import Payment from "../pages/Payment";
+import UserPayment from "../pages/UserPayment";
 import Statistic from "../pages/Statistic";
 import Reception from "../layout/Reception";
 import Doctors from "../pages/Doctors";
@@ -15,6 +16,7 @@ import Book from "./../pages/Book";
 import SingleBemor from "../pages/SingleBemor";
 import SingleDocktor from "../pages/SingleDoctor";
 import Treatment from "../pages/Treatment";
+import UserTreatment from "../pages/UserTreatment";
 import DebtTreatment from "../pages/DebtTreatment";
 import OrtoTreatment from "../pages/OrtoTreatment";
 import OrtoDoctorTreatment from "../pages/OrtoDoctorTreatment.tsx";
@@ -28,7 +30,10 @@ import DocktorTreatment from "../pages/DocktorTreatment";
 import SingleDocktorTreatment from "../pages/SingleDocktorTreatment";
 import ServiceCategory from "../pages/ServiceCategory";
 import Profile from "../pages/Profile";
+import UserProfile from "../pages/UserProfile";
 import Calendar from "../pages/Calendar";
+import UserCalendar from "../pages/UserCalendar";
+import UserLayout from "../layout/UserLayout";
 import SingleDocktorTreatmentOrta from "../pages/SingleDocktorTreatmentOrta";
 
 const route = createBrowserRouter(
@@ -76,6 +81,13 @@ const route = createBrowserRouter(
         <Route path="schedule/:id" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
         <Route path="hisobot" element={<Hisobot />} />
+      </Route>
+      <Route path="/dashboard" element={<UserLayout />}>
+        <Route path="payment" element={<UserPayment />} />
+        <Route path="treatment" element={<UserTreatment />} />
+        <Route path="schedule" element={<UserCalendar />} />
+        <Route path="profile" element={<UserProfile />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="/auth">
         <Route index element={<Login />} />

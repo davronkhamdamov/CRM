@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { LogoutOutlined, PieChartOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { Flex, Layout, Menu } from "antd";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import ProfileAvatar from "../components/ProfileAvatar";
 import { ThemeProvider } from "../App";
-import { FaSuitcaseMedical } from "react-icons/fa6";
-import { CiBoxList } from "react-icons/ci";
+import { FaDollarSign, FaSuitcaseMedical } from "react-icons/fa6";
 import { GrSchedule } from "react-icons/gr";
+import { SlLogout } from "react-icons/sl";
 
 const { Sider } = Layout;
 
@@ -19,26 +19,27 @@ function getItem(label: string, key: string, icon: JSX.Element) {
     label,
   };
 }
-
-const DockerLayout = () => {
+const UserLayout = () => {
   const { theme } = useContext(ThemeProvider);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { pathname } = useLocation();
 
   const items = [
-    getItem("Statistika", "statistic", <PieChartOutlined />),
-    getItem("Davolashlar", "treatment", <FaSuitcaseMedical />),
-    getItem("Ortopedik davolashlar", "orta-treatment", <FaSuitcaseMedical />),
+    getItem("Profilim", "profile", <UserOutlined />),
+    getItem(
+      "To'lovlarim",
+      "payment",
+      <FaDollarSign color={theme === "dark" ? "#f2f2f2" : "#000"} />
+    ),
     getItem("Taqvim", "schedule", <GrSchedule />),
-    getItem("Xisobot", "hisobot", <CiBoxList />),
-    getItem("Chiqish", "auth", <LogoutOutlined />),
+    getItem("Davolashlarim", "treatment", <FaSuitcaseMedical />),
+    getItem("Chiqish", "auth", <SlLogout />),
   ];
   const defaultRout = pathname?.split("/")[2];
-
   const token = localStorage.getItem("auth");
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_URL + "/staffs/get-me", {
+    fetch(import.meta.env.VITE_APP_URL + "/user/get-me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,13 +49,13 @@ const DockerLayout = () => {
         if (data?.detail === "Invalid token") {
           navigate("/auth");
         }
-        if (!["reception", "admin", "doctor"].includes(data?.result?.role)) {
-          navigate("/dashboard");
-        } else if (defaultRout[1] !== data.result.role) {
-          !defaultRout[2] && navigate("/" + data.result.role + "/statistic");
+
+        if (!defaultRout) {
+          navigate("/home" + "/payment");
         }
       });
   }, [token, defaultRout]);
+
   return (
     <Layout hasSider>
       <Sider
@@ -67,7 +68,7 @@ const DockerLayout = () => {
           minHeight: "100vh",
         }}
       >
-        <Flex align="center" justify="center" style={{ height: "60px" }}>
+        <Flex justify="center" style={{ height: "50px", marginTop: 20 }}>
           <ProfileAvatar />
         </Flex>
         <Menu
@@ -90,4 +91,5 @@ const DockerLayout = () => {
     </Layout>
   );
 };
-export default DockerLayout;
+
+export default UserLayout;

@@ -67,7 +67,7 @@ const RootLayout = () => {
           navigate("/auth");
         }
         if (!["reception", "admin", "doctor"].includes(data?.result?.role)) {
-          navigate("/auth");
+          navigate("/dashboard");
         } else if (defaultRout[1] !== data?.result?.role) {
           !defaultRout[2] && navigate("/" + data?.result?.role + "/statistic");
         }
