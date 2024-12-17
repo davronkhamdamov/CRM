@@ -1,13 +1,12 @@
 function formatMoney(amount: number) {
-    const formatter = new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS'
-    });
+  const absAmount = Math.abs(amount);
+  const parts = absAmount.toFixed(2).split(".");
 
-    const numericalAmount = parseFloat(formatter.format(amount).replace(/[^\d.]/g, ''));
+  const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-    const formattedAmount = numericalAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const formattedAmount = `${integerPart}.${parts[1]}`;
 
-    return `${amount < 0 ? '-' : ''}${formattedAmount} so'm`;
+  return `${amount < 0 ? "-" : ""}${formattedAmount} so'm`;
 }
-export default formatMoney
+
+export default formatMoney;
